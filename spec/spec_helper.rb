@@ -40,6 +40,10 @@ module RSpecMixin
   def last_json_response
     JSON.parse(last_response.body, symbolize_names: true)
   end
+
+  def spec_views
+    File.dirname(__FILE__) + '/support/views'
+  end
 end
 
 RSpec.configure do |config|

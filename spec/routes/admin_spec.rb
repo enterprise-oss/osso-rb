@@ -9,6 +9,7 @@ describe Osso::Admin do
   before do
     ENV['JWT_URL'] = jwt_url
     ENV['JWT_HMAC_SECRET'] = jwt_hmac_secret
+    described_class.set(:views, spec_views)
   end
 
   describe 'get /admin' do
