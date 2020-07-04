@@ -1,0 +1,13 @@
+# frozen_string_literal: true
+
+require 'osso'
+
+path = File.expand_path(__dir__)
+Dir.glob("#{path}/tasks/**/*.rake").each { |f| import f }
+
+namespace :db do
+  task :load_config do
+    osso_migrations = File.expand_path('./db/migrate', __dir__)
+    ActiveRecord::Migrator.migrations_paths << osso_migrations
+  end
+end

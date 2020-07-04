@@ -1,0 +1,14 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  database: osso
+  host: ''
+  port: 5432
+test:
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  database: osso-test
+  host: ''
+  port: 5432

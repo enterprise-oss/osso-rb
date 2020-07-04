@@ -1,0 +1,2 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/2b04828dc45bcb5abcb1/maintainability)](https://codeclimate.com/github/enterprise-oss/osso-rb/maintainability)
+[![Build status](https://badge.buildkite.com/0e01845bdd51be4131b9cbd496d9caa39cd48f171fc2d9a9ca.svg)](https://buildkite.com/enterpriseoss/osso-rb)
