@@ -15,6 +15,7 @@ Gem::Specification.new do |spec|
   spec.license = 'MIT'
 
   spec.add_runtime_dependency 'activesupport', '>= 6.0.3.2'
+  spec.add_runtime_dependency 'graphql'
   spec.add_runtime_dependency 'jwt'
   spec.add_runtime_dependency 'omniauth-multi-provider'
   spec.add_runtime_dependency 'omniauth-saml'

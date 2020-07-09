@@ -6,4 +6,5 @@ module Osso
   require_relative 'osso/lib/oauth2_token'
   require_relative 'osso/models/models'
   require_relative 'osso/routes/routes'
+  require_relative 'osso/graphql/schema'
 end

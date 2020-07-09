@@ -14,7 +14,7 @@ module Osso
     get '/' do
       admin_protected!
 
-      erb :'public/index'
+      erb :admin
     end
 
     get '/enterprise' do
@@ -25,10 +25,6 @@ module Osso
 
     get '/enterprise/:domain' do
       enterprise_protected!(params[:domain])
-
-      @enterprise = Models::EnterpriseAccount.where(
-        domain: params[:domain],
-      ).first_or_create
 
       erb :admin
     end
