@@ -2,7 +2,11 @@
 
 require 'graphql'
 
-module Types
-  class BaseObject < GraphQL::Schema::Object
+module Osso
+  module GraphQL
+    module Types
+      class BaseObject < ::GraphQL::Schema::Object
+      end
+    end
   end
 end

@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
-module Resolvers
+module Osso
+  module GraphQL
+    module Resolvers
+    end
+  end
 end
 
 require_relative 'resolvers/enterprise_account'

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-module Types
+module Osso
+  module Types
+  end
 end
 
 require_relative 'types/base_object'

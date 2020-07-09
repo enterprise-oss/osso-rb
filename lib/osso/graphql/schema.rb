@@ -13,10 +13,10 @@ GraphQL::Relay::BaseConnection.register_connection_implementation(
 
 module Osso
   module GraphQL
-    class Schema < GraphQL::Schema
+    class Schema < ::GraphQL::Schema
+      use ::GraphQL::Pagination::Connections
       query Types::QueryType
       mutation Types::MutationType
-      use GraphQL::Pagination::Connections
 
       def self.id_from_object(object, _type_definition = nil, _query_ctx = nil)
         GraphQL::Schema::UniqueWithinType.encode(object.class.name, object.id)

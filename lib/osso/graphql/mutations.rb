@@ -1,6 +1,7 @@
 # frozen_string_literal: true
-
-module Mutations
+module Osso
+  module Mutations
+  end
 end
 
 require_relative 'mutations/base_mutation'
