@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-module Helpers
+module Osso
+  module Helpers
+  end
 end
 
 require_relative 'auth'
