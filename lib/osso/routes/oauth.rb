@@ -24,7 +24,8 @@ module Osso
         redirect "/auth/saml/#{@enterprise.provider.id}"
       end
 
-      erb :multiple_providers
+      # TODO: multiple provider support
+      # erb :multiple_providers
 
     rescue Rack::OAuth2::Server::Authorize::BadRequest => e
       @error = e

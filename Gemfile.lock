@@ -1,8 +1,9 @@
 PATH
   remote: .
   specs:
-    osso (0.0.3)
+    osso (0.0.3.3)
       activesupport (>= 6.0.3.2)
+      graphql
       jwt
       omniauth-multi-provider
       omniauth-saml
@@ -48,6 +49,7 @@ GEM
       activesupport (>= 5.0.0)
     faker (2.13.0)
       i18n (>= 1.6, < 2)
+    graphql (1.11.1)
     hashdiff (1.0.1)
     hashie (4.1.0)
     httpclient (2.8.3)
