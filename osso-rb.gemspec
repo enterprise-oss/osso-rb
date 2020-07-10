@@ -2,6 +2,7 @@
 
 require_relative 'lib/osso/version'
 
+# rubocop:disable Metrics/BlockLength
 Gem::Specification.new do |spec|
   spec.name          = 'osso'
   spec.version       = Osso::VERSION
@@ -30,12 +31,10 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 2.1'
   spec.add_development_dependency 'pry'
 
-  # Specify which files should be added to the gem when it is released.
-  # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
   spec.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   spec.files         = `git ls-files`.split("\n")
   spec.test_files    = `git ls-files -- {spec}/*`.split("\n")
   spec.bindir        = 'bin'
-  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 end
+# rubocop:enable Metrics/BlockLength

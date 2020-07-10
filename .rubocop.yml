@@ -1,8 +1,7 @@
 AllCops:
   Exclude:
-    - client/**/*
     - db/**/*
-    - node_modules/**/*
+    - lib/osso/db/**/*
 
 # New rules must be explicitly opted into / out of
 Lint/RaiseException:
