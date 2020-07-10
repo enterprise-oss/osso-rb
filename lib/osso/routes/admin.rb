@@ -6,33 +6,36 @@ module Osso
   class Admin < Sinatra::Base
     include AppConfig
     helpers Helpers::Auth
+    register Sinatra::Namespace
 
     before do
       chomp_token
     end
 
-    get '/' do
-      admin_protected!
+    namespace '/admin' do
+      get '' do
+        admin_protected!
 
-      erb :admin
-    end
+        erb :admin
+      end
 
-    get '/enterprise' do
-      admin_protected!
+      get '/enterprise' do
+        admin_protected!
 
-      erb :admin
-    end
+        erb :admin
+      end
 
-    get '/enterprise/:domain' do
-      enterprise_protected!(params[:domain])
+      get '/enterprise/:domain' do
+        enterprise_protected!(params[:domain])
 
-      erb :admin
-    end
+        erb :admin
+      end
 
-    get '/config' do
-      admin_protected!
+      get '/config' do
+        admin_protected!
 
-      erb :admin
+        erb :admin
+      end
     end
   end
 end

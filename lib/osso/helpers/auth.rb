@@ -4,15 +4,17 @@ module Osso
   module Helpers
     module Auth
       attr_accessor :current_scope
-      
+
       def enterprise_protected!(domain = nil)
         return if admin_authorized?
         return if enterprise_authorized?(domain)
 
+        halt 401 if request.post?
+
         redirect ENV['JWT_URL']
       end
 
-      def enterprise_authorized?(domain)
+      def enterprise_authorized?(_domain)
         payload, _args = JWT.decode(
           token,
           ENV['JWT_HMAC_SECRET'],

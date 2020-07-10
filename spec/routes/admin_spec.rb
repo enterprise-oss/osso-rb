@@ -25,7 +25,9 @@ describe Osso::Admin do
       get('/admin', token: SecureRandom.hex(32))
 
       expect(last_response).to be_redirect
+
       follow_redirect!
+
       expect(last_request.url).to eq(jwt_url)
     end
 

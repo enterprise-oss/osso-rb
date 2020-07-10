@@ -14,15 +14,13 @@ ENV['SESSION_SECRET'] = 'supersecret'
 
 require File.expand_path '../lib/osso.rb', __dir__
 
+require File.expand_path 'support/spec_app', __dir__
+
 module RSpecMixin
   include Rack::Test::Methods
 
   def app
-    Rack::URLMap.new(
-      '/admin' => Osso::Admin,
-      '/auth' => Osso::Auth,
-      '/oauth' => Osso::Oauth,
-    )
+    SpecApp
   end
 
   def mock_saml_omniauth(email: 'user@enterprise.com', id: SecureRandom.uuid)
