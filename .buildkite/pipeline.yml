@@ -1,6 +1,6 @@
 steps:
   - name: ":rspec:"
     commands: 
-        - "bundle install --with development test"
+        - "bundle install"
         - "bundle exec rake db:test:prepare"
         - "bundle exec rspec"
