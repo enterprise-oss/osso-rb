@@ -1,3 +1,6 @@
 steps:
   - name: ":rspec:"
-    command: "bundle install --path vendor/bundle --with development test && RACK_ENV=test bundle exec rake db:migrate && bundle exec rspec"
+    commands: 
+        - "bundle install --path vendor/bundle --with development test"
+        - "bundle exec rake db:test:prepare"
+        - "bundle exec rspec"
