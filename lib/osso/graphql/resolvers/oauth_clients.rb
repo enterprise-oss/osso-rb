@@ -7,7 +7,7 @@ module Osso
         type [Types::OAuthClient], null: true
 
         def resolve
-          return Osso::Models::OAuthClient.all if context[:scope] == :admin
+          return Osso::Models::OauthClient.all if context[:scope] == :admin
         end
       end
     end

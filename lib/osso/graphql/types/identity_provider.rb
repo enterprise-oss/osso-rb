@@ -19,12 +19,8 @@ module Osso
         field :sso_cert, String, null: true
         field :configured, Boolean, null: false
 
-        def service
-          @object.provider
-        end
-
         def configured
-          @object.idp_sso_target_url && @object.idp_cert
+          !!(@object.idp_sso_target_url && @object.idp_cert)
         end
 
         def sso_cert

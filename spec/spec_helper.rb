@@ -11,6 +11,7 @@ require 'webmock/rspec'
 
 ENV['RACK_ENV'] = 'test'
 ENV['SESSION_SECRET'] = 'supersecret'
+ENV['BASE_URL'] = 'https://example.com'
 
 require File.expand_path '../lib/osso.rb', __dir__
 
