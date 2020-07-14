@@ -6,7 +6,7 @@ module Osso
     class OauthClient < ActiveRecord::Base
       has_many :access_tokens
       has_many :refresh_tokens
-      has_many :saml_providers
+      has_many :identity_providers
       has_many :redirect_uris
 
       before_validation :setup, on: :create

@@ -31,7 +31,7 @@ module Osso
         case obj
         when Osso::Models::EnterpriseAccount
           Types::EnterpriseAccount
-        when Osso::Models::SamlProvider
+        when Osso::Models::IdentityProvider
           Types::IdentityProvider
         else
           raise("Unexpected object: #{obj}")

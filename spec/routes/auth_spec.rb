@@ -6,7 +6,7 @@ describe Osso::Auth do
   describe 'post /auth/saml/:uuid/callback' do
     describe 'for an Okta SAML provider' do
       let(:enterprise) { create(:enterprise_with_okta) }
-      let(:okta_provider) { enterprise.saml_providers.first }
+      let(:okta_provider) { enterprise.identity_providers.first }
 
       describe "on the user's first authentication" do
         it 'creates a user' do
@@ -18,7 +18,7 @@ describe Osso::Auth do
               nil,
               {
                 'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
-                'saml_provider' => okta_provider,
+                'identity_provider' => okta_provider,
               },
             )
           end.to change { Osso::Models::User.count }.by(1)
@@ -33,7 +33,7 @@ describe Osso::Auth do
               nil,
               {
                 'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
-                'saml_provider' => okta_provider,
+                'identity_provider' => okta_provider,
               },
             )
           end.to change { Osso::Models::AuthorizationCode.count }.by(1)
@@ -42,8 +42,8 @@ describe Osso::Auth do
 
       describe 'on subsequent authentications' do
         let!(:enterprise) { create(:enterprise_with_okta) }
-        let!(:okta_provider) { enterprise.saml_providers.first }
-        let(:user) { create(:user, saml_provider_id: okta_provider.id) }
+        let!(:okta_provider) { enterprise.identity_providers.first }
+        let(:user) { create(:user, identity_provider_id: okta_provider.id) }
 
         before do
           mock_saml_omniauth(email: user.email, id: user.idp_id)
@@ -56,7 +56,7 @@ describe Osso::Auth do
               nil,
               {
                 'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
-                'saml_provider' => okta_provider,
+                'identity_provider' => okta_provider,
               },
             )
           end.to_not(change { Osso::Models::User.count })
@@ -78,7 +78,7 @@ describe Osso::Auth do
               nil,
               {
                 'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
-                'saml_provider' => azure_provider,
+                'identity_provider' => azure_provider,
               },
             )
           end.to change { Osso::Models::User.count }.by(1)
@@ -88,7 +88,7 @@ describe Osso::Auth do
       describe 'on subsequent authentications' do
         let!(:enterprise) { create(:enterprise_with_azure) }
         let!(:azure_provider) { enterprise.provider }
-        let(:user) { create(:user, saml_provider_id: azure_provider.id) }
+        let(:user) { create(:user, identity_provider_id: azure_provider.id) }
 
         before do
           mock_saml_omniauth(email: user.email, id: user.idp_id)
@@ -101,7 +101,7 @@ describe Osso::Auth do
               nil,
               {
                 'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
-                'saml_provider' => azure_provider,
+                'identity_provider' => azure_provider,
               },
             )
           end.to_not(change { Osso::Models::User.count })

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :saml_provider, class: Osso::Models::SamlProvider do
+  factory :identity_provider, class: Osso::Models::IdentityProvider do
     id { SecureRandom.uuid }
     domain { Faker::Internet.domain_name }
     oauth_client
@@ -29,15 +29,15 @@ FactoryBot.define do
       CERT
     end
 
-    factory :okta_saml_provider, parent: :saml_provider, class: Osso::Models::OktaSamlProvider do
-      provider { 'Osso::Models::OktaSamlProvider' }
+    factory :okta_identity_provider, parent: :identity_provider do
+      service { 'OKTA' }
       idp_sso_target_url do
         'https://dev-162024.okta.com/app/vcardmedev162024_rubydemo2_1/exk51326b3U1941Hf4x6/sso/saml'
       end
     end
 
-    factory :azure_saml_provider, parent: :saml_provider, class: Osso::Models::AzureSamlProvider do
-      provider { 'Osso::Models::AzureSamlProvider' }
+    factory :azure_identity_provider, parent: :identity_provider do
+      service { 'AZURE' }
       idp_sso_target_url do
         'https://login.microsoftonline.com/0af6c610-c40c-4683-9ea4-f25e509b8172/saml2'
       end

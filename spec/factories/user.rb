@@ -5,7 +5,7 @@ FactoryBot.define do
     id { SecureRandom.uuid }
     email { Faker::Internet.email }
     idp_id { SecureRandom.hex(32) }
-    saml_provider { create(:okta_saml_provider) }
+    identity_provider { create(:okta_identity_provider) }
     enterprise_account
     after(:create) do |user|
       create(

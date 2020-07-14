@@ -11,12 +11,13 @@ module Osso
 
       before_create :create_enterprise_account
 
-      # def name
-      #   raise(
-      #     NoMethodError,
-      #     '#name must be defined on each provider specific subclass',
-      #   )
-      # end
+      def name
+        service.titlecase
+        # raise(
+        #   NoMethodError,
+        #   '#name must be defined on each provider specific subclass',
+        # )
+      end
 
       # def saml_options
       #   raise(

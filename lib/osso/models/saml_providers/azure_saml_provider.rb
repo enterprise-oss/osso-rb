@@ -3,7 +3,7 @@
 module Osso
   module Models
     # Subclass for Azure / ADFS IDP instances
-    class AzureSamlProvider < Models::SamlProvider
+    class AzureSamlProvider < Models::IdentityProvider
       def name
         'Azure'
       end

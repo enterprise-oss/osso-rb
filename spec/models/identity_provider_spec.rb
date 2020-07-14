@@ -2,8 +2,8 @@
 
 require 'spec_helper'
 
-describe Osso::Models::SamlProvider do
-  subject { create(:okta_saml_provider) }
+describe Osso::Models::IdentityProvider do
+  subject { create(:okta_identity_provider) }
 
   describe '.create' do
     it 'creates an enterprise account' do
@@ -11,7 +11,7 @@ describe Osso::Models::SamlProvider do
 
       provider = described_class.create(
         domain: domain,
-        provider: 'Osso::Models::OktaSamlProvider',
+        service: 'OKTA',
       )
 
       expect(provider.enterprise_account).to be_a(Osso::Models::EnterpriseAccount)

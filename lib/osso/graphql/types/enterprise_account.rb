@@ -25,7 +25,7 @@ module Osso
         end
 
         def identity_providers
-          object.saml_providers
+          object.identity_providers
         end
       end
     end

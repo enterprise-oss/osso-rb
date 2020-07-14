@@ -10,19 +10,19 @@ module Osso
     class EnterpriseAccount < ActiveRecord::Base
       belongs_to :oauth_client
       has_many :users
-      has_many :saml_providers
+      has_many :identity_providers
 
       def single_provider?
-        saml_providers.one?
+        identity_providers.one?
       end
 
       def provider
         return nil unless single_provider?
 
-        saml_providers.first
+        identity_providers.first
       end
 
-      alias saml_provider provider
+      alias identity_provider provider
     end
   end
 end

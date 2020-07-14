@@ -13,11 +13,11 @@ module Osso
         field :errors, [String], null: false
 
         def resolve(provider:, id:)
-          saml_provider = Osso::Models::SamlProvider.find(id)
-          saml_provider.provider = provider
-          saml_provider.save!
+          identity_provider = Osso::Models::IdentityProvider.find(id)
+          identity_provider.service = provider
+          identity_provider.save!
           {
-            saml_provider: saml_provider,
+            identity_provider: identity_provider,
             errors: [],
           }
         end

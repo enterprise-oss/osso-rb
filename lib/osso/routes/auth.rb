@@ -25,8 +25,8 @@ module Osso
         identity_provider_id_regex: UUID_REGEXP,
         path_prefix: '/saml',
         callback_suffix: 'callback',
-      ) do |saml_provider_id, _env|
-        provider = Models::SamlProvider.find(saml_provider_id)
+      ) do |identity_provider_id, _env|
+        provider = Models::IdentityProvider.find(identity_provider_id)
         provider.saml_options
       end
     end
@@ -38,7 +38,7 @@ module Osso
       # is redirected back to your application with this code
       # as a URL query param, which you then exhange for an access token
       post '/saml/:id/callback' do
-        provider = Models::SamlProvider.find(params[:id])
+        provider = Models::IdentityProvider.find(params[:id])
         oauth_client = provider.oauth_client
         redirect_uri = env['redirect_uri'] || oauth_client.default_redirect_uri.uri
 
@@ -52,7 +52,7 @@ module Osso
           idp_id: attributes[:id],
         ).first_or_create! do |new_user|
           new_user.enterprise_account_id = provider.enterprise_account_id
-          new_user.saml_provider_id = provider.id
+          new_user.identity_provider_id = provider.id
         end
 
         authorization_code = user.authorization_codes.create!(

@@ -3,7 +3,7 @@
 module Osso
   module Models
     # Subclass for Okta IDP instances
-    class OktaSamlProvider < Models::SamlProvider
+    class OktaSamlProvider < Models::IdentityProvider
       def name
         'Okta'
       end

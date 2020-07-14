@@ -8,7 +8,7 @@ module Osso
       class MutationType < BaseObject
         field :configure_identity_provider, mutation: Mutations::ConfigureIdentityProvider
         field :create_identity_provider, mutation: Mutations::CreateIdentityProvider
-        field :set_saml_provider, mutation: Mutations::SetSamlProvider
+        field :set_identity_provider, mutation: Mutations::SetSamlProvider
       end
     end
   end

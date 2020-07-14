@@ -14,7 +14,7 @@ module Osso
         field :errors, [String], null: false
 
         def resolve(id:, sso_url:, sso_cert:, service:)
-          provider = Osso::Models::SamlProvider.find(id)
+          provider = Osso::Models::IdentityProvider.find(id)
           provider.update(
             idp_cert: sso_cert,
             idp_sso_target_url: sso_url,

@@ -15,7 +15,7 @@ module Osso
           :identity_provider,
           Types::IdentityProvider,
           null: true,
-          resolve: ->(_obj, args, _context) { Osso::Models::SamlProvider.find(args[:id]) },
+          resolve: ->(_obj, args, _context) { Osso::Models::IdentityProvider.find(args[:id]) },
         ) do
           argument :id, ID, required: true
         end
