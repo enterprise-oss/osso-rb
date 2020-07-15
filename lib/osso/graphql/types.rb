@@ -7,6 +7,7 @@ end
 
 require_relative 'types/base_object'
 require_relative 'types/base_enum'
+require_relative 'types/base_input_object'
 require_relative 'types/identity_provider_service'
 require_relative 'types/identity_provider'
 require_relative 'types/enterprise_account'

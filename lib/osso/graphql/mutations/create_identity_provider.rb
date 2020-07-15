@@ -5,22 +5,24 @@ module Osso
     module Mutations
       class CreateIdentityProvider < BaseMutation
         null false
+
         argument :enterprise_account_id, ID, required: true
-        argument :provider_service, Types::IdentityProviderService, required: true
+        argument :service, Types::IdentityProviderService, required: false
 
         field :identity_provider, Types::IdentityProvider, null: false
         field :errors, [String], null: false
 
-        def resolve(enterprise_account_id:, provider_service:)
+        def resolve(enterprise_account_id:, service: nil)
           enterprise_account = Osso::Models::EnterpriseAccount.find(enterprise_account_id)
-          identity_provider = enterprise_account.identity_providers.create!(
-            provider: provider_service || 'OKTA',
+          identity_provider = enterprise_account.identity_providers.build(
+            enterprise_account_id: enterprise_account_id,
+            service: service,
             domain: enterprise_account.domain,
           )
 
-          return_data(identity_provider: identity_provider)
-        rescue StandardError => e
-          return_error(errors: e.full_message)
+          return response_data(identity_provider: identity_provider) if identity_provider.save
+
+          response_error(errors: identity_provider.errors.full_messages)
         end
       end
     end
