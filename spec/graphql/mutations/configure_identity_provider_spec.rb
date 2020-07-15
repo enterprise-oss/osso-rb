@@ -47,7 +47,6 @@ describe Osso::GraphQL::Schema do
         end
 
         it 'configures an identity provider' do
-          binding.pry
           expect(subject.dig('data', 'configureIdentityProvider', 'identityProvider', 'configured')).
             to be true
         end
