@@ -18,12 +18,11 @@ module Osso
       query Types::QueryType
       mutation Types::MutationType
 
-      # def self.id_from_object(object, _type_definition = nil, _query_ctx = nil)
-      #   GraphQL::Schema::UniqueWithinType.encode(object.class.name, object.id)
-      # end
+      def self.id_from_object(object, _type_definition = nil, _query_ctx = nil)
+        GraphQL::Schema::UniqueWithinType.encode(object.class.name, object.id)
+      end
 
       def self.object_from_id(id, _query_ctx = nil)
-        binding.pry
         class_name, item_id = GraphQL::Schema::UniqueWithinType.decode(id)
         Object.const_get(class_name).find(item_id)
       end

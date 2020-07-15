@@ -6,23 +6,19 @@ module Osso
       class ConfigureIdentityProvider < BaseMutation
         null false
         argument :id, ID, required: true
-        argument :service, Types::IdentityProviderService, required: true
-        argument :sso_url, String, required: true
-        argument :sso_cert, String, required: true
+        argument :service, Types::IdentityProviderService, required: false
+        argument :sso_url, String, required: false
+        argument :sso_cert, String, required: false
 
-        field :identity_provider, Types::IdentityProvider, null: true
+        field :identity_provider, Types::IdentityProvider, null: false
         field :errors, [String], null: false
 
-        def resolve(id:, sso_url:, sso_cert:, service:)
+        def resolve(id:, **args)
           provider = Osso::Models::IdentityProvider.find(id)
-          provider.update(
-            idp_cert: sso_cert,
-            idp_sso_target_url: sso_url,
-          )
 
-          return_data(identity_provider: provider)
-          # rescue StandardError => e
-          #   return_error(errors: e.full_message)
+          return response_data(identity_provider: provider) if provider.update(args)
+
+          response_error(errors: provder.errors.messages)
         end
       end
     end

@@ -20,15 +20,7 @@ module Osso
         field :configured, Boolean, null: false
 
         def configured
-          !!(@object.idp_sso_target_url && @object.idp_cert)
-        end
-
-        def sso_cert
-          @object.idp_cert
-        end
-
-        def sso_url
-          @object.idp_sso_target_url
+          !!(@object.sso_url && @object.sso_cert)
         end
       end
     end
