@@ -16,6 +16,7 @@ module Osso
         def resolve(id:, **args)
           provider = Osso::Models::IdentityProvider.find(id)
 
+          return unauthorized unless authorized?
           return response_data(identity_provider: provider) if provider.update(args)
 
           response_error(errors: provder.errors.messages)

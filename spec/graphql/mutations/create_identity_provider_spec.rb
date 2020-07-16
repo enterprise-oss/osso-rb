@@ -77,5 +77,28 @@ describe Osso::GraphQL::Schema do
         end
       end
     end
+
+    describe 'for a wrong email scoped user' do
+      let(:domain) { Faker::Internet.domain_name }
+      let(:current_scope) { domain }
+      let(:enterprise_account) { create(:enterprise_account, domain: domain) }
+      let(:target_account) { create(:enterprise_account) }
+
+      describe 'without a service' do
+        let(:variables) { { input: { enterpriseAccountId: target_account.id } } }
+
+        it 'does not creates a identity provider' do
+          expect { subject }.to_not(change { Osso::Models::IdentityProvider.count })
+        end
+      end
+
+      describe 'with a service' do
+        let(:variables) { { input: { enterpriseAccountId: target_account.id, service: 'OKTA' } } }
+
+        it 'does not creates a identity provider' do
+          expect { subject }.to_not(change { Osso::Models::IdentityProvider.count })
+        end
+      end
+    end
   end
 end

@@ -3,8 +3,19 @@
 require 'spec_helper'
 
 describe Osso::GraphQL::Schema do
-  describe 'CreateIdentityProvider' do
-    let(:identity_provider) { create(:identity_provider) }
+  describe 'ConfigureIdentityProvider' do
+    let(:enterprise_account) { create(:enterprise_account) }
+    let(:identity_provider) { create(:identity_provider, enterprise_account: enterprise_account) }
+    let(:variables) do
+      {
+        input: {
+          id: identity_provider.id,
+          service: 'OKTA',
+          ssoUrl: 'https://example.com',
+          ssoCert: 'BEGIN_CERTIFICATE',
+        },
+      }
+    end
     let(:mutation) do
       <<~GRAPHQL
          mutation ConfigureIdentityProvider($input: ConfigureIdentityProviderInput!) {
@@ -34,58 +45,21 @@ describe Osso::GraphQL::Schema do
 
     describe 'for an admin user' do
       let(:current_scope) { :admin }
-      describe 'without a service' do
-        let(:variables) do
-          {
-            input: {
-              id: identity_provider.id,
-              service: 'OKTA',
-              ssoUrl: 'https://example.com',
-              ssoCert: 'BEGIN_CERTIFICATE',
-            },
-          }
-        end
-
-        it 'configures an identity provider' do
-          expect(subject.dig('data', 'configureIdentityProvider', 'identityProvider', 'configured')).
-            to be true
-        end
-      end
-
-      xdescribe 'with a service' do
-        let(:variables) { { input: { enterpriseAccountId: enterprise_account.id, service: 'OKTA' } } }
-
-        it 'creates an identity provider for given service ' do
-          expect { subject }.to change { enterprise_account.identity_providers.count }.by(1)
-          expect(subject.dig('data', 'createIdentityProvider', 'identityProvider', 'service')).
-            to eq('OKTA')
-        end
+      it 'configures an identity provider' do
+        expect(subject.dig('data', 'configureIdentityProvider', 'identityProvider', 'configured')).
+          to be true
       end
     end
 
-    xdescribe 'for an email scoped user' do
+    describe 'for an email scoped user' do
       let(:domain) { Faker::Internet.domain_name }
       let(:current_scope) { domain }
       let(:enterprise_account) { create(:enterprise_account, domain: domain) }
 
-      describe 'without a service' do
-        let(:variables) { { input: { enterpriseAccountId: enterprise_account.id } } }
-
-        it 'creates an identity provider' do
-          expect { subject }.to change { enterprise_account.identity_providers.count }.by(1)
-          expect(subject.dig('data', 'createIdentityProvider', 'identityProvider', 'domain')).
-            to eq(domain)
-        end
-      end
-
-      describe 'with a service' do
-        let(:variables) { { input: { enterpriseAccountId: enterprise_account.id, service: 'OKTA' } } }
-
-        it 'creates an identity provider for given service ' do
-          expect { subject }.to change { enterprise_account.identity_providers.count }.by(1)
-          expect(subject.dig('data', 'createIdentityProvider', 'identityProvider', 'service')).
-            to eq('OKTA')
-        end
+      it 'creates an identity provider' do
+        binding.pry
+        expect(subject.dig('data', 'configureIdentityProvider', 'identityProvider', 'domain')).
+          to eq(domain)
       end
     end
   end

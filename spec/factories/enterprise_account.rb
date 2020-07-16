@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :enterprise_account, class: Osso::Models::EnterpriseAccount do
     id { SecureRandom.uuid }
+    name { Faker::Company.name }
     domain { Faker::Internet.domain_name }
     oauth_client
   end

@@ -16,10 +16,6 @@ module Osso
         field :identity_providers, [Types::IdentityProvider], null: true
         field :status, String, null: false
 
-        def name
-          object.domain.gsub('.com', '')
-        end
-
         def status
           'active'
         end
