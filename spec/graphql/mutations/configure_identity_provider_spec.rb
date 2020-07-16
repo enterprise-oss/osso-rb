@@ -57,7 +57,6 @@ describe Osso::GraphQL::Schema do
       let(:enterprise_account) { create(:enterprise_account, domain: domain) }
 
       it 'creates an identity provider' do
-        binding.pry
         expect(subject.dig('data', 'configureIdentityProvider', 'identityProvider', 'domain')).
           to eq(domain)
       end
