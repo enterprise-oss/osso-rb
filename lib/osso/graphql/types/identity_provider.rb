@@ -27,6 +27,10 @@ module Osso
         def documentation_pdf_url
           ENV['BASE_URL'] + '/identity_provider/documentation/' + @object.id
         end
+
+        def self.authorized?(object, context)
+          super && (context[:scope] == :admin || object.domain == context[:scope])
+        end
       end
     end
   end

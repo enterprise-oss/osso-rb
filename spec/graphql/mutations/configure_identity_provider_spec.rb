@@ -55,10 +55,20 @@ describe Osso::GraphQL::Schema do
       let(:domain) { Faker::Internet.domain_name }
       let(:current_scope) { domain }
       let(:enterprise_account) { create(:enterprise_account, domain: domain) }
+      let(:identity_provider) { create(:identity_provider, enterprise_account: enterprise_account, domain: domain) }
 
-      it 'creates an identity provider' do
+      it 'configures an identity provider' do
         expect(subject.dig('data', 'configureIdentityProvider', 'identityProvider', 'domain')).
           to eq(domain)
+      end
+    end
+
+    describe 'for the wrong email scoped user' do
+      let(:domain) { Faker::Internet.domain_name }
+      let(:current_scope) { domain }
+
+      it 'does not configure an identity provider' do
+        expect(subject.dig('errors')).to_not be_empty
       end
     end
   end

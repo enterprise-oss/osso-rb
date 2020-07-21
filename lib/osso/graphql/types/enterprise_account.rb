@@ -23,6 +23,10 @@ module Osso
         def identity_providers
           object.identity_providers
         end
+
+        def self.authorized?(object, context)
+          super && (context[:scope] == :admin || object.domain == context[:scope])
+        end
       end
     end
   end

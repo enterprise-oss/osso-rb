@@ -16,10 +16,19 @@ module Osso
         def resolve(id:, **args)
           provider = Osso::Models::IdentityProvider.find(id)
 
-          return unauthorized unless authorized?
           return response_data(identity_provider: provider) if provider.update(args)
 
           response_error(errors: provder.errors.messages)
+        end
+
+        def ready?(id:, **args)
+          return true if context[:scope] == :admin
+
+          domain = Osso::Models::IdentityProvider.find(id)&.domain
+
+          return true if domain == context[:scope]
+
+          raise ::GraphQL::ExecutionError, "This user lacks the scope to mutate records belonging to #{domain}"
         end
       end
     end
