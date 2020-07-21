@@ -18,9 +18,14 @@ module Osso
         field :sso_url, String, null: true
         field :sso_cert, String, null: true
         field :configured, Boolean, null: false
+        field :documentation_pdf_url, String, null: true
 
         def configured
           !!(@object.sso_url && @object.sso_cert)
+        end
+
+        def documentation_pdf_url
+          ENV['BASE_URL'] + '/identity_provider/documentation/' + @object.id
         end
       end
     end
