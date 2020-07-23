@@ -26,3 +26,23 @@ module Osso
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: enterprise_accounts
+#
+#  id              :uuid             not null, primary key
+#  domain          :string           not null
+#  external_uuid   :uuid
+#  external_int_id :integer
+#  external_id     :string
+#  oauth_client_id :uuid
+#  name            :string           not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#
+# Indexes
+#
+#  index_enterprise_accounts_on_domain           (domain) UNIQUE
+#  index_enterprise_accounts_on_oauth_client_id  (oauth_client_id)
+#

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# -*- SkipSchemaAnnotations
+
 require 'sinatra/activerecord'
 
 module Osso

@@ -30,3 +30,19 @@ module Osso
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: oauth_clients
+#
+#  id         :uuid             not null, primary key
+#  name       :string           not null
+#  secret     :string           not null
+#  identifier :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_oauth_clients_on_identifier  (identifier) UNIQUE
+#

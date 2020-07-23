@@ -54,3 +54,25 @@ module Osso
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: identity_providers
+#
+#  id                    :uuid             not null, primary key
+#  service               :string
+#  domain                :string           not null
+#  sso_url               :string
+#  sso_cert              :text
+#  enterprise_account_id :uuid
+#  oauth_client_id       :uuid
+#  status                :enum             default("PENDING")
+#  created_at            :datetime
+#  updated_at            :datetime
+#
+# Indexes
+#
+#  index_identity_providers_on_domain                 (domain)
+#  index_identity_providers_on_enterprise_account_id  (enterprise_account_id)
+#  index_identity_providers_on_oauth_client_id        (oauth_client_id)
+#
