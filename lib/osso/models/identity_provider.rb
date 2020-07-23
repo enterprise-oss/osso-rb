@@ -10,7 +10,6 @@ module Osso
       has_many :users
       before_save :set_status
 
-
       def name
         service.titlecase
         # raise(

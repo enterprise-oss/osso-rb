@@ -15,12 +15,7 @@ module Osso
       end
 
       def enterprise_authorized?(_domain)
-        payload, _args = JWT.decode(
-          token,
-          ENV['JWT_HMAC_SECRET'],
-          true,
-          { algorithm: 'HS256' },
-        )
+        payload, _args = decode(token)
 
         @current_scope = payload['scope']
 
@@ -36,12 +31,7 @@ module Osso
       end
 
       def admin_authorized?
-        payload, _args = JWT.decode(
-          token,
-          ENV['JWT_HMAC_SECRET'],
-          true,
-          { algorithm: 'HS256' },
-        )
+        payload, _args = decode(token)
 
         if payload['scope'] == 'admin'
           @current_scope = :admin
@@ -65,6 +55,15 @@ module Osso
         return if request.post?
 
         redirect request.path
+      end
+
+      def decode(token)
+        JWT.decode(
+          token,
+          ENV['JWT_HMAC_SECRET'],
+          true,
+          { algorithm: 'HS256' },
+        )
       end
     end
   end

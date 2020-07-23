@@ -4,7 +4,7 @@ module Osso
   module GraphQL
     module Resolvers
       class OAuthClients < ::GraphQL::Schema::Resolver
-        type [Types::OAuthClient], null: true
+        type [Types::OauthClient], null: true
 
         def resolve
           return Osso::Models::OauthClient.all if context[:scope] == :admin

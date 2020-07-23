@@ -25,7 +25,7 @@ module Osso
 
       def setup
         self.identifier = SecureRandom.hex(16)
-        self.secret = SecureRandom.hex(64)
+        self.secret = SecureRandom.hex(32)
       end
     end
   end

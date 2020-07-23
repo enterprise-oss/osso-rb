@@ -21,7 +21,7 @@ module Osso
           response_error(errors: provder.errors.messages)
         end
 
-        def ready?(id:, **args)
+        def ready?(id:, **_args)
           return true if context[:scope] == :admin
 
           domain = Osso::Models::IdentityProvider.find(id)&.domain

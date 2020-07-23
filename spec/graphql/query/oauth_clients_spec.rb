@@ -10,6 +10,8 @@ describe Osso::GraphQL::Schema do
           oauthClients {
             name
             id
+            clientSecret
+            clientId
           }
         }
       GRAPHQL

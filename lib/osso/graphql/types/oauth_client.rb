@@ -5,7 +5,7 @@ require 'graphql'
 module Osso
   module GraphQL
     module Types
-      class OAuthClient < Types::BaseObject
+      class OauthClient < Types::BaseObject
         description 'An OAuth client used to consume Osso SAML users'
         implements ::GraphQL::Types::Relay::Node
 
@@ -14,6 +14,18 @@ module Osso
         field :name, String, null: false
         field :client_id, String, null: false
         field :client_secret, String, null: false
+
+        def client_id
+          object.identifier
+        end
+
+        def client_secret
+          object.secret
+        end
+
+        def self.authorized?(object, context)
+          super && context[:scope] == :admin
+        end
       end
     end
   end

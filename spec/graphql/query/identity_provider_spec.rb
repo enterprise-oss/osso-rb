@@ -55,7 +55,7 @@ describe Osso::GraphQL::Schema do
 
     describe 'for the wrong email scoped user' do
       let(:current_scope) { 'bar.com' }
-      
+
       it 'returns Enterprise Account for domain' do
         expect(subject['errors']).to_not be_empty
         expect(subject.dig('data', 'enterpriseAccount')).to be_nil
