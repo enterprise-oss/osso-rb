@@ -47,7 +47,7 @@ describe Osso::GraphQL::Schema do
       let(:current_scope) { :admin }
       it 'configures an identity provider' do
         expect(subject.dig('data', 'configureIdentityProvider', 'identityProvider', 'status')).
-          to eq('configured')
+          to eq('Configured')
       end
     end
 
