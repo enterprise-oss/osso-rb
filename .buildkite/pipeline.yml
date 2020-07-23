@@ -2,5 +2,5 @@ steps:
   - name: ":rspec:"
     commands: 
         - "bundle install"
-        - "bundle exec rake db:test:prepare"
+        - "RACK_ENV=test bundle exec rake db:migrate"
         - "bundle exec rspec"
