@@ -23,7 +23,7 @@ describe Osso::GraphQL::Schema do
             identityProvider {
               id
               domain
-              configured
+              status
               enterpriseAccountId
               service
               acsUrl
@@ -46,8 +46,8 @@ describe Osso::GraphQL::Schema do
     describe 'for an admin user' do
       let(:current_scope) { :admin }
       it 'configures an identity provider' do
-        expect(subject.dig('data', 'configureIdentityProvider', 'identityProvider', 'configured')).
-          to be true
+        expect(subject.dig('data', 'configureIdentityProvider', 'identityProvider', 'status')).
+          to eq('configured')
       end
     end
 

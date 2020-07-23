@@ -17,7 +17,7 @@ describe Osso::GraphQL::Schema do
             acsUrl
             ssoCert
             ssoUrl
-            configured
+            status
           }
         }
       GRAPHQL

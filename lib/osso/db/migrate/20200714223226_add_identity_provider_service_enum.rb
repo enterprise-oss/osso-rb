@@ -4,7 +4,7 @@ class AddIdentityProviderServiceEnum < ActiveRecord::Migration[6.0]
       execute <<-SQL
         CREATE TYPE identity_provider_service AS ENUM ('OKTA', 'AZURE');
       SQL
-      chnage_column :identity_providers, :service, :identity_provider_service
+      change_column :identity_providers, :service, :identity_provider_service
     end
   
     def down

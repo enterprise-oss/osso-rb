@@ -8,6 +8,8 @@ module Osso
       belongs_to :enterprise_account
       belongs_to :oauth_client
       has_many :users
+      before_save :set_status
+
 
       def name
         service.titlecase
@@ -43,6 +45,12 @@ module Osso
       end
 
       alias acs_url assertion_consumer_service_url
+
+      def set_status
+        return if status != 'PENDING'
+
+        self.status = 'CONFIGURED' if sso_url && sso_cert
+      end
     end
   end
 end
