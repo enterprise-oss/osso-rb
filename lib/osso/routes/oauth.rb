@@ -14,7 +14,7 @@ module Osso
       # of the user who wants to sign in.
       get '/authorize' do
         @enterprise = Models::EnterpriseAccount.
-          includes(:saml_providers).
+          includes(:identity_providers).
           find_by!(domain: params[:domain])
 
         Rack::OAuth2::Server::Authorize.new do |req, _res|

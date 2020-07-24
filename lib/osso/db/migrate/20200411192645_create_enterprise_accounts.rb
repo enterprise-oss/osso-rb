@@ -9,7 +9,7 @@ class CreateEnterpriseAccounts < ActiveRecord::Migration[6.0]
 
     add_index :enterprise_accounts, :domain, unique: true
 
-    add_reference :saml_providers, :enterprise_account, type: :uuid, index: true    
+    add_reference :identity_providers, :enterprise_account, type: :uuid, index: true    
     add_reference :users, :enterprise_account, type: :uuid, index: true
   end
 end

@@ -35,7 +35,7 @@ describe Osso::Oauth do
             redirect_uri: client.redirect_uri_values.sample,
           )
 
-          provider_id = enterprise.saml_providers.first.id
+          provider_id = enterprise.identity_providers.first.id
 
           expect(last_response).to be_redirect
           follow_redirect!

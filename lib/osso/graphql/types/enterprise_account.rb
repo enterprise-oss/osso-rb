@@ -16,16 +16,16 @@ module Osso
         field :identity_providers, [Types::IdentityProvider], null: true
         field :status, String, null: false
 
-        def name
-          object.domain.gsub('.com', '')
-        end
-
         def status
           'active'
         end
 
         def identity_providers
-          object.saml_providers
+          object.identity_providers
+        end
+
+        def self.authorized?(object, context)
+          super && (context[:scope] == :admin || object.domain == context[:scope])
         end
       end
     end

@@ -6,9 +6,12 @@ module Osso
   module GraphQL
     module Types
       class MutationType < BaseObject
-        field :configure_identity_provider, mutation: Mutations::ConfigureIdentityProvider
+        field :configure_identity_provider, mutation: Mutations::ConfigureIdentityProvider, null: true
         field :create_identity_provider, mutation: Mutations::CreateIdentityProvider
-        field :set_saml_provider, mutation: Mutations::SetSamlProvider
+        field :create_enterprise_account, mutation: Mutations::CreateEnterpriseAccount
+        field :create_oauth_client, mutation: Mutations::CreateOauthClient
+        field :delete_enterprise_account, mutation: Mutations::DeleteEnterpriseAccount
+        field :delete_oauth_client, mutation: Mutations::DeleteOauthClient
       end
     end
   end

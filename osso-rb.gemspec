@@ -28,6 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'sinatra-activerecord'
   spec.add_runtime_dependency 'sinatra-contrib'
 
+  spec.add_development_dependency 'annotate', '~> 3.1'
   spec.add_development_dependency 'bundler', '~> 2.1'
   spec.add_development_dependency 'pry'
 

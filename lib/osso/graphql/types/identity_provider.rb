@@ -17,22 +17,15 @@ module Osso
         field :acs_url, String, null: false
         field :sso_url, String, null: true
         field :sso_cert, String, null: true
-        field :configured, Boolean, null: false
+        field :status, Types::IdentityProviderStatus, null: false
+        field :documentation_pdf_url, String, null: true
 
-        def service
-          @object.provider
+        def documentation_pdf_url
+          ENV['BASE_URL'] + '/identity_provider/documentation/' + @object.id
         end
 
-        def configured
-          @object.idp_sso_target_url && @object.idp_cert
-        end
-
-        def sso_cert
-          @object.idp_cert
-        end
-
-        def sso_url
-          @object.idp_sso_target_url
+        def self.authorized?(object, context)
+          super && (context[:scope] == :admin || object.domain == context[:scope])
         end
       end
     end

@@ -10,19 +10,39 @@ module Osso
     class EnterpriseAccount < ActiveRecord::Base
       belongs_to :oauth_client
       has_many :users
-      has_many :saml_providers
+      has_many :identity_providers
 
       def single_provider?
-        saml_providers.one?
+        identity_providers.one?
       end
 
       def provider
         return nil unless single_provider?
 
-        saml_providers.first
+        identity_providers.first
       end
 
-      alias saml_provider provider
+      alias identity_provider provider
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: enterprise_accounts
+#
+#  id              :uuid             not null, primary key
+#  domain          :string           not null
+#  external_uuid   :uuid
+#  external_int_id :integer
+#  external_id     :string
+#  oauth_client_id :uuid
+#  name            :string           not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#
+# Indexes
+#
+#  index_enterprise_accounts_on_domain           (domain) UNIQUE
+#  index_enterprise_accounts_on_oauth_client_id  (oauth_client_id)
+#

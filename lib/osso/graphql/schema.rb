@@ -31,11 +31,15 @@ module Osso
         case obj
         when Osso::Models::EnterpriseAccount
           Types::EnterpriseAccount
-        when Osso::Models::SamlProvider
+        when Osso::Models::IdentityProvider
           Types::IdentityProvider
         else
           raise("Unexpected object: #{obj}")
         end
+      end
+
+      def self.unauthorized_object(error)
+        raise ::GraphQL::ExecutionError, "An object of type #{error.type.graphql_name} was hidden due to permissions"
       end
     end
   end

@@ -27,3 +27,21 @@ module Osso
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: access_tokens
+#
+#  id              :uuid             not null, primary key
+#  token           :string
+#  expires_at      :datetime
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  user_id         :uuid
+#  oauth_client_id :uuid
+#
+# Indexes
+#
+#  index_access_tokens_on_oauth_client_id  (oauth_client_id)
+#  index_access_tokens_on_user_id          (user_id)
+#
