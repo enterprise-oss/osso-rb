@@ -5,6 +5,7 @@ module Osso
   end
 end
 
+require_relative 'types/base_connection'
 require_relative 'types/base_object'
 require_relative 'types/base_enum'
 require_relative 'types/base_input_object'

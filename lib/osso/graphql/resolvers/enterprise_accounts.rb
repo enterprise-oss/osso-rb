@@ -4,7 +4,7 @@ module Osso
   module GraphQL
     module Resolvers
       class EnterpriseAccounts < ::GraphQL::Schema::Resolver
-        type [Types::EnterpriseAccount], null: true
+        type Types::EnterpriseAccount.connection_type, null: true
 
         def resolve
           return Osso::Models::EnterpriseAccount.all if context[:scope] == :admin
