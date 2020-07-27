@@ -6,10 +6,18 @@ module Osso
       class EnterpriseAccounts < ::GraphQL::Schema::Resolver
         type Types::EnterpriseAccount.connection_type, null: true
 
-        def resolve
-          return Osso::Models::EnterpriseAccount.all if context[:scope] == :admin
+        def resolve(sort_column: nil, sort_order: nil)
+          return Array(Osso::Models::EnterpriseAccount.find_by(domain: context[:scope])) if context[:scope] != :admin
 
-          Array(Osso::Models::EnterpriseAccount.find_by(domain: context[:scope]))
+          accounts = Osso::Models::EnterpriseAccount
+
+          accounts = accounts.order(sort_column => sort_order_sym(sort_order)) if sort_column && sort_order
+
+          accounts.all
+        end
+
+        def sort_order_sym(order_string)
+          order_string == 'ascend' ? :asc : :desc
         end
       end
     end
