@@ -17,6 +17,10 @@ module Osso
         redirect_uris.find(&:primary)
       end
 
+      def redirect_uri_values
+        redirect_uris.map(&:uri)
+      end
+
       def generate_secrets
         self.identifier = SecureRandom.hex(16)
         self.secret = SecureRandom.hex(32)
