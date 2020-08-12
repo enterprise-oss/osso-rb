@@ -14,6 +14,8 @@ module Osso
         redirect ENV['JWT_URL']
       end
 
+      # use client id in payload to restrict customer
+      # users from accessing dev?
       def enterprise_authorized?(_domain)
         payload, _args = decode(token)
 

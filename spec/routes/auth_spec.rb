@@ -3,6 +3,31 @@
 require 'spec_helper'
 
 describe Osso::Auth do
+  describe 'get /auth/saml/:uuid' do
+    describe 'for an Okta SAML provider' do
+      let(:enterprise) { create(:enterprise_with_okta) }
+      let(:okta_provider) { enterprise.identity_providers.first }
+      it 'uses omniauth saml' do
+        get("/auth/saml/#{okta_provider.id}")
+
+        expect(last_response).to be_redirect
+        follow_redirect!
+        expect(last_request.url).to match("auth/saml/#{okta_provider.id}")
+      end
+    end
+
+    describe 'for an Azure SAML provider' do
+      let(:enterprise) { create(:enterprise_with_okta) }
+      let(:azure_provider) { enterprise.identity_providers.first }
+      it 'uses omniauth saml' do
+        get("/auth/saml/#{azure_provider.id}")
+
+        expect(last_response).to be_redirect
+        follow_redirect!
+        expect(last_request.url).to match("auth/saml/#{azure_provider.id}")
+      end
+    end
+  end
   describe 'post /auth/saml/:uuid/callback' do
     describe 'for an Okta SAML provider' do
       let(:enterprise) { create(:enterprise_with_okta) }

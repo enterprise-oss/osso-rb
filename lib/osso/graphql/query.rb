@@ -8,17 +8,27 @@ module Osso
           argument :sort_column, String, required: false
           argument :sort_order, String, required: false
         end
-        field :oauth_clients, null: true, resolver: Resolvers::OAuthClients
 
         field :enterprise_account, null: true, resolver: Resolvers::EnterpriseAccount do
           argument :domain, String, required: true
         end
+
+        field :oauth_clients, null: true, resolver: Resolvers::OAuthClients
 
         field(
           :identity_provider,
           Types::IdentityProvider,
           null: true,
           resolve: ->(_obj, args, _context) { Osso::Models::IdentityProvider.find(args[:id]) },
+        ) do
+          argument :id, ID, required: true
+        end
+
+        field(
+          :oauth_client,
+          Types::OauthClient,
+          null: true,
+          resolve: ->(_obj, args, _context) { Osso::Models::OauthClient.find(args[:id]) },
         ) do
           argument :id, ID, required: true
         end
