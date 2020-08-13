@@ -14,9 +14,9 @@ module Osso
         def resolve(id:)
           oauth_client = Osso::Models::OauthClient.find(id)
           oauth_client.generate_secrets
-          
+
           return response_data(oauth_client: oauth_client) if oauth_client.save
-        
+
           response_error(errors: oauth_client.errors.full_messages)
         end
 

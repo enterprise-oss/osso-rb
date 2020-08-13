@@ -14,7 +14,7 @@ module Osso
         field :delete_enterprise_account, mutation: Mutations::DeleteEnterpriseAccount
         field :delete_oauth_client, mutation: Mutations::DeleteOauthClient
         field :delete_redirect_uri, mutation: Mutations::DeleteRedirectUri
-        field :mark_redirect_uri_primary, mutation: Mutations::MarkRedirectUriPrimary
+        field :set_redirect_uris, mutation: Mutations::SetRedirectUris
         field :regenerate_oauth_credentials, mutation: Mutations::RegenerateOauthCredentials
       end
     end
