@@ -10,5 +10,5 @@ steps:
   - block: ":rocket: :rubygems: Publish :red_button:"
   
   - name: "Push :rubygems:"
-      command: "./bin/deploy"
-      branches: "main"
+    commands: "./bin/deploy"
+    branches: "main"
