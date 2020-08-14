@@ -8,6 +8,7 @@ steps:
       - bundle exec rspec
   
   - block: ":rocket: :rubygems: Publish :red_button:"
+    branches: "main"
   
   - name: "Push :rubygems:"
     commands: "./bin/deploy"
