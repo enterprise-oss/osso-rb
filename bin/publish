@@ -7,7 +7,6 @@
 GEM_NAME="osso-rb"
 GEMSPEC_SUFFIX=".gemspec"
 GEM_BUILD_CMD="gem build"
-GEM_PUSH_CMD="gem push -k :rubygems_api_key:"
 
 # run the gem build and parse for the gem release filename
 GEM_BUILD_NAME=$(gem build "$GEM_NAME$GEMSPEC_SUFFIX" |  awk '/File/ {print $2}' -)
@@ -17,6 +16,8 @@ if [ -z "$GEM_BUILD_NAME" ]; then
   echo "The gem build failed.  Please confirm the gem name and try again." >&2
   exit 1
 fi
+
+cat ~/.gem/credentials
 
 # if above succeeded, then push to rubygems.org using the gem that was compiled
 gem push $GEM_BUILD_NAME
