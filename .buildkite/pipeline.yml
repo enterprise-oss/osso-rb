@@ -11,5 +11,5 @@ steps:
     branches: "main"
   
   - name: "Push :rubygems:"
-    commands: "./bin/deploy"
+    commands: "./bin/publish"
     branches: "main"
