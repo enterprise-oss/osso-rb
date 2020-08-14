@@ -1,0 +1,22 @@
+#!/bin/sh
+# Scriptacular - gemify.sh
+# Create a Ruby gem and push it to rubygems.org
+# Copyright 2013 Christopher Simpkins
+# MIT License
+
+GEM_NAME="osso-rb"
+GEMSPEC_SUFFIX=".gemspec"
+GEM_BUILD_CMD="gem build"
+GEM_PUSH_CMD="gem push"
+
+# run the gem build and parse for the gem release filename
+GEM_BUILD_NAME=$(gem build "$GEM_NAME$GEMSPEC_SUFFIX" |  awk '/File/ {print $2}' -)
+
+# if the build failed (i.e. no file name obtained above), print error message and exit
+if [ -z "$GEM_BUILD_NAME" ]; then
+  echo "The gem build failed.  Please confirm the gem name and try again." >&2
+  exit 1
+fi
+
+# if above succeeded, then push to rubygems.org using the gem that was compiled
+gem push $GEM_BUILD_NAME
