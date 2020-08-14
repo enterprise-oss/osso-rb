@@ -7,7 +7,7 @@
 GEM_NAME="osso-rb"
 GEMSPEC_SUFFIX=".gemspec"
 GEM_BUILD_CMD="gem build"
-GEM_PUSH_CMD="gem push"
+GEM_PUSH_CMD="gem push -k :rubygems_api_key:"
 
 # run the gem build and parse for the gem release filename
 GEM_BUILD_NAME=$(gem build "$GEM_NAME$GEMSPEC_SUFFIX" |  awk '/File/ {print $2}' -)
