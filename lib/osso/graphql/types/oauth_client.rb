@@ -14,6 +14,7 @@ module Osso
         field :name, String, null: false
         field :client_id, String, null: false
         field :client_secret, String, null: false
+        field :redirect_uris, [Types::RedirectUri], null: true
 
         def client_id
           object.identifier

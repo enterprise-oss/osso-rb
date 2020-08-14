@@ -9,11 +9,11 @@ module Osso
       has_many :identity_providers
       has_many :redirect_uris
 
-      before_validation :setup, on: :create
+      before_validation :generate_secrets, on: :create
       validates :name, :secret, presence: true
       validates :identifier, presence: true, uniqueness: true
 
-      def default_redirect_uri
+      def primary_redirect_uri
         redirect_uris.find(&:primary)
       end
 
@@ -21,9 +21,7 @@ module Osso
         redirect_uris.map(&:uri)
       end
 
-      private
-
-      def setup
+      def generate_secrets
         self.identifier = SecureRandom.hex(16)
         self.secret = SecureRandom.hex(32)
       end

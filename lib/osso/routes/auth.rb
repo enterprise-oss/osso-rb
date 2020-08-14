@@ -23,7 +23,7 @@ module Osso
         self,
         provider_name: 'saml',
         identity_provider_id_regex: UUID_REGEXP,
-        path_prefix: '/saml',
+        path_prefix: '/auth/saml',
         callback_suffix: 'callback',
       ) do |identity_provider_id, _env|
         provider = Models::IdentityProvider.find(identity_provider_id)
@@ -40,7 +40,7 @@ module Osso
       post '/saml/:id/callback' do
         provider = Models::IdentityProvider.find(params[:id])
         oauth_client = provider.oauth_client
-        redirect_uri = env['redirect_uri'] || oauth_client.default_redirect_uri.uri
+        redirect_uri = env['redirect_uri'] || oauth_client.primary_redirect_uri.uri
 
         attributes = env['omniauth.auth']&.
           extra&.

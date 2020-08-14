@@ -36,6 +36,12 @@ module Osso
 
         erb :admin
       end
+
+      get '/config/:id' do
+        admin_protected!
+
+        erb :admin
+      end
     end
   end
 end

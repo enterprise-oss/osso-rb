@@ -6,3 +6,10 @@ steps:
       - bundle exec rake db:create
       - RACK_ENV=test bundle exec rake db:migrate
       - bundle exec rspec
+  
+  - block: ":rocket: :rubygems: Publish :red_button:"
+    branches: "main"
+  
+  - name: "Push :rubygems:"
+    commands: "./bin/deploy"
+    branches: "main"
