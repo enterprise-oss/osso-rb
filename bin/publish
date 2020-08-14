@@ -17,7 +17,5 @@ if [ -z "$GEM_BUILD_NAME" ]; then
   exit 1
 fi
 
-cat ~/.gem/credentials
-
 # if above succeeded, then push to rubygems.org using the gem that was compiled
 gem push $GEM_BUILD_NAME
