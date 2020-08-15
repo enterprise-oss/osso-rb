@@ -12,10 +12,6 @@ module Osso
 
       def name
         service.titlecase
-        # raise(
-        #   NoMethodError,
-        #   '#name must be defined on each provider specific subclass',
-        # )
       end
 
       def saml_options

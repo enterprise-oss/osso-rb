@@ -28,7 +28,6 @@ module Osso
         end
 
         # TODO: multiple provider support
-        # erb :multiple_providers
 
       rescue Rack::OAuth2::Server::Authorize::BadRequest => e
         @error = e

@@ -3,16 +3,16 @@
 require 'spec_helper'
 
 describe Osso::Auth do
-  describe 'get /auth/saml/:uuid' do
+  describe 'get /saml/:uuid' do
     describe 'for an Okta SAML provider' do
       let(:enterprise) { create(:enterprise_with_okta) }
       let(:okta_provider) { enterprise.identity_providers.first }
       it 'uses omniauth saml' do
-        get("/auth/saml/#{okta_provider.id}")
+        get("/saml/#{okta_provider.id}")
 
         expect(last_response).to be_redirect
         follow_redirect!
-        expect(last_request.url).to match("auth/saml/#{okta_provider.id}")
+        expect(last_request.url).to match("saml/#{okta_provider.id}")
       end
     end
 
@@ -20,15 +20,15 @@ describe Osso::Auth do
       let(:enterprise) { create(:enterprise_with_okta) }
       let(:azure_provider) { enterprise.identity_providers.first }
       it 'uses omniauth saml' do
-        get("/auth/saml/#{azure_provider.id}")
+        get("/saml/#{azure_provider.id}")
 
         expect(last_response).to be_redirect
         follow_redirect!
-        expect(last_request.url).to match("auth/saml/#{azure_provider.id}")
+        expect(last_request.url).to match("saml/#{azure_provider.id}")
       end
     end
   end
-  describe 'post /auth/saml/:uuid/callback' do
+  describe 'post /saml/:uuid/callback' do
     describe 'for an Okta SAML provider' do
       let(:enterprise) { create(:enterprise_with_okta) }
       let(:okta_provider) { enterprise.identity_providers.first }
@@ -39,7 +39,7 @@ describe Osso::Auth do
 
           expect do
             post(
-              "/auth/saml/#{okta_provider.id}/callback",
+              "/saml/#{okta_provider.id}/callback",
               nil,
               {
                 'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
@@ -54,7 +54,7 @@ describe Osso::Auth do
 
           expect do
             post(
-              "/auth/saml/#{okta_provider.id}/callback",
+              "/saml/#{okta_provider.id}/callback",
               nil,
               {
                 'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
@@ -77,7 +77,7 @@ describe Osso::Auth do
         it 'creates a user' do
           expect do
             post(
-              "/auth/saml/#{okta_provider.id}/callback",
+              "/saml/#{okta_provider.id}/callback",
               nil,
               {
                 'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
@@ -99,7 +99,7 @@ describe Osso::Auth do
 
           expect do
             post(
-              "/auth/saml/#{azure_provider.id}/callback",
+              "/saml/#{azure_provider.id}/callback",
               nil,
               {
                 'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
@@ -122,7 +122,7 @@ describe Osso::Auth do
         it 'creates a user' do
           expect do
             post(
-              "/auth/saml/#{azure_provider.id}/callback",
+              "/saml/#{azure_provider.id}/callback",
               nil,
               {
                 'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
