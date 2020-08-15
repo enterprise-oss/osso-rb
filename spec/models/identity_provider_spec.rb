@@ -14,4 +14,16 @@ describe Osso::Models::IdentityProvider do
       )
     end
   end
+
+  describe '#saml_options' do
+    it 'returns the required args' do
+      expect(subject.saml_options).
+        to match(
+          domain: subject.domain,
+          idp_cert: subject.sso_cert,
+          idp_sso_target_url: subject.sso_url,
+          issuer: subject.domain,
+        )
+    end
+  end
 end

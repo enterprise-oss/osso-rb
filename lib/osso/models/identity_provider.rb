@@ -19,19 +19,13 @@ module Osso
       end
 
       def saml_options
-        attributes.slice(
-          'domain',
-          'idp_cert',
-          'idp_sso_target_url',
-        ).symbolize_keys
+        {
+          domain: domain,
+          idp_sso_target_url: sso_url,
+          idp_cert: sso_cert,
+          issuer: domain,
+        }
       end
-
-      # def saml_options
-      #   raise(
-      #     NoMethodError,
-      #     '#saml_options must be defined on each provider specific subclass',
-      #   )
-      # end
 
       def assertion_consumer_service_url
         [
