@@ -23,7 +23,7 @@ module Osso
         self,
         provider_name: 'saml',
         identity_provider_id_regex: UUID_REGEXP,
-        path_prefix: '/auth/saml',
+        path_prefix: 'auth/saml',
         callback_suffix: 'callback',
       ) do |identity_provider_id, _env|
         provider = Models::IdentityProvider.find(identity_provider_id)
