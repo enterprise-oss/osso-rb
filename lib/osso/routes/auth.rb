@@ -14,10 +14,6 @@ module Osso
       /[0-9a-f]{8}-[0-9a-f]{3,4}-[0-9a-f]{4}-[0-9a-f]{3,4}-[0-9a-f]{12}/.
         freeze
 
-    def self.internal_redirect?(env)
-      env['HTTP_REFERER']&.match(env['SERVER_NAME'])
-    end
-
     use OmniAuth::Builder do
       OmniAuth::MultiProvider.register(
         self,
@@ -26,8 +22,8 @@ module Osso
         path_prefix: '/auth/saml',
         callback_suffix: 'callback',
       ) do |identity_provider_id, _env|
-        provider = Models::IdentityProvider.find(identity_provider_id)
-        provider.saml_options
+        Models::IdentityProvider.find(identity_provider_id).
+          saml_options
       end
     end
 
@@ -36,7 +32,7 @@ module Osso
       # their Identity Provider. We find or create a user record,
       # and then create an authorization code for that user. The user
       # is redirected back to your application with this code
-      # as a URL query param, which you then exhange for an access token
+      # as a URL query param, which you then exchange for an access token.
       post '/saml/:id/callback' do
         provider = Models::IdentityProvider.find(params[:id])
         oauth_client = provider.oauth_client
@@ -60,7 +56,13 @@ module Osso
           redirect_uri: redirect_uri,
         )
 
-        redirect(redirect_uri + "?code=#{CGI.escape(authorization_code.token)}&state=#{session[:oauth_state]}")
+        # Mark IDP as active
+
+        redirect(redirect_uri + "?code=#{CGI.escape(authorization_code.token)}&state=#{provider_state}")
+      end
+
+      def provider_state
+        session[:osso_oauth_state] || 'IDP_INITIATED'
       end
     end
   end

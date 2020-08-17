@@ -63,6 +63,24 @@ describe Osso::Auth do
             )
           end.to change { Osso::Models::AuthorizationCode.count }.by(1)
         end
+
+        describe 'for an IDP initiated login' do
+          it 'redirects with a default state' do
+            mock_saml_omniauth
+
+            post(
+              "/auth/saml/#{okta_provider.id}/callback",
+              nil,
+              {
+                'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
+                'identity_provider' => okta_provider,
+              },
+            )
+            expect(last_response).to be_redirect
+            follow_redirect!
+            expect(last_request.url).to match(/.*state=IDP_INITIATED$/)
+          end
+        end
       end
 
       describe 'on subsequent authentications' do
