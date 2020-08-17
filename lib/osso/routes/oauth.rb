@@ -6,7 +6,7 @@ module Osso
   class Oauth < Sinatra::Base
     include AppConfig
     register Sinatra::Namespace
-    # rubocop:disable Metrics/BlockLength
+
     namespace '/oauth' do
       # Send your users here in order to being an authentication
       # flow. This flow follows the authorization grant oauth
@@ -19,11 +19,11 @@ module Osso
 
         Rack::OAuth2::Server::Authorize.new do |req, _res|
           client = Models::OauthClient.find_by!(identifier: req.client_id)
-          req.verify_redirect_uri!(client.redirect_uri_values)
+          session[:osso_oauth_redirect_uri] = req.verify_redirect_uri!(client.redirect_uri_values)
         end.call(env)
 
         if @enterprise.single_provider?
-          session[:oauth_state] = params[:state]
+          session[:osso_oauth_state] = params[:state]
           redirect "/auth/saml/#{@enterprise.provider.id}"
         end
 
@@ -35,9 +35,10 @@ module Osso
         return erb :error
       end
 
-      # Exchange an authorization code token for an access token.
-      # In addition to the token, you must include all paramaters
-      # required by Oauth spec: redirect_uri, client ID, and client secret
+      # Exchange an authorization code for an access token.
+      # In addition to the authorization code, you must include all 
+      # paramaters required by OAuth spec: redirect_uri, client ID, 
+      # and client secret
       post '/token' do
         Rack::OAuth2::Server::Token.new do |req, res|
           code = Models::AuthorizationCode.
@@ -60,4 +61,3 @@ module Osso
     end
   end
 end
-# rubocop:enable Metrics/BlockLength

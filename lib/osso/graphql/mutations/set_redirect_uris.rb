@@ -31,7 +31,7 @@ module Osso
 
         def update_existing(oauth_client, redirect_uris)
           oauth_client.redirect_uris.each do |redirect|
-            updating_index = redirect_uris.index{ |incoming| incoming[:id] == redirect.id }
+            updating_index = redirect_uris.index { |incoming| incoming[:id] == redirect.id }
 
             if updating_index
               updating = redirect_uris.delete_at(updating_index)
