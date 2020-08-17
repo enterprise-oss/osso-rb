@@ -19,7 +19,6 @@ module Osso
 
         Rack::OAuth2::Server::Authorize.new do |req, _res|
           client = Models::OauthClient.find_by!(identifier: req.client_id)
-          # binding.pry
           session[:osso_oauth_redirect_uri] = req.verify_redirect_uri!(client.redirect_uri_values)
         end.call(env)
 
