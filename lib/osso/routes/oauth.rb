@@ -19,7 +19,8 @@ module Osso
 
         Rack::OAuth2::Server::Authorize.new do |req, _res|
           client = Models::OauthClient.find_by!(identifier: req.client_id)
-          req.verify_redirect_uri!(client.redirect_uri_values)
+          # binding.pry
+          session[:osso_oauth_redirect_uri] = req.verify_redirect_uri!(client.redirect_uri_values)
         end.call(env)
 
         if @enterprise.single_provider?
@@ -35,9 +36,10 @@ module Osso
         return erb :error
       end
 
-      # Exchange an authorization code token for an access token.
-      # In addition to the token, you must include all paramaters
-      # required by OAuth spec: redirect_uri, client ID, and client secret
+      # Exchange an authorization code for an access token.
+      # In addition to the authorization code, you must include all 
+      # paramaters required by OAuth spec: redirect_uri, client ID, 
+      # and client secret
       post '/token' do
         Rack::OAuth2::Server::Token.new do |req, res|
           code = Models::AuthorizationCode.

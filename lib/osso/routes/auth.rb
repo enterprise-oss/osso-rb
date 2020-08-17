@@ -35,8 +35,7 @@ module Osso
       # as a URL query param, which you then exchange for an access token.
       post '/saml/:id/callback' do
         provider = Models::IdentityProvider.find(params[:id])
-        oauth_client = provider.oauth_client
-        redirect_uri = env['redirect_uri'] || oauth_client.primary_redirect_uri.uri
+        @oauth_client = provider.oauth_client
 
         attributes = env['omniauth.auth']&.
           extra&.
@@ -52,7 +51,7 @@ module Osso
         end
 
         authorization_code = user.authorization_codes.create!(
-          oauth_client: oauth_client,
+          oauth_client: @oauth_client,
           redirect_uri: redirect_uri,
         )
 
@@ -61,8 +60,20 @@ module Osso
         redirect(redirect_uri + "?code=#{CGI.escape(authorization_code.token)}&state=#{provider_state}")
       end
 
+      def redirect_uri
+        return @oauth_client.primary_redirect_uri.uri if valid_idp_initiated_flow
+
+        session[:osso_oauth_redirect_uri]
+      end
+
       def provider_state
-        session[:osso_oauth_state] || 'IDP_INITIATED'
+        return 'IDP_INITIATED' if valid_idp_initiated_flow
+
+        session[:osso_oauth_state]
+      end
+
+      def valid_idp_initiated_flow
+        !session[:osso_oauth_redirect_uri] && !session[:osso_oauth_state]
       end
     end
   end
