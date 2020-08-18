@@ -5,6 +5,7 @@ module Osso
   module Models
     class OauthClient < ActiveRecord::Base
       has_many :access_tokens
+      has_many :enterprise_accounts
       has_many :refresh_tokens
       has_many :identity_providers
       has_many :redirect_uris

@@ -18,6 +18,7 @@ module Osso
             enterprise_account_id: enterprise_account_id,
             service: service,
             domain: enterprise_account.domain,
+            oauth_client_id: enterprise_account.oauth_client_id,
           )
 
           return response_data(identity_provider: identity_provider) if identity_provider.save

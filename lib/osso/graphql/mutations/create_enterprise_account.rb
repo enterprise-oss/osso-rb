@@ -8,6 +8,7 @@ module Osso
 
         argument :domain, String, required: true
         argument :name, String, required: true
+        argument :oauth_client_id, required: false
 
         field :enterprise_account, Types::EnterpriseAccount, null: false
         field :errors, [String], null: false

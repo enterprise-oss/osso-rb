@@ -71,9 +71,9 @@ module Osso
       end
 
       def provider_state
-        return 'IDP_INITIATED' if valid_idp_initiated_flow
+        return @provider_state = 'IDP_INITIATED' if valid_idp_initiated_flow
 
-        session.delete([:osso_oauth_state])
+        session.delete(:osso_oauth_state)
       end
 
       def valid_idp_initiated_flow

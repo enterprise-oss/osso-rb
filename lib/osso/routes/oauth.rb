@@ -7,37 +7,43 @@ module Osso
     include AppConfig
     register Sinatra::Namespace
 
-    namespace '/oauth' do
+    namespace '/oauth' do # rubocop:disable Metrics/BlockLength
       # Send your users here in order to being an authentication
       # flow. This flow follows the authorization grant oauth
       # spec with one exception - you must also pass the domain
-      # of the user who wants to sign in.
+      # of the user who wants to sign in. If the sign in request
+      # is valid, the user is redirected to their Identity Provider.
+      # Once they complete IdP login, they will be returned to the
+      # redirect_uri with an authorization code parameter.
       get '/authorize' do
-        @enterprise = Models::EnterpriseAccount.
-          includes(:identity_providers).
-          find_by!(domain: params[:domain])
-
         Rack::OAuth2::Server::Authorize.new do |req, _res|
           client = Models::OauthClient.find_by!(identifier: req.client_id)
           session[:osso_oauth_redirect_uri] = req.verify_redirect_uri!(client.redirect_uri_values)
+          session[:osso_oauth_state] = params[:state]
         end.call(env)
 
-        if @enterprise.single_provider?
-          session[:osso_oauth_state] = params[:state]
-          redirect "/auth/saml/#{@enterprise.provider.id}"
-        end
+        enterprise = Models::EnterpriseAccount.
+          includes(:identity_providers).
+          find_by!(domain: params[:domain])
+
+        redirect "/auth/saml/#{enterprise.provider.id}" if enterprise.single_provider?
 
         # TODO: multiple provider support
         # erb :multiple_providers
 
       rescue Rack::OAuth2::Server::Authorize::BadRequest => e
         @error = e
-        return erb :error
+        erb :error
+      rescue ActiveRecord::RecordNotFound => e
+        @error = e
+        @error = 'No OAuth Client exists for the provided client_id' if e.model == 'Osso::Models::OauthClient'
+        @error = "No Customer exists with the domain #{params[:domain]}" if e.model == 'Osso::Models::EnterpriseAccount'
+        erb :error
       end
 
       # Exchange an authorization code for an access token.
-      # In addition to the authorization code, you must include all 
-      # paramaters required by OAuth spec: redirect_uri, client ID, 
+      # In addition to the authorization code, you must include all
+      # paramaters required by OAuth spec: redirect_uri, client ID,
       # and client secret
       post '/token' do
         Rack::OAuth2::Server::Token.new do |req, res|
@@ -50,7 +56,8 @@ module Osso
         end.call(env)
       end
 
-      # Use the access token to request a user profile
+      # Use the access token to request a profile for the user who
+      # just logged in. Access tokens are short-lived.
       get '/me' do
         json Models::AccessToken.
           includes(:user).
