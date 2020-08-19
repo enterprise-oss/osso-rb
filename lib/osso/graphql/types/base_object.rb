@@ -26,7 +26,7 @@ module Osso
         end
 
         def self.authorized?(object, context)
-          # we first receive the paylaod object as a hash, but can depend on the
+          # we first receive the payload object as a hash, but can depend on the
           # return type to hide the actual objects non-admins shouldn't see
           return true if object.class == Hash
 

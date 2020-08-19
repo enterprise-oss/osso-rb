@@ -11,20 +11,20 @@ module Osso
         field :enterprise_account, Types::EnterpriseAccount, null: true
         field :errors, [String], null: false
 
-        def enterprise_account(id)
+        def enterprise_account(id:, **_args)
           @enterprise_account ||= Osso::Models::EnterpriseAccount.find(id)
         end
 
-        def resolve(id:)
-          return response_data(enterprise_account: nil) if enterprise_account(id).destroy
+        def resolve(**args)
+          customer = enterprise_account(**args)
 
-          response_error(errors: enterprise_account(id).errors.full_messages)
+          return response_data(enterprise_account: nil) if customer.destroy
+
+          response_error(errors: customer.errors.full_messages)
         end
 
-        def ready?(id:, **args)
-          return true if super(**args)
-
-          domain_ready?(enterprise_account(id).domain)
+        def domain(**args)
+          enterprise_account(**args).domain
         end
       end
     end

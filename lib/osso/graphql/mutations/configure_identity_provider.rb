@@ -13,22 +13,20 @@ module Osso
         field :identity_provider, Types::IdentityProvider, null: false
         field :errors, [String], null: false
 
-        def resolve(id:, **args)
-          provider = Osso::Models::IdentityProvider.find(id)
+        def resolve(**args)
+          provider = identity_provider(**args)
 
           return response_data(identity_provider: provider) if provider.update(args)
 
-          response_error(errors: provder.errors.messages)
+          response_error(errors: provider.errors.messages)
         end
 
-        def ready?(id:, **_args)
-          return true if context[:scope] == 'admin'
+        def domain(**args)
+          identity_provider(**args)&.domain
+        end
 
-          domain = Osso::Models::IdentityProvider.find(id)&.domain
-
-          return true if domain == context[:email].split('@')[1]
-
-          raise ::GraphQL::ExecutionError, "This user lacks the scope to mutate records belonging to #{domain}"
+        def identity_provider(id:, **_args)
+          @identity_provider ||= Osso::Models::IdentityProvider.find(id)
         end
       end
     end

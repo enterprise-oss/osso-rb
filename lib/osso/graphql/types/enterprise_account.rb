@@ -9,7 +9,6 @@ module Osso
         description 'An Account for a company that wishes to use SAML via Osso'
         implements ::GraphQL::Types::Relay::Node
 
-        global_id_field :gid
         field :id, ID, null: false
         field :name, String, null: false
         field :domain, String, null: false

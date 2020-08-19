@@ -7,9 +7,7 @@ module Osso
     module Types
       class IdentityProvider < Types::BaseObject
         description 'Represents a SAML based IDP instance for an EnterpriseAccount'
-        implements ::GraphQL::Types::Relay::Node
 
-        global_id_field :gid
         field :id, ID, null: false
         field :enterprise_account_id, ID, null: false
         field :service, Types::IdentityProviderService, null: true

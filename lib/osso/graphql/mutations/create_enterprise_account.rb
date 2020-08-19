@@ -21,14 +21,6 @@ module Osso
 
           response_error(errors: enterprise_account.errors.full_messages)
         end
-
-        def ready?(domain: nil, **_args)
-          return true if %w[admin internal].include?(context[:scope])
-          return true if context[:scope] == 'end-user' &&
-            context[:email].split('@')[1] == domain
-
-          false
-        end
       end
     end
   end
