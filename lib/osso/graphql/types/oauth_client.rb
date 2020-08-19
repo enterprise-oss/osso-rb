@@ -24,8 +24,8 @@ module Osso
           object.secret
         end
 
-        def self.authorized?(object, context)
-          super && context[:scope] == :admin
+        def self.authorized?(_object, context)
+          admin_authorized?(context)
         end
       end
     end

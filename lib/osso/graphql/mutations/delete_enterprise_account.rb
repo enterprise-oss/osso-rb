@@ -11,22 +11,20 @@ module Osso
         field :enterprise_account, Types::EnterpriseAccount, null: true
         field :errors, [String], null: false
 
-        def resolve(id:)
-          enterprise_account = Osso::Models::EnterpriseAccount.find(id)
-
-          return response_data(enterprise_account: nil) if enterprise_account.destroy
-
-          response_error(errors: enterprise_account.errors.full_messages)
+        def enterprise_account(id)
+          @enterprise_account ||= Osso::Models::EnterpriseAccount.find(id)
         end
 
-        def ready?(id:)
-          return true if context[:scope] == :admin
+        def resolve(id:)
+          return response_data(enterprise_account: nil) if enterprise_account(id).destroy
 
-          domain = account_domain(id)
+          response_error(errors: enterprise_account(id).errors.full_messages)
+        end
 
-          return true if domain == context[:scope]
+        def ready?(id:, **args)
+          return true if super(**args)
 
-          raise ::GraphQL::ExecutionError, "This user lacks the scope to mutate records belonging to #{domain}"
+          domain_ready?(enterprise_account(id).domain)
         end
       end
     end

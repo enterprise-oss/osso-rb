@@ -14,8 +14,8 @@ module Osso
         field :uri, String, null: false
         field :primary, Boolean, null: false
 
-        def self.authorized?(object, context)
-          super && context[:scope] == :admin
+        def self.authorized?(_object, context)
+          context[:scope] == 'admin'
         end
       end
     end

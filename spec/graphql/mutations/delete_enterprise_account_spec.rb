@@ -30,12 +30,15 @@ describe Osso::GraphQL::Schema do
       described_class.execute(
         mutation,
         variables: variables,
-        context: { scope: current_scope },
+        context: current_context,
       )
     end
 
     describe 'for an admin user' do
-      let(:current_scope) { :admin }
+      let(:current_context) do
+        { scope: 'admin' }
+      end
+
       it 'deletes an Enterprise Account' do
         expect { subject }.to change { Osso::Models::EnterpriseAccount.count }.by(-1)
         expect(subject.dig('data', 'createEnterpriseAccount', 'enterpriseAccount')).
@@ -44,7 +47,12 @@ describe Osso::GraphQL::Schema do
     end
 
     describe 'for an email scoped user' do
-      let(:current_scope) { domain }
+      let(:current_context) do
+        {
+          scope: 'end-user',
+          email: "user@#{domain}",
+        }
+      end
 
       it 'deletes the Enterprise Account' do
         expect { subject }.to change { Osso::Models::EnterpriseAccount.count }.by(-1)
@@ -52,8 +60,14 @@ describe Osso::GraphQL::Schema do
           to be_nil
       end
     end
+    
     describe 'for the wrong email scoped user' do
-      let(:current_scope) { 'foo.com' }
+      let(:current_context) do
+        {
+          scope: 'end-user',
+          email: 'user@foo.com',
+        }
+      end
 
       it 'does not delete the Enterprise Account' do
         expect { subject }.to_not(change { Osso::Models::EnterpriseAccount.count })

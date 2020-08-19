@@ -1,12 +1,22 @@
 # frozen_string_literal: true
 
+require 'pry'
 module Osso
   module Helpers
     module Auth
-      attr_accessor :current_scope
+      END_USER_SCOPE = 'end-user'
+      INTERNAL_SCOPE = 'internal'
+      ADMIN_SCOPE    = 'admin'
+
+      attr_accessor :current_user
+
+      def token_protected!
+        decode(token)
+      end
 
       def enterprise_protected!(domain = nil)
         return if admin_authorized?
+        return if internal_authorized?
         return if enterprise_authorized?(domain)
 
         halt 401 if request.post?
@@ -14,14 +24,26 @@ module Osso
         redirect ENV['JWT_URL']
       end
 
-      # use client id in payload to restrict customer
-      # users from accessing dev?
-      def enterprise_authorized?(_domain)
-        payload, _args = decode(token)
+      def enterprise_authorized?(domain)
+        decode(token)
 
-        @current_scope = payload['scope']
+        @current_user[:scope] == END_USER_SCOPE &&
+          @current_user[:email].split('@')[1] == domain
+      rescue JWT::DecodeError
+        false
+      end
 
-        true
+      def internal_protected!
+        return if admin_authorized?
+        return if internal_authorized?
+
+        redirect ENV['JWT_URL']
+      end
+
+      def internal_authorized?
+        decode(token)
+
+        @current_user[:scope] == INTERNAL_SCOPE
       rescue JWT::DecodeError
         false
       end
@@ -33,14 +55,9 @@ module Osso
       end
 
       def admin_authorized?
-        payload, _args = decode(token)
+        decode(token)
 
-        if payload['scope'] == 'admin'
-          @current_scope = :admin
-          return true
-        end
-
-        false
+        @current_user[:scope] == ADMIN_SCOPE
       rescue JWT::DecodeError
         false
       end
@@ -60,12 +77,14 @@ module Osso
       end
 
       def decode(token)
-        JWT.decode(
+        payload, _args = JWT.decode(
           token,
           ENV['JWT_HMAC_SECRET'],
           true,
           { algorithm: 'HS256' },
         )
+
+        @current_user = payload.symbolize_keys
       end
     end
   end

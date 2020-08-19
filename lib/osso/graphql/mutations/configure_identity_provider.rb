@@ -22,11 +22,11 @@ module Osso
         end
 
         def ready?(id:, **_args)
-          return true if context[:scope] == :admin
+          return true if context[:scope] == 'admin'
 
           domain = Osso::Models::IdentityProvider.find(id)&.domain
 
-          return true if domain == context[:scope]
+          return true if domain == context[:email].split('@')[1]
 
           raise ::GraphQL::ExecutionError, "This user lacks the scope to mutate records belonging to #{domain}"
         end

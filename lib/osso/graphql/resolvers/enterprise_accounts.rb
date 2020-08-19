@@ -3,11 +3,11 @@
 module Osso
   module GraphQL
     module Resolvers
-      class EnterpriseAccounts < ::GraphQL::Schema::Resolver
+      class EnterpriseAccounts < BaseResolver
         type Types::EnterpriseAccount.connection_type, null: true
 
         def resolve(sort_column: nil, sort_order: nil)
-          return Array(Osso::Models::EnterpriseAccount.find_by(domain: context[:scope])) if context[:scope] != :admin
+          return Array(Osso::Models::EnterpriseAccount.find_by(domain: context[:scope])) unless internal_authorized?
 
           accounts = Osso::Models::EnterpriseAccount
 

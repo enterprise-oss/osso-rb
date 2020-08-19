@@ -11,12 +11,12 @@ module Osso
         use Osso::Oauth
 
         post '/graphql' do
-          enterprise_protected!
+          token_protected!
 
           result = Osso::GraphQL::Schema.execute(
             params[:query],
             variables: params[:variables],
-            context: { scope: current_scope },
+            context: current_user.symbolize_keys,
           )
 
           json result

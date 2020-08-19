@@ -8,7 +8,10 @@ describe Osso::Oauth do
   describe 'get /oauth/authorize' do
     describe 'with a valid client ID and redirect URI' do
       describe 'for a domain that does not belong to an enterprise' do
-        it '404s' do
+        # TODO: better error handling and test
+        it 'renders an error page' do
+          described_class.set(:views, spec_views)
+
           create(:enterprise_with_okta, domain: 'foo.com')
 
           get(
@@ -19,7 +22,7 @@ describe Osso::Oauth do
             redirect_uri: client.redirect_uri_values.sample,
           )
 
-          expect(last_response.status).to eq(404)
+          expect(last_response.status).to eq(200)
         end
       end
 

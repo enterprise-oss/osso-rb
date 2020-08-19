@@ -31,12 +31,14 @@ describe Osso::GraphQL::Schema do
       described_class.execute(
         mutation,
         variables: variables,
-        context: { scope: current_scope },
+        context: current_context,
       )
     end
 
     describe 'for an admin user' do
-      let(:current_scope) { :admin }
+      let(:current_context) do
+        { scope: 'admin' }
+      end
       it 'creates an OauthClient' do
         expect { subject }.to change { Osso::Models::OauthClient.count }.by(1)
         expect(subject.dig('data', 'createOauthClient', 'oauthClient', 'clientId')).
@@ -45,7 +47,12 @@ describe Osso::GraphQL::Schema do
     end
 
     describe 'for an email scoped user' do
-      let(:current_scope) { 'foo.com' }
+      let(:current_context) do
+        {
+          scope: 'end-user',
+          email: 'user@foo.com',
+        }
+      end
 
       it 'does not create an OauthClient Account' do
         expect { subject }.to_not(change { Osso::Models::OauthClient.count })

@@ -25,12 +25,14 @@ describe Osso::GraphQL::Schema do
       described_class.execute(
         query,
         variables: nil,
-        context: { scope: current_scope },
+        context: current_context,
       )
     end
 
     describe 'for an admin user' do
-      let(:current_scope) { :admin }
+      let(:current_context) do
+        { scope: 'admin' }
+      end
 
       it 'returns Oauth Clients' do
         expect(subject['errors']).to be_nil
@@ -38,11 +40,12 @@ describe Osso::GraphQL::Schema do
       end
     end
 
-    describe 'for an email scoped user' do
-      let(:current_scope) { 'foo.com' }
-
-      it 'returns Oauth Clients' do
-        expect(subject['errors']).to be_nil
+    describe 'for an internal scoped user' do
+      let(:current_context) do
+        { scope: 'internal' }
+      end
+      it 'does not return Oauth Clients' do
+        expect(subject['errors']).to_not be_nil
         expect(subject.dig('data', 'oauthClients')).to be_nil
       end
     end

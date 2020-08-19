@@ -25,12 +25,14 @@ describe Osso::GraphQL::Schema do
       described_class.execute(
         mutation,
         variables: variables,
-        context: { scope: current_scope },
+        context: current_context,
       )
     end
 
     describe 'for an admin user' do
-      let(:current_scope) { :admin }
+      let(:current_context) do
+        { scope: 'admin' }
+      end
       describe 'without a service' do
         let(:variables) { { input: { enterpriseAccountId: enterprise_account.id } } }
 
@@ -54,7 +56,12 @@ describe Osso::GraphQL::Schema do
 
     describe 'for an email scoped user' do
       let(:domain) { Faker::Internet.domain_name }
-      let(:current_scope) { domain }
+      let(:current_context) do
+        {
+          scope: 'end-user',
+          email: "user@#{domain}",
+        }
+      end
       let(:enterprise_account) { create(:enterprise_account, domain: domain) }
 
       describe 'without a service' do
@@ -80,12 +87,17 @@ describe Osso::GraphQL::Schema do
 
     describe 'for a wrong email scoped user' do
       let(:domain) { Faker::Internet.domain_name }
-      let(:current_scope) { domain }
+      let(:current_context) do
+        {
+          scope: 'end-user',
+          email: "user@#{domain}",
+        }
+      end
       let(:enterprise_account) { create(:enterprise_account, domain: domain) }
       let(:target_account) { create(:enterprise_account) }
 
       describe 'without a service' do
-        let(:variables) { { input: { enterpriseAccountId: target_account.id } } }
+        let(:variables) { { input: { enterpriseAccountId: target_account.id, domain: domain } } }
 
         it 'does not creates a identity provider' do
           expect { subject }.to_not(change { Osso::Models::IdentityProvider.count })
@@ -93,7 +105,7 @@ describe Osso::GraphQL::Schema do
       end
 
       describe 'with a service' do
-        let(:variables) { { input: { enterpriseAccountId: target_account.id, service: 'OKTA' } } }
+        let(:variables) { { input: { enterpriseAccountId: target_account.id, service: 'OKTA', domain: domain } } }
 
         it 'does not creates a identity provider' do
           expect { subject }.to_not(change { Osso::Models::IdentityProvider.count })
