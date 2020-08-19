@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'pry'
 module Osso
   module Helpers
     module Auth
@@ -12,6 +11,8 @@ module Osso
 
       def token_protected!
         decode(token)
+      rescue JWT::DecodeError
+        halt 401
       end
 
       def enterprise_protected!(domain = nil)
