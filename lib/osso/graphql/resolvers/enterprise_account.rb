@@ -3,21 +3,11 @@
 module Osso
   module GraphQL
     module Resolvers
-      class EnterpriseAccount < ::GraphQL::Schema::Resolver
+      class EnterpriseAccount < BaseResolver
         type Types::EnterpriseAccount, null: false
 
         def resolve(args)
-          return unless admin? || enterprise_authorized?(args[:domain])
-
           Osso::Models::EnterpriseAccount.find_by(domain: args[:domain])
-        end
-
-        def admin?
-          context[:scope] == :admin
-        end
-
-        def enterprise_authorized?(domain)
-          context[:scope] == domain
         end
       end
     end

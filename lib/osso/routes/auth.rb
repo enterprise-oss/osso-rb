@@ -27,7 +27,11 @@ module Osso
       end
     end
 
-    namespace '/auth' do
+    namespace '/auth' do # rubocop:disable Metrics/BlockLength
+      get '/failure' do
+        @error = params[:message]
+        erb :error
+      end
       # Enterprise users are sent here after authenticating against
       # their Identity Provider. We find or create a user record,
       # and then create an authorization code for that user. The user
@@ -67,9 +71,9 @@ module Osso
       end
 
       def provider_state
-        return 'IDP_INITIATED' if valid_idp_initiated_flow
+        return @provider_state = 'IDP_INITIATED' if valid_idp_initiated_flow
 
-        session[:osso_oauth_state]
+        session.delete(:osso_oauth_state)
       end
 
       def valid_idp_initiated_flow

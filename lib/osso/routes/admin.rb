@@ -14,13 +14,13 @@ module Osso
 
     namespace '/admin' do
       get '' do
-        admin_protected!
+        internal_protected!
 
         erb :admin
       end
 
       get '/enterprise' do
-        admin_protected!
+        internal_protected!
 
         erb :admin
       end

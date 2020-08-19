@@ -15,13 +15,26 @@ module Osso
           error.merge(data: nil)
         end
 
-        def ready?(enterprise_account_id: nil, domain: nil, identity_provider_id: nil, **args)
-          return true if context[:scope] == :admin
+        def ready?(**args)
+          return true if internal_ready?
 
-          domain ||= account_domain(enterprise_account_id) || provider_domain(identity_provider_id)
-          return true if domain == context[:scope]
+          return true if domain_ready?(args[:domain] || domain(**args))
 
-          raise ::GraphQL::ExecutionError, "This user lacks the scope to mutate records belonging to #{args[:domain]}"
+          raise ::GraphQL::ExecutionError, 'This user lacks the permission to make the requested changes'
+        end
+
+        def admin_ready?
+          context[:scope] == 'admin'
+        end
+
+        def internal_ready?
+          return true if admin_ready?
+
+          context[:scope] == 'internal'
+        end
+
+        def domain_ready?(domain)
+          context[:email].split('@')[1] == domain
         end
 
         def account_domain(id)

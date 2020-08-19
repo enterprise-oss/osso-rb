@@ -32,6 +32,13 @@ module Osso
         ) do
           argument :id, ID, required: true
         end
+
+        field(
+          :current_user,
+          Types::AdminUser,
+          null: false,
+          resolve: ->(_obj, _args, context) { context.to_h },
+        )
       end
     end
   end

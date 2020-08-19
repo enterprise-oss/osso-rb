@@ -5,7 +5,9 @@ require 'spec_helper'
 describe Osso::GraphQL::Schema do
   describe 'EnterpriseAccounts' do
     describe 'for an admin user' do
-      let(:current_scope) { :admin }
+      let(:current_context) do
+        { scope: 'admin' }
+      end
 
       it 'returns paginated Enterprise Accounts' do
         %w[A B C].map do |name|
@@ -44,7 +46,7 @@ describe Osso::GraphQL::Schema do
         response = described_class.execute(
           query,
           variables: { first: 2, sortOrder: 'descending', sortColumn: 'name' },
-          context: { scope: current_scope },
+          context: current_context,
         )
 
         expect(response['errors']).to be_nil

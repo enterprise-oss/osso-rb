@@ -24,9 +24,7 @@ module Osso
         end
 
         def ready?(*)
-          return true if context[:scope] == :admin
-
-          raise ::GraphQL::ExecutionError, 'Only admin users may mutate OauthClients'
+          admin_ready?
         end
 
         def update_existing(oauth_client, redirect_uris)

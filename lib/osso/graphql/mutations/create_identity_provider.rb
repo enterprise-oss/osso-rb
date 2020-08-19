@@ -12,17 +12,26 @@ module Osso
         field :identity_provider, Types::IdentityProvider, null: false
         field :errors, [String], null: false
 
-        def resolve(enterprise_account_id:, service: nil)
-          enterprise_account = Osso::Models::EnterpriseAccount.find(enterprise_account_id)
-          identity_provider = enterprise_account.identity_providers.build(
-            enterprise_account_id: enterprise_account_id,
+        def resolve(service: nil, **args)
+          customer = enterprise_account(**args)
+
+          identity_provider = customer.identity_providers.build(
             service: service,
-            domain: enterprise_account.domain,
+            domain: customer.domain,
+            oauth_client_id: customer.oauth_client_id,
           )
 
           return response_data(identity_provider: identity_provider) if identity_provider.save
 
           response_error(errors: identity_provider.errors.full_messages)
+        end
+
+        def domain(**args)
+          enterprise_account(**args)&.domain
+        end
+
+        def enterprise_account(enterprise_account_id:, **_args)
+          @enterprise_account ||= Osso::Models::EnterpriseAccount.find(enterprise_account_id)
         end
       end
     end

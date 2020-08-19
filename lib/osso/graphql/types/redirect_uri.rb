@@ -7,15 +7,13 @@ module Osso
     module Types
       class RedirectUri < Types::BaseObject
         description 'An allowed redirect URI for an OauthClient'
-        implements ::GraphQL::Types::Relay::Node
 
-        global_id_field :gid
         field :id, ID, null: false
         field :uri, String, null: false
         field :primary, Boolean, null: false
 
-        def self.authorized?(object, context)
-          super && context[:scope] == :admin
+        def self.authorized?(_object, context)
+          context[:scope] == 'admin'
         end
       end
     end

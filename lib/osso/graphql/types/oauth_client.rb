@@ -7,9 +7,7 @@ module Osso
     module Types
       class OauthClient < Types::BaseObject
         description 'An OAuth client used to consume Osso SAML users'
-        implements ::GraphQL::Types::Relay::Node
 
-        global_id_field :gid
         field :id, ID, null: false
         field :name, String, null: false
         field :client_id, String, null: false
@@ -24,8 +22,8 @@ module Osso
           object.secret
         end
 
-        def self.authorized?(object, context)
-          super && context[:scope] == :admin
+        def self.authorized?(_object, context)
+          admin_authorized?(context)
         end
       end
     end
