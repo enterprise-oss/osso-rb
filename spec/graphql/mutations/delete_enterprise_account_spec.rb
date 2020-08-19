@@ -60,7 +60,7 @@ describe Osso::GraphQL::Schema do
           to be_nil
       end
     end
-    
+
     describe 'for the wrong email scoped user' do
       let(:current_context) do
         {

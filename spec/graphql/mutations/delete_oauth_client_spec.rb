@@ -43,7 +43,7 @@ describe Osso::GraphQL::Schema do
     end
 
     describe 'for an email scoped user' do
-      let(:current_context) do 
+      let(:current_context) do
         { scope: 'end-user', email: 'user@foo.com' }
       end
 

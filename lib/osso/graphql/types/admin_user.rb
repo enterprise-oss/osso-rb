@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'graphql'
-require_relative 'base_object'
 
 module Osso
   module GraphQL
@@ -13,7 +12,7 @@ module Osso
         field :email, String, null: false
         field :scope, String, null: false
         field :oauth_client_id, ID, null: true
-        
+
         def self.authorized?(_object, _context)
           true
         end
