@@ -67,7 +67,7 @@ describe Osso::GraphQL::Schema do
       let(:current_context) do
         {
           scope: 'internal',
-          email: "user@saasco.com",
+          email: 'user@saasco.com',
           oauth_client_id: oauth_client.identifier,
         }
       end
