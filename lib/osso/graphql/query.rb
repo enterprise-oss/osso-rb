@@ -25,6 +25,13 @@ module Osso
         end
 
         field(
+          :app_config,
+          Types::AppConfig,
+          null: false,
+          resolve: ->(_obj, _args, _context) { Osso::Models::AppConfig.find },
+        )
+
+        field(
           :oauth_client,
           Types::OauthClient,
           null: true,
