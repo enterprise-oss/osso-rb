@@ -6,6 +6,15 @@ steps:
       - bundle exec rake db:create
       - RACK_ENV=test bundle exec rake db:migrate
       - bundle exec rspec
+    artifact_paths:
+      - coverage/*
+  
+  - name: ":codeclimate: Report coverage"
+    plugins:
+      - jobready/codeclimate-test-reporter#v2.0:
+          artifact: "coverage/.resultset.json"
+          input_type: simplecov
+          prefix: '/var/lib/buildkite-agent/builds/enterprise-oss-bk-1/enterpriseoss/osso-rb/'
   
   - block: ":rubygems: Publish :red_button:"
     branches: "main"

@@ -5,6 +5,7 @@ require 'spec_helper'
 describe Osso::GraphQL::Schema do
   describe 'CreateIdentityProvider' do
     let(:domain) { Faker::Internet.domain_name }
+    let!(:oauth_client) { create(:oauth_client) }
     let(:variables) do
       {
         input: {
@@ -41,10 +42,44 @@ describe Osso::GraphQL::Schema do
       let(:current_context) do
         { scope: 'admin' }
       end
+      let(:variables) do
+        {
+          input: {
+            name: Faker::Company.name,
+            domain: domain,
+            oauthClientId: oauth_client.id,
+          },
+        }
+      end
+
       it 'creates an Enterprise Account' do
         expect { subject }.to change { Osso::Models::EnterpriseAccount.count }.by(1)
         expect(subject.dig('data', 'createEnterpriseAccount', 'enterpriseAccount', 'domain')).
           to eq(domain)
+      end
+
+      it 'attaches the Enterprise Account to the correct OAuth Client' do
+        expect { subject }.to change { oauth_client.enterprise_accounts.count }.by(1)
+      end
+    end
+
+    describe 'for an internal scoped user' do
+      let(:current_context) do
+        {
+          scope: 'internal',
+          email: 'user@saasco.com',
+          oauth_client_id: oauth_client.identifier,
+        }
+      end
+
+      it 'creates an Enterprise Account' do
+        expect { subject }.to change { Osso::Models::EnterpriseAccount.count }.by(1)
+        expect(subject.dig('data', 'createEnterpriseAccount', 'enterpriseAccount', 'domain')).
+          to eq(domain)
+      end
+
+      it 'attaches the Enterprise Account to the correct OAuth Client' do
+        expect { subject }.to change { oauth_client.enterprise_accounts.count }.by(1)
       end
     end
 
@@ -53,6 +88,7 @@ describe Osso::GraphQL::Schema do
         {
           scope: 'end-user',
           email: "user@#{domain}",
+          oauth_client_id: oauth_client.identifier,
         }
       end
 
@@ -60,6 +96,10 @@ describe Osso::GraphQL::Schema do
         expect { subject }.to change { Osso::Models::EnterpriseAccount.count }.by(1)
         expect(subject.dig('data', 'createEnterpriseAccount', 'enterpriseAccount', 'domain')).
           to eq(domain)
+      end
+
+      it 'attaches the Enterprise Account to the correct OAuth Client' do
+        expect { subject }.to change { oauth_client.enterprise_accounts.count }.by(1)
       end
     end
     describe 'for the wrong email scoped user' do

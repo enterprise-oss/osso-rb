@@ -25,6 +25,21 @@ module Osso
         redirect ENV['JWT_URL']
       end
 
+      def internal_protected!
+        return if admin_authorized?
+        return if internal_authorized?
+
+        redirect ENV['JWT_URL']
+      end
+
+      def admin_protected!
+        return true if admin_authorized?
+
+        redirect ENV['JWT_URL']
+      end
+
+      private
+
       def enterprise_authorized?(domain)
         decode(token)
 
@@ -34,25 +49,12 @@ module Osso
         false
       end
 
-      def internal_protected!
-        return if admin_authorized?
-        return if internal_authorized?
-
-        redirect ENV['JWT_URL']
-      end
-
       def internal_authorized?
         decode(token)
 
         @current_user[:scope] == INTERNAL_SCOPE
       rescue JWT::DecodeError
         false
-      end
-
-      def admin_protected!
-        return if admin_authorized?
-
-        redirect ENV['JWT_URL']
       end
 
       def admin_authorized?
