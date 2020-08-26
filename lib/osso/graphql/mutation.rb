@@ -14,6 +14,7 @@ module Osso
         field :delete_oauth_client, mutation: Mutations::DeleteOauthClient
         field :set_redirect_uris, mutation: Mutations::SetRedirectUris
         field :regenerate_oauth_credentials, mutation: Mutations::RegenerateOauthCredentials
+        field :update_app_config, mutation: Mutations::UpdateAppConfig
 
         def self.authorized?(_object, _context)
           # mutations are prevented from executing with ready? so

@@ -9,7 +9,7 @@ steps:
     artifact_paths:
       - coverage/*
   
-  - name: ":codeclimate: Report coverage"
+  - name: ":codeclimate:"
     plugins:
       - jobready/codeclimate-test-reporter#v2.0:
           artifact: "coverage/.resultset.json"

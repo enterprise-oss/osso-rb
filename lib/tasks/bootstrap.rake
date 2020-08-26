@@ -12,5 +12,7 @@ namespace :osso do
         name: environement,
       )
     end
+
+    Osso::Models::AppConfig.create!
   end
 end

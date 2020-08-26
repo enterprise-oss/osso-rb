@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    osso (0.0.3.18)
+    osso (0.0.3.19)
       activesupport (>= 6.0.3.2)
       graphql
       jwt
