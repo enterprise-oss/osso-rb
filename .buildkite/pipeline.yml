@@ -6,6 +6,8 @@ steps:
       - bundle exec rake db:create
       - RACK_ENV=test bundle exec rake db:migrate
       - bundle exec rspec
+    artifact_paths:
+      - coverage/
   
   - name: ":codeclimate: Report coverage"
     plugins:
