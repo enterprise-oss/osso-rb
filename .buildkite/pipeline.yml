@@ -7,6 +7,12 @@ steps:
       - RACK_ENV=test bundle exec rake db:migrate
       - bundle exec rspec
   
+  - name: ":codeclimate: Report coverage"
+    plugins:
+      - jobready/codeclimate-test-reporter#v2.0:
+          artifact: "coverage/.resultset.json"
+          input_type: simplecov
+  
   - block: ":rubygems: Publish :red_button:"
     branches: "main"
   
