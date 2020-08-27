@@ -15,4 +15,3 @@ require_relative 'mutations/delete_oauth_client'
 require_relative 'mutations/regenerate_oauth_credentials'
 require_relative 'mutations/set_redirect_uris'
 require_relative 'mutations/update_app_config'
-

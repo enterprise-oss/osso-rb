@@ -7,7 +7,7 @@ module Osso
         type Types::EnterpriseAccount.connection_type, null: true
 
         def resolve(sort_column: nil, sort_order: nil)
-          return Array(Osso::Models::EnterpriseAccount.find_by(domain: context[:scope])) unless internal_authorized?
+          return Array(Osso::Models::EnterpriseAccount.find_by(domain: context_domain)) unless internal_authorized?
 
           accounts = Osso::Models::EnterpriseAccount
 

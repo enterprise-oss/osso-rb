@@ -23,8 +23,8 @@ module Osso
       end
 
       def generate_secrets
-        self.identifier = SecureRandom.hex(16)
-        self.secret = SecureRandom.hex(32)
+        self.identifier ||= SecureRandom.hex(16)
+        self.secret ||= SecureRandom.hex(32)
       end
     end
   end

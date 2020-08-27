@@ -13,6 +13,12 @@ module Osso
     end
 
     namespace '/admin' do
+      get '/login' do
+        token_protected!
+
+        erb :admin
+      end
+
       get '' do
         internal_protected!
 
@@ -20,7 +26,7 @@ module Osso
       end
 
       get '/enterprise' do
-        internal_protected!
+        token_protected!
 
         erb :admin
       end
