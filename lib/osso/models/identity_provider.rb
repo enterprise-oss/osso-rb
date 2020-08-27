@@ -42,7 +42,9 @@ module Osso
       end
 
       def root_url
-        ENV['HEROKU_APP_NAME'] || ENV.fetch('BASE_URL')
+        return "https://${ENV['HEROKU_APP_NAME]}.herokuapp.com" if ENV['HEROKU_APP_NAME']
+
+        ENV.fetch('BASE_URL')
       end
     end
   end
