@@ -12,10 +12,6 @@ module Osso
 
       def name
         service.titlecase
-        # raise(
-        #   NoMethodError,
-        #   '#name must be defined on each provider specific subclass',
-        # )
       end
 
       def saml_options
@@ -29,7 +25,7 @@ module Osso
 
       def assertion_consumer_service_url
         [
-          ENV.fetch('BASE_URL'),
+          root_url,
           'auth',
           'saml',
           id,
@@ -43,6 +39,10 @@ module Osso
         return if status != 'PENDING'
 
         self.status = 'CONFIGURED' if sso_url && sso_cert
+      end
+
+      def root_url
+        ENV['HEROKU_APP_NAME'] || ENV.fetch('BASE_URL')
       end
     end
   end
