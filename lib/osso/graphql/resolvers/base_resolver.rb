@@ -15,6 +15,10 @@ module Osso
         def enterprise_authorized?(domain)
           context[:scope] == domain
         end
+
+        def context_domain
+          context[:email].split('@')[1]
+        end
       end
     end
   end
