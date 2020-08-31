@@ -26,6 +26,11 @@ module Osso
         self.identifier ||= SecureRandom.hex(16)
         self.secret ||= SecureRandom.hex(32)
       end
+
+      def regenerate_secrets!
+        self.identifier = SecureRandom.hex(16)
+        self.secret = SecureRandom.hex(32)
+      end
     end
   end
 end
