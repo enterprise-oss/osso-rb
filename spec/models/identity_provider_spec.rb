@@ -7,10 +7,11 @@ describe Osso::Models::IdentityProvider do
 
   describe '#assertion_consumer_service_url' do
     it 'returns the expected URI for BASE_URL' do
+      ENV['HEROKU_APP_NAME'] = nil
       ENV['BASE_URL'] = 'https://example.com'
 
       expect(subject.assertion_consumer_service_url).to eq(
-        "https://example.com/auth/saml/#{subject.id}/callback",
+        "#{ENV['BASE_URL']}/auth/saml/#{subject.id}/callback",
       )
     end
 

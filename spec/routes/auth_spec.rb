@@ -104,6 +104,17 @@ describe Osso::Auth do
             )
           end.to_not(change { Osso::Models::User.count })
         end
+        it 'marks the provider as ACTIVE' do
+          post(
+            "/auth/saml/#{okta_provider.id}/callback",
+            nil,
+            {
+              'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
+              'identity_provider' => okta_provider,
+            },
+          )
+          expect(okta_provider.reload.status).to eq('ACTIVE')
+        end
       end
     end
 
@@ -125,6 +136,21 @@ describe Osso::Auth do
               },
             )
           end.to change { Osso::Models::User.count }.by(1)
+        end
+
+        it 'marks the provider ACTIVE' do
+          mock_saml_omniauth
+
+          post(
+            "/auth/saml/#{azure_provider.id}/callback",
+            nil,
+            {
+              'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
+              'identity_provider' => azure_provider,
+            },
+          )
+
+          expect(azure_provider.reload.status).to eq('ACTIVE')
         end
       end
 

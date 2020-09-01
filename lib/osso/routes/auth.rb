@@ -58,8 +58,7 @@ module Osso
           oauth_client: @oauth_client,
           redirect_uri: redirect_uri,
         )
-
-        # Mark IDP as active
+        provider.active!
 
         redirect(redirect_uri + "?code=#{CGI.escape(authorization_code.token)}&state=#{provider_state}")
       end
