@@ -4,7 +4,6 @@ module Osso
   module Models
     # Base class for SAML Providers
     class IdentityProvider < ActiveRecord::Base
-      NAME_FORMAT = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
       belongs_to :enterprise_account
       belongs_to :oauth_client
       has_many :users
@@ -39,6 +38,14 @@ module Osso
         return if status != 'PENDING'
 
         self.status = 'CONFIGURED' if sso_url && sso_cert
+      end
+
+      def active!
+        update(status: 'ACTIVE')
+      end
+
+      def error!
+        update(status: 'ERROR')
       end
 
       def root_url

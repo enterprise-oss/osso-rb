@@ -5,6 +5,7 @@ FactoryBot.define do
     id { SecureRandom.uuid }
     domain { Faker::Internet.domain_name }
     oauth_client
+    status { 'PENDING' }
 
     factory :okta_identity_provider, parent: :identity_provider do
       service { 'OKTA' }
@@ -21,6 +22,7 @@ FactoryBot.define do
     end
 
     factory :configured_identity_provider, parent: :identity_provider do
+      status { 'CONFIGURED' }
       sso_cert do
         <<~CERT
           -----BEGIN CERTIFICATE-----
