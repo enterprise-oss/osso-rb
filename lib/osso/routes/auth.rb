@@ -41,6 +41,7 @@ module Osso
         provider = Models::IdentityProvider.find(params[:id])
         @oauth_client = provider.oauth_client
 
+        # TODO: PORC for validating attributes
         attributes = env['omniauth.auth']&.
           extra&.
           response_object&.

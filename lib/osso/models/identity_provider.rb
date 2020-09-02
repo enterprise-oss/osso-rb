@@ -8,6 +8,7 @@ module Osso
       belongs_to :oauth_client
       has_many :users
       before_save :set_status
+      validate :sso_cert_valid
 
       def name
         service.titlecase
@@ -52,6 +53,19 @@ module Osso
         return "https://#{ENV['HEROKU_APP_NAME']}.herokuapp.com" if ENV['HEROKU_APP_NAME']
 
         ENV.fetch('BASE_URL')
+      end
+
+      def sso_cert_valid
+        return if sso_cert.blank?
+
+        OpenSSL::X509::Certificate.new([
+          "-----BEGIN CERTIFICATE-----\n",
+          sso_cert,
+          "\n-----END CERTIFICATE-----\n",
+        ].join)
+
+      rescue OpenSSL::X509::CertificateError
+        errors.add(:sso_cert, 'x509 Certificate is malformed')
       end
     end
   end
