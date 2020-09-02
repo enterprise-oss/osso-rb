@@ -20,7 +20,7 @@ module Osso
 
           return response_data(enterprise_account: nil) if customer.destroy
 
-          response_error(errors: customer.errors.full_messages)
+          response_error(customer.errors)
         end
 
         def domain(**args)

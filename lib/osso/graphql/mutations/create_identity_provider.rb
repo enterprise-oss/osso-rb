@@ -23,7 +23,7 @@ module Osso
 
           return response_data(identity_provider: identity_provider) if identity_provider.save
 
-          response_error(errors: identity_provider.errors.full_messages)
+          response_error(identity_provider.errors)
         end
 
         def domain(**args)

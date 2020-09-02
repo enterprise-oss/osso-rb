@@ -19,7 +19,7 @@ module Osso
 
           return response_data(enterprise_account: enterprise_account) if enterprise_account.save
 
-          response_error(errors: enterprise_account.errors.full_messages)
+          response_error(enterprise_account.errors)
         end
 
         def find_client_db_id(oauth_client_identifier)

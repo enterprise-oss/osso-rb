@@ -11,8 +11,23 @@ module Osso
           data.merge(errors: [])
         end
 
-        def response_error(error)
-          error.merge(data: nil)
+        def response_error(errors)
+          raise ::GraphQL::ExecutionError.new(
+            'Mutation error',
+            extensions: {
+              'errors' => field_errors(errors),
+            }
+          )
+        end
+
+        def field_errors(errors)
+          errors.map do |attribute, messages|
+            attribute = attribute.to_s.camelize(:lower)
+            {
+              attribute: attribute,
+              message: messages,
+            }
+          end
         end
 
         def ready?(**args)

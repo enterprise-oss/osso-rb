@@ -17,7 +17,7 @@ module Osso
 
           return response_data(oauth_client: oauth_client) if oauth_client.save
 
-          response_error(errors: oauth_client.errors.full_messages)
+          response_error(oauth_client.errors)
         end
 
         def ready?(*)

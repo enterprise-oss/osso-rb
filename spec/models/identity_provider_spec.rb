@@ -35,4 +35,25 @@ describe Osso::Models::IdentityProvider do
         )
     end
   end
+  
+  describe '#validate_sso_cert' do
+    it 'rejects an invalid cert' do
+      subject.update(sso_cert: 'bad-cert')
+
+      expect(subject.errors.full_messages.first).to include('x509 Certificate is malformed')
+    end
+
+    it 'massages a cert with header and footer' do
+      subject.update(sso_cert: valid_x509_pem)
+
+      expect(subject.errors).to be_empty
+      expect(subject.sso_cert).to_not include('BEGIN CERTIFICATE')
+    end
+
+    it 'accepts a cert without header and footer' do
+      subject.update(sso_cert: raw_x509_string)
+
+      expect(subject.errors).to be_empty
+    end
+  end
 end
