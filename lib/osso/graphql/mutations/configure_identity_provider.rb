@@ -16,13 +16,8 @@ module Osso
           provider = identity_provider(**args)
 
           return response_data(identity_provider: provider) if provider.update(args)
-
-          raise ::GraphQL::ExecutionError.new(
-            'Mutation error',
-            extensions: {
-              'errors' => field_errors(provider.errors.messages),
-            }
-          )
+          
+          response_error(provider.errors)
         end
 
         def domain(**args)
@@ -31,16 +26,6 @@ module Osso
 
         def identity_provider(id:, **_args)
           @identity_provider ||= Osso::Models::IdentityProvider.find(id)
-        end
-
-        def field_errors(errors)
-          errors.map do |attribute, messages|
-            attribute = attribute.to_s.camelize(:lower)
-            {
-              attribute: attribute,
-              message: messages,
-            }
-          end
         end
       end
     end

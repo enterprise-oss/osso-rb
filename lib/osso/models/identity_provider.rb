@@ -10,6 +10,9 @@ module Osso
       before_save :set_status
       validate :sso_cert_valid
 
+      PEM_HEADER = "-----BEGIN CERTIFICATE-----\n"
+      PEM_FOOTER = "\n-----END CERTIFICATE-----"
+
       def name
         service.titlecase
       end
@@ -58,11 +61,14 @@ module Osso
       def sso_cert_valid
         return if sso_cert.blank?
 
-        OpenSSL::X509::Certificate.new([
-          "-----BEGIN CERTIFICATE-----\n",
-          sso_cert,
-          "\n-----END CERTIFICATE-----\n",
-        ].join)
+        has_header_and_footer = sso_cert.match(/#{PEM_HEADER}(?<cert>.*)#{PEM_FOOTER}/m)
+
+        if has_header_and_footer
+          OpenSSL::X509::Certificate.new(sso_cert)
+          self.sso_cert = has_header_and_footer[:cert]
+        else
+          OpenSSL::X509::Certificate.new([PEM_HEADER, sso_cert, PEM_FOOTER].join)
+        end
 
       rescue OpenSSL::X509::CertificateError
         errors.add(:sso_cert, 'x509 Certificate is malformed')

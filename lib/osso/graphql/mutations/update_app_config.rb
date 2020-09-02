@@ -17,7 +17,7 @@ module Osso
           app_config = Osso::Models::AppConfig.find
           return response_data(app_config: app_config) if app_config.update(**args)
 
-          response_error(errors: e)
+          response_error(app_config.errors)
         end
 
         def ready?(*)

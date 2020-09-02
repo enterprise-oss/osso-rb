@@ -20,7 +20,7 @@ module Osso
 
           response_data(oauth_client: oauth_client.reload)
         rescue StandardError => e
-          response_error(errors: e)
+          response_error(e)
         end
 
         def ready?(*)
@@ -33,17 +33,17 @@ module Osso
 
             if updating_index
               updating = redirect_uris.delete_at(updating_index)
-              redirect.update(updating.to_h)
+              redirect.update!(updating.to_h)
               next
             end
 
-            redirect.destroy
+            redirect.destroy!
           end
         end
 
         def create_new(oauth_client, redirect_uris)
           redirect_uris.map do |uri|
-            oauth_client.redirect_uris.create(uri.to_h.without(:id))
+            oauth_client.redirect_uris.create!(uri.to_h.without(:id))
           end
         end
       end

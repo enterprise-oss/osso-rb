@@ -12,7 +12,7 @@ describe Osso::GraphQL::Schema do
           id: identity_provider.id,
           service: 'OKTA',
           ssoUrl: 'https://example.com',
-          ssoCert: 'BEGIN_CERTIFICATE',
+          ssoCert: valid_x509_pem,
         },
       }
     end
