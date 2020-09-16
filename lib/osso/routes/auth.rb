@@ -49,7 +49,7 @@ module Osso
 
         user = Models::User.where(
           email: attributes[:email],
-          idp_id: attributes[:id],
+          idp_id: attributes[:id] || attributes[:idp_id],
         ).first_or_create! do |new_user|
           new_user.enterprise_account_id = provider.enterprise_account_id
           new_user.identity_provider_id = provider.id
