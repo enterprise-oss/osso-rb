@@ -16,7 +16,7 @@ module Osso
           provider = identity_provider(**args)
 
           return response_data(identity_provider: provider) if provider.update(args)
-          
+
           response_error(provider.errors)
         end
 

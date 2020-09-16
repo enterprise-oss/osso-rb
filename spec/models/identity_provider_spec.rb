@@ -35,7 +35,7 @@ describe Osso::Models::IdentityProvider do
         )
     end
   end
-  
+
   describe '#validate_sso_cert' do
     it 'rejects an invalid cert' do
       subject.update(sso_cert: 'bad-cert')

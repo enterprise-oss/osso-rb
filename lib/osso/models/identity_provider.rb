@@ -69,7 +69,6 @@ module Osso
         else
           OpenSSL::X509::Certificate.new([PEM_HEADER, sso_cert, PEM_FOOTER].join)
         end
-
       rescue OpenSSL::X509::CertificateError
         errors.add(:sso_cert, 'x509 Certificate is malformed')
       end

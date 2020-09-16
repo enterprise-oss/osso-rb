@@ -7,6 +7,7 @@ module Osso
         value('AZURE', 'Microsoft Azure Identity Provider', value: 'AZURE')
         value('OKTA', 'Okta Identity Provider', value: 'OKTA')
         value('ONELOGIN', 'OneLogin Identity Provider', value: 'ONELOGIN')
+        value('GOOGLE', 'Google SAML Identity Provider', value: 'GOOGLE')
       end
     end
   end
