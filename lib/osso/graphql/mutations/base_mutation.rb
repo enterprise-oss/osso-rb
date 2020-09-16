@@ -16,7 +16,7 @@ module Osso
             'Mutation error',
             extensions: {
               'errors' => field_errors(errors),
-            }
+            },
           )
         end
 
