@@ -28,8 +28,8 @@ module Osso
 
         redirect "/auth/saml/#{enterprise.provider.id}" if enterprise.single_provider?
 
-        # TODO: multiple provider support
-        # erb :multiple_providers
+        @providers = enterprise.identity_providers
+        erb :multiple_providers
 
       rescue Rack::OAuth2::Server::Authorize::BadRequest => e
         @error = e
