@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Osso
-  VERSION = '0.0.5-gamma'
+  VERSION = '0.0.5-delta'
 end
