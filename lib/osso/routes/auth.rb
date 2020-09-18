@@ -39,12 +39,12 @@ module Osso
       # is redirected back to your application with this code
       # as a URL query param, which you then exchange for an access token.
       post '/saml/:provider_id/callback' do
-        redirect_uri = UserBuilder.perform(
+        redirect_uri = SamlHandler.perform(
           auth_hash: env['omniauth.auth'],
           provider_id: params[:provider_id],
           session: session,
         )
-        
+
         redirect(redirect_uri)
       end
     end
