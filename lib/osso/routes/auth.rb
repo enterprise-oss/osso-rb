@@ -21,18 +21,32 @@ module Osso
         identity_provider_id_regex: UUID_REGEXP,
         path_prefix: '/auth/saml',
         callback_suffix: 'callback',
-      ) do |identity_provider_id, _env|
+      ) do |identity_provider_id, env|
+        
         Models::IdentityProvider.find(identity_provider_id).
           saml_options
+
+      rescue ActiveRecord::RecordNotFound
+        if env['PATH_INFO'].ends_with?('callback')
+          raise Osso::Error::InvalidACSURLError
+        else
+          binding.pry
+        end
       end
     end
 
-    namespace '/auth' do # rubocop:disable Metrics/BlockLength
+    OmniAuth.config.on_failure = Proc.new { |env|
+      OmniAuth::FailureEndpoint.new(env).redirect_to_failure
+    }
+
+    error do
+      erb :error
+    end
+
+    namespace '/auth' do
       get '/failure' do
-        @error = params[:message]
         erb :error
       end
-
       # Enterprise users are sent here after authenticating against
       # their Identity Provider. We find or create a user record,
       # and then create an authorization code for that user. The user
@@ -46,6 +60,9 @@ module Osso
         )
 
         redirect(redirect_uri)
+      rescue Osso::Error::InvalidACSURLError => e
+        @error = e
+        erb :error
       end
     end
   end

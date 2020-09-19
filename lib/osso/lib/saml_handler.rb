@@ -2,26 +2,31 @@
 
 module Osso
   class SamlHandler
-    attr_accessor :session, :provider, :attributes, :user
+    attr_accessor :session, :provider, :attributes
 
     def self.perform(**attrs)
       new(attrs).perform
     end
 
     def initialize(auth_hash:, provider_id:, session:)
-      @provider = Models::IdentityProvider.find(provider_id)
-      @attributes = auth_hash&.extra&.response_object&.attributes      
+      find_provider(provider_id)
+      @attributes = auth_hash&.extra&.response_object&.attributes
       @session = session
     end
 
     def perform
       validate_attributes
-      find_or_create_user
       provider.active!
       redirect_uri
     end
-    
+
     private
+
+    def find_provider(id)
+      @provider ||= Models::IdentityProvider.find(id)
+    rescue ActiveRecord::RecordNotFound
+      raise Osso::Error::InvalidACSURLError
+    end
 
     def validate_attributes
       raise Osso::Error::MissingSamlIdAttributeError unless id_attribute
@@ -36,7 +41,7 @@ module Osso
       attributes[:email]
     end
 
-    def find_or_create_user
+    def user
       @user ||= Models::User.where(
         email: email_attribute,
         idp_id: id_attribute,

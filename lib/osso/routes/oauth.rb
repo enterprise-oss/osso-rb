@@ -16,28 +16,18 @@ module Osso
       # Once they complete IdP login, they will be returned to the
       # redirect_uri with an authorization code parameter.
       get '/authorize' do
-        Rack::OAuth2::Server::Authorize.new do |req, _res|
-          client = Models::OauthClient.find_by!(identifier: req.client_id)
-          session[:osso_oauth_redirect_uri] = req.verify_redirect_uri!(client.redirect_uri_values)
-          session[:osso_oauth_state] = params[:state]
-        end.call(env)
+        client = find_client(params[:client_id])
+        enterprise = find_account(domain: params[:domain], client_id: client.id)
 
-        enterprise = Models::EnterpriseAccount.
-          includes(:identity_providers).
-          find_by!(domain: params[:domain])
+        validate_oauth_request(env)
 
         redirect "/auth/saml/#{enterprise.provider.id}" if enterprise.single_provider?
 
         @providers = enterprise.identity_providers
         erb :multiple_providers
 
-      rescue Rack::OAuth2::Server::Authorize::BadRequest => e
+      rescue Osso::Error::OAuthError => e
         @error = e
-        erb :error
-      rescue ActiveRecord::RecordNotFound => e
-        @error = e
-        @error = 'No OAuth Client exists for the provided client_id' if e.model == 'Osso::Models::OauthClient'
-        @error = "No Customer exists with the domain #{params[:domain]}" if e.model == 'Osso::Models::EnterpriseAccount'
         erb :error
       end
 
@@ -65,6 +55,32 @@ module Osso
           find_by_token!(params[:access_token]).
           user
       end
+    end
+
+    private
+
+    def find_account(domain:, client_id:)
+      Models::EnterpriseAccount.
+        includes(:identity_providers).
+        find_by!(domain: domain, oauth_client_id: client_id)
+    rescue ActiveRecord::RecordNotFound
+      raise Osso::Error::NoAccountForOAuthClientError
+    end
+
+    def find_client(identifier)
+      @client ||= Models::OauthClient.find_by!(identifier: identifier)
+    rescue ActiveRecord::RecordNotFound
+      raise Osso::Error::InvalidOAuthClientIdentifier
+    end
+
+    def validate_oauth_request(env)
+      Rack::OAuth2::Server::Authorize.new do |req, _res|
+        client = find_client(req[:client_id])
+        session[:osso_oauth_redirect_uri] = req.verify_redirect_uri!(client.redirect_uri_values)
+        session[:osso_oauth_state] = params[:state]
+      end.call(env)
+    rescue Rack::OAuth2::Server::Authorize::BadRequest
+      raise Osso::Error::InvalidRedirectUri
     end
   end
 end

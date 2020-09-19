@@ -6,3 +6,5 @@ module Osso
 end
 
 require_relative 'missing_saml_attribute_error'
+require_relative 'oauth_error'
+require_relative 'saml_config_error'
