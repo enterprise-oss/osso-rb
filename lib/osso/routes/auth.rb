@@ -21,16 +21,15 @@ module Osso
         identity_provider_id_regex: UUID_REGEXP,
         path_prefix: '/auth/saml',
         callback_suffix: 'callback',
-      ) do |identity_provider_id, env|
-        
+      ) do |identity_provider_id, _env|
         Models::IdentityProvider.find(identity_provider_id).
           saml_options
-      end    
+      end
     end
 
-    OmniAuth.config.on_failure = Proc.new { |env|
+    OmniAuth.config.on_failure = proc do |env|
       OmniAuth::FailureEndpoint.new(env).redirect_to_failure
-    }
+    end
 
     error do
       erb :error
