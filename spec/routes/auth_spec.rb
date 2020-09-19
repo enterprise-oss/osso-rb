@@ -43,7 +43,6 @@ describe Osso::Auth do
               nil,
               {
                 'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
-                'identity_provider' => okta_provider,
               },
             )
           end.to change { Osso::Models::User.count }.by(1)
@@ -58,7 +57,6 @@ describe Osso::Auth do
               nil,
               {
                 'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
-                'identity_provider' => okta_provider,
               },
             )
           end.to change { Osso::Models::AuthorizationCode.count }.by(1)
@@ -73,7 +71,6 @@ describe Osso::Auth do
               nil,
               {
                 'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
-                'identity_provider' => okta_provider,
               },
             )
             expect(last_response).to be_redirect
@@ -99,7 +96,6 @@ describe Osso::Auth do
               nil,
               {
                 'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
-                'identity_provider' => okta_provider,
               },
             )
           end.to_not(change { Osso::Models::User.count })
@@ -110,7 +106,6 @@ describe Osso::Auth do
             nil,
             {
               'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
-              'identity_provider' => okta_provider,
             },
           )
           expect(okta_provider.reload.status).to eq('ACTIVE')
@@ -132,7 +127,6 @@ describe Osso::Auth do
               nil,
               {
                 'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
-                'identity_provider' => azure_provider,
               },
             )
           end.to change { Osso::Models::User.count }.by(1)
@@ -146,7 +140,6 @@ describe Osso::Auth do
             nil,
             {
               'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
-              'identity_provider' => azure_provider,
             },
           )
 
@@ -170,11 +163,45 @@ describe Osso::Auth do
               nil,
               {
                 'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
-                'identity_provider' => azure_provider,
               },
             )
           end.to_not(change { Osso::Models::User.count })
         end
+      end
+    end
+  end
+
+  context 'with an invalid SAML response' do
+    describe 'post /auth/saml/:uuid/callback' do
+      let!(:enterprise) { create(:enterprise_with_azure) }
+      let!(:azure_provider) { enterprise.provider }
+
+      it 'raises an error when email is missing' do
+        mock_saml_omniauth(email: nil, id: SecureRandom.uuid)
+
+        expect do
+          post(
+            "/auth/saml/#{azure_provider.id}/callback",
+            nil,
+            {
+              'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
+            },
+          )
+        end.to raise_error(Osso::Error::MissingSamlEmailAttributeError)
+      end
+
+      it 'raises an error when id is missing' do
+        mock_saml_omniauth(email: Faker::Internet.email, id: nil)
+
+        expect do
+          post(
+            "/auth/saml/#{azure_provider.id}/callback",
+            nil,
+            {
+              'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
+            },
+          )
+        end.to raise_error(Osso::Error::MissingSamlIdAttributeError)
       end
     end
   end
