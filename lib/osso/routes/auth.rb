@@ -25,14 +25,7 @@ module Osso
         
         Models::IdentityProvider.find(identity_provider_id).
           saml_options
-
-      rescue ActiveRecord::RecordNotFound
-        if env['PATH_INFO'].ends_with?('callback')
-          raise Osso::Error::InvalidACSURLError
-        else
-          binding.pry
-        end
-      end
+      end    
     end
 
     OmniAuth.config.on_failure = Proc.new { |env|
