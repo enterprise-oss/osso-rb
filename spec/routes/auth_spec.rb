@@ -108,7 +108,7 @@ describe Osso::Auth do
               'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
             },
           )
-          expect(okta_provider.reload.status).to eq('ACTIVE')
+          expect(okta_provider.reload.status).to eq('active')
         end
       end
     end
@@ -143,7 +143,7 @@ describe Osso::Auth do
             },
           )
 
-          expect(azure_provider.reload.status).to eq('ACTIVE')
+          expect(azure_provider.reload.status).to eq('active')
         end
       end
 

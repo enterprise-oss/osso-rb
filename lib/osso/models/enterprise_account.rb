@@ -13,7 +13,7 @@ module Osso
       has_many :identity_providers
 
       def single_provider?
-        identity_providers.one?
+        identity_providers.not_pending.one?
       end
 
       def provider

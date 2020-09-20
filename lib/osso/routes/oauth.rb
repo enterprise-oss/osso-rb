@@ -23,7 +23,7 @@ module Osso
 
         redirect "/auth/saml/#{enterprise.provider.id}" if enterprise.single_provider?
 
-        @providers = enterprise.identity_providers
+        @providers = enterprise.identity_providers.not_pending
         erb :multiple_providers
 
       rescue Osso::Error::OAuthError => e
