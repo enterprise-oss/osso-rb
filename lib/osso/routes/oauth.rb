@@ -24,9 +24,10 @@ module Osso
         redirect "/auth/saml/#{enterprise.provider.id}" if enterprise.single_provider?
 
         @providers = enterprise.identity_providers.not_pending
-        erb :multiple_providers
+        erb :multiple_providers if providers.count > 1
 
-      rescue Osso::Error::OAuthError => e
+        raise Osso::Error::MissingConfiguredIdentityProvider
+      rescue Osso::Error => e
         @error = e
         erb :error
       end
