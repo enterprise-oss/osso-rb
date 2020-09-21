@@ -2,7 +2,7 @@
 
 module Osso
   module Error
-    class MissingSamlAttributeError < StandardError; end
+    class MissingSamlAttributeError < Base; end
 
     class MissingSamlEmailAttributeError < MissingSamlAttributeError
       def message

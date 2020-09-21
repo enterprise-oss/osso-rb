@@ -11,7 +11,8 @@ FactoryBot.define do
   factory :enterprise_with_okta, parent: :enterprise_account do
     after :create do |enterprise|
       create(
-        :okta_identity_provider,
+        :configured_identity_provider,
+        service: 'OKTA',
         domain: enterprise.domain,
         enterprise_account_id: enterprise.id,
       )
@@ -21,7 +22,8 @@ FactoryBot.define do
   factory :enterprise_with_azure, parent: :enterprise_account do
     after :create do |enterprise|
       create(
-        :azure_identity_provider,
+        :configured_identity_provider,
+        service: 'AZURE',
         domain: enterprise.domain,
         enterprise_account_id: enterprise.id,
       )
@@ -31,13 +33,15 @@ FactoryBot.define do
   factory :enterprise_with_multiple_providers, parent: :enterprise_account do
     after :create do |enterprise|
       create(
-        :okta_identity_provider,
+        :configured_identity_provider,
+        service: 'OKTA',
         domain: enterprise.domain,
         enterprise_account_id: enterprise.id,
       )
 
       create(
-        :azure_identity_provider,
+        :configured_identity_provider,
+        service: 'AZURE',
         domain: enterprise.domain,
         enterprise_account_id: enterprise.id,
       )

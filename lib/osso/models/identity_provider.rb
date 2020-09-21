@@ -10,6 +10,8 @@ module Osso
       before_save :set_status
       validate :sso_cert_valid
 
+      enum status: { pending: "PENDING", configured: 'CONFIGURED', active: "ACTIVE", error: "ERROR"}
+
       PEM_HEADER = "-----BEGIN CERTIFICATE-----\n"
       PEM_FOOTER = "\n-----END CERTIFICATE-----"
 
@@ -39,17 +41,15 @@ module Osso
       alias acs_url assertion_consumer_service_url
 
       def set_status
-        return if status != 'PENDING'
-
-        self.status = 'CONFIGURED' if sso_url && sso_cert
+        self.status = 'configured' if sso_url && sso_cert && pending?
       end
 
       def active!
-        update(status: 'ACTIVE')
+        update(status: 'active')
       end
 
       def error!
-        update(status: 'ERROR')
+        update(status: 'error')
       end
 
       def root_url

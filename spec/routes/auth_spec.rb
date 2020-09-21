@@ -3,6 +3,9 @@
 require 'spec_helper'
 
 describe Osso::Auth do
+  before do
+    described_class.set(:views, spec_views)
+  end
   describe 'get /auth/saml/:uuid' do
     describe 'for an Okta SAML provider' do
       let(:enterprise) { create(:enterprise_with_okta) }
@@ -108,7 +111,7 @@ describe Osso::Auth do
               'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
             },
           )
-          expect(okta_provider.reload.status).to eq('ACTIVE')
+          expect(okta_provider.reload.status).to eq('active')
         end
       end
     end
@@ -143,7 +146,7 @@ describe Osso::Auth do
             },
           )
 
-          expect(azure_provider.reload.status).to eq('ACTIVE')
+          expect(azure_provider.reload.status).to eq('active')
         end
       end
 
@@ -179,29 +182,30 @@ describe Osso::Auth do
       it 'raises an error when email is missing' do
         mock_saml_omniauth(email: nil, id: SecureRandom.uuid)
 
-        expect do
-          post(
+        
+          response = post(
             "/auth/saml/#{azure_provider.id}/callback",
             nil,
             {
               'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
             },
           )
-        end.to raise_error(Osso::Error::MissingSamlEmailAttributeError)
-      end
+
+          expect(response.body).to eq('Osso::Error::MissingSamlEmailAttributeError')
+        end
 
       it 'raises an error when id is missing' do
         mock_saml_omniauth(email: Faker::Internet.email, id: nil)
 
-        expect do
-          post(
+        response = post(
             "/auth/saml/#{azure_provider.id}/callback",
             nil,
             {
               'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
             },
           )
-        end.to raise_error(Osso::Error::MissingSamlIdAttributeError)
+        
+        expect(response.body).to eq('Osso::Error::MissingSamlIdAttributeError')
       end
     end
   end
