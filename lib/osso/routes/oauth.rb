@@ -24,10 +24,10 @@ module Osso
         redirect "/auth/saml/#{enterprise.provider.id}" if enterprise.single_provider?
 
         @providers = enterprise.identity_providers.not_pending
-        erb :multiple_providers if providers.count > 1
+        erb :multiple_providers if @providers.count > 1
 
-        raise Osso::Error::MissingConfiguredIdentityProvider
-      rescue Osso::Error => e
+        raise Osso::Error::MissingConfiguredIdentityProvider.new(domain: params[:domain])
+      rescue Osso::Error::Base => e
         @error = e
         erb :error
       end
@@ -65,7 +65,7 @@ module Osso
         includes(:identity_providers).
         find_by!(domain: domain, oauth_client_id: client_id)
     rescue ActiveRecord::RecordNotFound
-      raise Osso::Error::NoAccountForOAuthClientError
+      raise Osso::Error::NoAccountForOAuthClientError.new(domain: params[:domain])
     end
 
     def find_client(identifier)
@@ -81,7 +81,7 @@ module Osso
         session[:osso_oauth_state] = params[:state]
       end.call(env)
     rescue Rack::OAuth2::Server::Authorize::BadRequest
-      raise Osso::Error::InvalidRedirectUri
+      raise Osso::Error::InvalidRedirectUri.new(redirect_uri: params[:redirect_uri])
     end
   end
 end

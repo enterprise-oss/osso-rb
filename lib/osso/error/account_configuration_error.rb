@@ -2,13 +2,17 @@
 
 module Osso
   module Error
-    class AccountConfigurationError < StandardError; end
+    class AccountConfigurationError < Base; end
 
     class MissingConfiguredIdentityProvider < AccountConfigurationError
+      def initialize(domain: 'The requested domain')
+        @domain = domain
+      end
+
       def message
-        'The requested account has no configured Identity Provider. ' \
-          'Before a user for this account can sign in with SSO, you must ' \
-          'complete configuration. Review the SSO configuration guides.'
+        "#{@domain} has no configured Identity Provider. " \
+          'SAML configuartion must be finalized before a user ' \
+          'for this domain can sign in with SSO.'
       end
     end
   end

@@ -2,7 +2,11 @@
 
 module Osso
   module Error
-    class SamlConfigError < StandardError; end
+    class SamlConfigError < Base
+      def message
+        'Something went wrong with your SAML configuration.'
+      end
+    end
 
     class InvalidACSURLError < SamlConfigError
       def message
