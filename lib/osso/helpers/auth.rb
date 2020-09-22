@@ -66,7 +66,7 @@ module Osso
       end
 
       def token
-        request.env['HTTP_AUTHORIZATION'] || session['admin_token'] || request['admin_token']
+        session['admin_token'] || request.env['HTTP_AUTHORIZATION'] || request.params['admin_token']
       end
 
       def chomp_token
