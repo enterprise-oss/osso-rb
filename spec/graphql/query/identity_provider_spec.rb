@@ -15,6 +15,7 @@ describe Osso::GraphQL::Schema do
             service
             domain
             acsUrl
+            acsUrlValidator
             ssoCert
             ssoUrl
             status

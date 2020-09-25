@@ -16,6 +16,7 @@ module Osso
         field :sso_url, String, null: true
         field :sso_cert, String, null: true
         field :status, Types::IdentityProviderStatus, null: false
+        field :acs_url_validator, String, null: false
       end
     end
   end

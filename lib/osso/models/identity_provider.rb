@@ -40,6 +40,10 @@ module Osso
 
       alias acs_url assertion_consumer_service_url
 
+      def acs_url_validator
+        Regexp.escape(acs_url)
+      end
+
       def set_status
         self.status = 'configured' if sso_url && sso_cert && pending?
       end
