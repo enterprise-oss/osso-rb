@@ -24,6 +24,19 @@ describe Osso::Models::IdentityProvider do
     end
   end
 
+  describe '#acs_url_validator' do
+    it 'returns a regex escaped string' do
+      allow(subject).to receive(:acs_url).and_return(
+        'https://foo.com/auth/saml/callback'
+      )
+
+      expect(subject.acs_url_validator).to eq(
+        'https://foo\\.com/auth/saml/callback'
+      )
+    end
+  end
+
+
   describe '#saml_options' do
     it 'returns the required args' do
       expect(subject.saml_options).
