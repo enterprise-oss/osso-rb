@@ -6,7 +6,7 @@ module Osso
     class IdentityProvider < ActiveRecord::Base
       belongs_to :enterprise_account
       belongs_to :oauth_client
-      has_many :users
+      has_many :users, dependent: :delete_all
       before_save :set_status
       validate :sso_cert_valid
 
