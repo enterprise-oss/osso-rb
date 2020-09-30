@@ -3,8 +3,8 @@
 module Osso
   module Models
     class User < ActiveRecord::Base
-      belongs_to :enterprise_account
-      belongs_to :identity_provider
+      belongs_to :enterprise_account, counter_cache: true
+      belongs_to :identity_provider, counter_cache: true
       has_many :authorization_codes, dependent: :delete_all
       has_many :access_tokens, dependent: :delete_all
 

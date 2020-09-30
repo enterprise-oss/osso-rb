@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Osso
-  VERSION = '0.0.5-iota'
+  VERSION = '0.0.5-kappa'
 end
