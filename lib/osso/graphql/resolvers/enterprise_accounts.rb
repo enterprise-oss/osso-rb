@@ -11,7 +11,7 @@ module Osso
 
           accounts = Osso::Models::EnterpriseAccount
 
-          accounts = accounts.order(sort_column => sort_order_sym(sort_order)) if sort_column && sort_order
+          accounts = accounts.order(sort_column.underscore => sort_order_sym(sort_order)) if sort_column && sort_order
 
           accounts.all
         end

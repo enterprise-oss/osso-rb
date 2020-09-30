@@ -14,6 +14,7 @@ module Osso
         field :domain, String, null: false
         field :identity_providers, [Types::IdentityProvider], null: true
         field :status, String, null: false
+        field :users_count, Integer, null: false
 
         def status
           'active'
