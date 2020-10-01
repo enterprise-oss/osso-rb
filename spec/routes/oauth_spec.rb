@@ -48,7 +48,7 @@ describe Osso::Oauth do
 
       describe 'for an enterprise domain with multiple SAML providers' do
         it 'renders the multiple providers screen' do
-          enterprise = create(:enterprise_with_multiple_providers)
+          enterprise = create(:enterprise_with_multiple_providers, oauth_client: client)
 
           get(
             '/oauth/authorize',
@@ -59,6 +59,7 @@ describe Osso::Oauth do
           )
 
           expect(last_response).to be_ok
+          expect(last_response.body).to eq("MULITPLE PROVIDERS")
         end
       end
     end
