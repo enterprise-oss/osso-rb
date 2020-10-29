@@ -5,7 +5,7 @@ steps:
       - dropdb ossorb-development --if-exists
       - dropdb ossorb-development --if-exists
       - createdb ossorb-development
-      - cretedb ossorb-test
+      - createdb ossorb-test
       - RACK_ENV=test bundle exec rake db:migrate
       - bundle exec rspec
     artifact_paths:
