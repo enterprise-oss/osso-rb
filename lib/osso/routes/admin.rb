@@ -9,9 +9,7 @@ module Osso
     use Rack::Session::Cookie, secret: ENV['SESSION_SECRET']
 
     plugin :middleware
-
-    plugin :render, engine: 'erb', views: File.join(File.expand_path(Bundler.root), 'views/rodauth'), cache: nil
-    # plugin :render, engine: 'erb', views: 'lib/osso/views' if ENV['RACK_ENV'] == 'test'
+    plugin :render, engine: 'erb', views: ENV['RODAUTH_VIEWS'] || File.join(File.expand_path(Bundler.root), 'views/rodauth')
     plugin :route_csrf
 
     plugin :rodauth do
