@@ -1,10 +1,6 @@
 require 'rodauth/migrations'
 
 class AddRodauthTables < ActiveRecord::Migration[6.0]
-  def database_type
-    'postgres'
-  end
-
   DB = Sequel.postgres(extensions: :activerecord_connection)
 
   def change
@@ -23,7 +19,7 @@ class AddRodauthTables < ActiveRecord::Migration[6.0]
       t.string :password_hash, null: false
     end
 
-    Rodauth.create_database_authentication_functions(DB)
+    Rodauth.create_database_authentication_functions(DB, table_name: "account_password_hashes")
 
     # Used by the password reset feature
     create_table :account_password_reset_keys, id: :uuid do |t|
