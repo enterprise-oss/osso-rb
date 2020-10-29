@@ -10,9 +10,8 @@ class AddRodauthTables < ActiveRecord::Migration[6.0]
       t.citext :email, null: false, index: { unique: true, where: "status_id IN (1, 2)" }
       t.integer :status_id, null: false, default: 1
       t.string :role, null: false, default: 'admin'
+      t.string :oauth_client_id, null: true, index: true
     end
-
-    add_reference :accounts, :oauth_client, type: :uuid, index: true
 
     create_table :account_password_hashes, id: :uuid do |t|
       t.foreign_key :accounts, column: :id

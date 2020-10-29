@@ -10,6 +10,7 @@ module Osso
           email: email,
           id: id,
           scope: role,
+          oauth_client_id: oauth_client_id,
         }
       end
     end
