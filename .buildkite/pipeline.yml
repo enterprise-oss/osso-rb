@@ -2,8 +2,8 @@ steps:
   - name: ":rspec:"
     commands: 
       - bundle install
-      - dropdb ossorb-development
-      - dropdb ossorb-development
+      - dropdb ossorb-development --if-exists
+      - dropdb ossorb-development --if-exists
       - createdb ossorb-development
       - cretedb ossorb-test
       - RACK_ENV=test bundle exec rake db:migrate
