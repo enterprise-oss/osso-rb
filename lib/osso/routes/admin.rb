@@ -11,7 +11,7 @@ module Osso
     plugin :middleware
 
     plugin :render, engine: 'erb', views: File.join(File.expand_path(Bundler.root), 'views/rodauth'), cache: nil
-    plugin :render, engine: 'erb', views: 'lib/osso/views' if ENV['RACK_ENV'] == 'test'
+    # plugin :render, engine: 'erb', views: 'lib/osso/views' if ENV['RACK_ENV'] == 'test'
     plugin :route_csrf
 
     plugin :rodauth do
