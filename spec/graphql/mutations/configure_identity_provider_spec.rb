@@ -81,7 +81,7 @@ describe Osso::GraphQL::Schema do
       end
 
       it 'does not configure an identity provider' do
-        expect(subject.dig('errors')).to_not be_empty
+        expect(subject['errors']).to_not be_empty
       end
     end
   end

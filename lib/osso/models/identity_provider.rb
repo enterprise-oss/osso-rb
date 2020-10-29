@@ -10,7 +10,7 @@ module Osso
       before_save :set_status
       validate :sso_cert_valid
 
-      enum status: { pending: "PENDING", configured: 'CONFIGURED', active: "ACTIVE", error: "ERROR"}
+      enum status: { pending: 'PENDING', configured: 'CONFIGURED', active: 'ACTIVE', error: 'ERROR' }
 
       PEM_HEADER = "-----BEGIN CERTIFICATE-----\n"
       PEM_FOOTER = "\n-----END CERTIFICATE-----"

@@ -10,6 +10,7 @@ module Osso
 end
 
 require_relative 'access_token'
+require_relative 'account'
 require_relative 'app_config'
 require_relative 'authorization_code'
 require_relative 'enterprise_account'

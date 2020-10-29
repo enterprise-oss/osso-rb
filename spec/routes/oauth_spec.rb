@@ -3,6 +3,10 @@
 require 'spec_helper'
 
 describe Osso::Oauth do
+  before do
+    described_class.set(:views, spec_views)
+  end
+
   let(:client) { create(:oauth_client) }
 
   describe 'get /oauth/authorize' do
@@ -10,8 +14,6 @@ describe Osso::Oauth do
       describe 'for a domain that does not belong to an enterprise' do
         # TODO: better error handling and test
         it 'renders an error page' do
-          described_class.set(:views, spec_views)
-
           create(:enterprise_with_okta, domain: 'foo.com')
 
           get(
@@ -59,7 +61,7 @@ describe Osso::Oauth do
           )
 
           expect(last_response).to be_ok
-          expect(last_response.body).to eq("MULITPLE PROVIDERS")
+          expect(last_response.body).to eq('MULITPLE PROVIDERS')
         end
       end
     end

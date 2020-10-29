@@ -47,11 +47,11 @@ module RSpecMixin
   end
 
   def spec_views
-    File.dirname(__FILE__) + '/support/views'
+    "#{File.dirname(__FILE__)}/support/views"
   end
 
   def valid_x509_pem
-    raw = File.read(File.dirname(__FILE__) + '/support/fixtures/test.pem')
+    raw = File.read("#{File.dirname(__FILE__)}/support/fixtures/test.pem")
     OpenSSL::X509::Certificate.new(raw).to_pem
   end
 

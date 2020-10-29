@@ -8,9 +8,9 @@ describe Osso::Helpers::Auth do
   end
 
   subject(:app) do
-    Class.new { 
+    Class.new do
       include Osso::Helpers::Auth
-    }
+    end
   end
 
   describe 'with the token as a header' do
@@ -21,7 +21,7 @@ describe Osso::Helpers::Auth do
 
       allow_any_instance_of(subject).to receive(:session) do
         {
-          admin_token: nil
+          admin_token: nil,
         }
       end
 
@@ -103,7 +103,7 @@ describe Osso::Helpers::Auth do
 
       allow_any_instance_of(subject).to receive(:session) do
         {
-          admin_token: nil
+          admin_token: nil,
         }
       end
 
@@ -182,20 +182,18 @@ describe Osso::Helpers::Auth do
       allow_any_instance_of(subject).to receive(:request) do
         double('Request', env: {}, params: {}, post?: false)
       end
-    
+
       allow_any_instance_of(subject).to receive(:redirect) do
         false
       end
 
       allow_any_instance_of(subject).to receive(:session).and_return(
-        {admin_token: token}.with_indifferent_access
+        { admin_token: token }.with_indifferent_access,
       )
-
     end
 
     describe 'with an admin token' do
       let(:token) { encode({ scope: 'admin' }) }
-      
 
       it 'allows #token_protected! methods' do
         expect(subject.new.token_protected!).to_not be(false)

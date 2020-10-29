@@ -3,56 +3,22 @@
 require 'spec_helper'
 
 describe Osso::Admin do
-  let(:jwt_url) { 'https://foo.com/jwt' }
-  let(:jwt_hmac_secret) { SecureRandom.hex(32) }
-
-  before do
-    ENV['JWT_URL'] = jwt_url
-    ENV['JWT_HMAC_SECRET'] = jwt_hmac_secret
-    described_class.set(:views, spec_views)
-  end
-
   describe 'get /admin' do
-    it 'redirects to JWT_URL without a session or token' do
+    it 'redirects to /login without a session' do
       get('/admin')
 
       expect(last_response).to be_redirect
       follow_redirect!
-      expect(last_request.url).to eq(jwt_url)
+      expect(last_request.url).to match('/login')
     end
 
-    it 'redirects to JWT_URL with an invalid token' do
-      get('/admin', token: SecureRandom.hex(32))
+    xit 'renders the admin page for a valid session token' do
+      password = SecureRandom.urlsafe_base64(16)
+      account = create(:verified_account, password: password)
+      
+      post('/login', { email: account.email, password: password })
 
-      expect(last_response).to be_redirect
-
-      follow_redirect!
-
-      expect(last_request.url).to eq(jwt_url)
-    end
-
-    it 'chomps the token and redirects to request path with valid token' do
-      token = JWT.encode(
-        { email: 'admin@saas.com', scope: 'admin' },
-        jwt_hmac_secret,
-        'HS256',
-      )
-
-      get('/admin', { admin_token: token })
-
-      expect(last_response).to be_redirect
-      follow_redirect!
-      expect(last_request.url).to match('/admin')
-    end
-
-    it 'renders the admin page for a valid session token' do
-      token = JWT.encode(
-        { email: 'admin@saas.com', scope: 'admin' },
-        jwt_hmac_secret,
-        'HS256',
-      )
-
-      get('/admin', {}, 'rack.session' => { admin_token: token })
+      get('/admin')
 
       expect(last_response).to be_ok
     end

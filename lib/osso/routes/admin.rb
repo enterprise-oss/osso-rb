@@ -7,47 +7,14 @@ module Osso
     include AppConfig
     helpers Helpers::Auth
     register Sinatra::Namespace
+    use Osso::Rodauth
 
-    before do
-      chomp_token
-    end
+    private
 
-    namespace '/admin' do
-      get '/login' do
-        token_protected!
-
-        erb :admin, layout: false
-      end
-
-      get '' do
-        internal_protected!
-
-        erb :admin, layout: false
-      end
-
-      get '/enterprise' do
-        token_protected!
-
-        erb :admin, layout: false
-      end
-
-      get '/enterprise/:domain' do
-        enterprise_protected!(params[:domain])
-
-        erb :admin, layout: false
-      end
-
-      get '/config' do
-        admin_protected!
-
-        erb :admin, layout: false
-      end
-
-      get '/config/:id' do
-        admin_protected!
-
-        erb :admin, layout: false
-      end
+    def current_account
+      Osso::Models::Account.find(env['rodauth'].session['account_id']).
+        context.
+        merge({ rodauth: env['rodauth'] })
     end
   end
 end
