@@ -9,7 +9,7 @@ module Osso
         {
           email: email,
           id: id,
-          scope: scope,
+          scope: role,
         }
       end
     end

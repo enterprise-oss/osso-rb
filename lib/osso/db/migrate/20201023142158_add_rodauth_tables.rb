@@ -5,10 +5,10 @@ class AddRodauthTables < ActiveRecord::Migration[6.0]
     'postgres'
   end
 
+  DB = Sequel.postgres(extensions: :activerecord_connection)
+
   def change
     enable_extension "citext"
-    Rodauth.create_database_authentication_functions(self)
-    Rodauth.create_database_previous_password_check_functions(self)
 
     create_table :accounts, id: :uuid do |t|
       t.citext :email, null: false, index: { unique: true, where: "status_id IN (1, 2)" }
@@ -22,6 +22,8 @@ class AddRodauthTables < ActiveRecord::Migration[6.0]
       t.foreign_key :accounts, column: :id
       t.string :password_hash, null: false
     end
+
+    Rodauth.create_database_authentication_functions(DB)
 
     # Used by the password reset feature
     create_table :account_password_reset_keys, id: :uuid do |t|
