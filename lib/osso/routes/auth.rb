@@ -26,7 +26,8 @@ module Osso
           not_pending.
           find(identity_provider_id).
           saml_options
-      rescue StandardError
+      rescue StandardError => e
+        Raven.capture_exception(e) if defined?(Raven)
         {}
       end
     end
