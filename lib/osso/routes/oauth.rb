@@ -16,8 +16,10 @@ module Osso
       # Once they complete IdP login, they will be returned to the
       # redirect_uri with an authorization code parameter.
       get '/authorize' do
-        client = find_client(params[:client_id])
-        enterprise = find_account(domain: params[:domain], client_id: client.id)
+        enterprise = find_account(
+          domain: params[:domain],
+          client_identifier: params[:client_id]
+        )
 
         validate_oauth_request(env)
 
@@ -60,10 +62,16 @@ module Osso
 
     private
 
-    def find_account(domain:, client_id:)
-      Models::EnterpriseAccount.
+    def find_account(domain:, client_identifier:)
+      Osso::Models::EnterpriseAccount.
         includes(:identity_providers).
-        find_by!(domain: domain, oauth_client_id: client_id)
+        joins(:oauth_client).
+        find_by!(
+          domain: domain, 
+          oauth_clients: {
+            identifier: client_identifier
+          }
+        )
     rescue ActiveRecord::RecordNotFound
       raise Osso::Error::NoAccountForOAuthClientError.new(domain: params[:domain])
     end
