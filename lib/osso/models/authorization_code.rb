@@ -9,6 +9,10 @@ module Osso
         @access_token ||= expired! &&
           user.access_tokens.create(oauth_client: oauth_client)
       end
+
+      def create_access_token(requested:)
+        user.access_tokens.create(oauth_client: oauth_client)
+      end
     end
   end
 end

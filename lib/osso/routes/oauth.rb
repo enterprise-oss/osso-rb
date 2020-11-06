@@ -43,22 +43,20 @@ module Osso
           code = Models::AuthorizationCode.find_by_token!(params[:code])
           req.invalid_grant! if code.redirect_uri != req.redirect_uri
 
-          res.access_token = code.access_token.to_bearer_token
+          requested = session.delete(:osso_oauth_requested)
+
+          res.access_token = code.create_access_token(requested: requested).to_bearer_token
         end.call(env)
       end
 
       # Use the access token to request a profile for the user who
       # just logged in. Access tokens are short-lived.
       get '/me' do
-        requested = session.delete(:osso_oauth_requested)
-
         json Models::AccessToken.
           includes(:user).
           valid.
           find_by_token!(params[:access_token]).
-          user.
-          as_json.
-          merge({ requested: requested })
+          user
       end
     end
 

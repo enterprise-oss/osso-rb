@@ -154,10 +154,6 @@ describe Osso::Oauth do
         user = create(:user)
         code = user.authorization_codes.valid.first
 
-        allow_any_instance_of(described_class).to receive(:session).and_return(
-          { osso_oauth_requested: { email: user.email } },
-        )
-
         get(
           '/oauth/me',
           access_token: code.access_token.to_bearer_token,
@@ -168,7 +164,6 @@ describe Osso::Oauth do
           email: user.email,
           id: user.id,
           idp: 'Okta',
-          requested: { email: user.email },
         )
       end
     end
