@@ -55,15 +55,16 @@ end
 # Table name: identity_providers
 #
 #  id                    :uuid             not null, primary key
-#  service               :string
+#  service               :enum
 #  domain                :string           not null
 #  sso_url               :string
 #  sso_cert              :text
 #  enterprise_account_id :uuid
 #  oauth_client_id       :uuid
-#  status                :enum             default("PENDING")
+#  status                :enum             default("pending")
 #  created_at            :datetime
 #  updated_at            :datetime
+#  users_count           :integer          default(0)
 #
 # Indexes
 #

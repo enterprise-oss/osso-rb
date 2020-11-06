@@ -7,11 +7,7 @@ module Osso
 
       def access_token
         @access_token ||= expired! &&
-          user.access_tokens.create(oauth_client: oauth_client)
-      end
-
-      def create_access_token(requested:)
-        user.access_tokens.create(oauth_client: oauth_client, requested: requested)
+          user.access_tokens.create(oauth_client: oauth_client, requested: requested)
       end
     end
   end
@@ -29,6 +25,7 @@ end
 #  updated_at      :datetime         not null
 #  user_id         :uuid
 #  oauth_client_id :uuid
+#  requested       :jsonb
 #
 # Indexes
 #

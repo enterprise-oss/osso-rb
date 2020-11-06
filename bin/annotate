@@ -1,1 +1,0 @@
-annotate --require osso.rb  --models --model-dir ./lib/osso/models/ --position bottom -k -i

@@ -39,9 +39,11 @@ end
 #  updated_at      :datetime         not null
 #  user_id         :uuid
 #  oauth_client_id :uuid
+#  requested       :jsonb
 #
 # Indexes
 #
-#  index_access_tokens_on_oauth_client_id  (oauth_client_id)
-#  index_access_tokens_on_user_id          (user_id)
+#  index_access_tokens_on_oauth_client_id       (oauth_client_id)
+#  index_access_tokens_on_token_and_expires_at  (token,expires_at) UNIQUE
+#  index_access_tokens_on_user_id               (user_id)
 #
