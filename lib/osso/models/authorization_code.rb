@@ -11,7 +11,7 @@ module Osso
       end
 
       def create_access_token(requested:)
-        user.access_tokens.create(oauth_client: oauth_client)
+        user.access_tokens.create(oauth_client: oauth_client, requested: requested)
       end
     end
   end
