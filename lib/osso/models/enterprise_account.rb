@@ -11,6 +11,8 @@ module Osso
       belongs_to :oauth_client
       has_many :users
       has_many :identity_providers
+      
+      validates_format_of :domain, with: /\A[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}\z/
 
       def single_provider?
         identity_providers.not_pending.one?

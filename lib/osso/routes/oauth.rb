@@ -39,12 +39,14 @@ module Osso
       # paramaters required by OAuth spec: redirect_uri, client ID,
       # and client secret
       post '/token' do
-        Rack::OAuth2::Server::Token.new do |req, res|
-          code = Models::AuthorizationCode.
-            find_by_token!(params[:code])
+
+        Rack::OAuth2::Server::Token.new do |req, res|    
           client = Models::OauthClient.find_by!(identifier: req.client_id)
           req.invalid_client! if client.secret != req.client_secret
+
+          code = Models::AuthorizationCode.find_by_token!(params[:code])
           req.invalid_grant! if code.redirect_uri != req.redirect_uri
+
           res.access_token = code.access_token.to_bearer_token
         end.call(env)
       end
