@@ -103,7 +103,7 @@ module Osso
         client = find_client(req[:client_id])
         session[:osso_oauth_redirect_uri] = req.verify_redirect_uri!(client.redirect_uri_values)
         session[:osso_oauth_state] = params[:state]
-        session[:osso_oauth_requested] = { domain: params[:domain], email: params[:email] }
+        session[:osso_oauth_requested] = { domain: req[:domain], email: req[:email] }
       end.call(env)
     rescue Rack::OAuth2::Server::Authorize::BadRequest
       raise Osso::Error::InvalidRedirectUri.new(redirect_uri: params[:redirect_uri])
