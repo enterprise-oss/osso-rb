@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-FactoryBot.define do
-  DB = Sequel.postgres(extensions: :activerecord_connection)
+DB = Sequel.postgres(extensions: :activerecord_connection)
 
+FactoryBot.define do
   factory :account, class: Osso::Models::Account do
     id { SecureRandom.uuid }
     email { Faker::Internet.email }

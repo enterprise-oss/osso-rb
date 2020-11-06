@@ -15,7 +15,7 @@ describe Osso::Admin do
     xit 'renders the admin page for a valid session token' do
       password = SecureRandom.urlsafe_base64(16)
       account = create(:verified_account, password: password)
-      
+
       post('/login', { email: account.email, password: password })
 
       get('/admin')

@@ -16,16 +16,13 @@ module Osso
       # Once they complete IdP login, they will be returned to the
       # redirect_uri with an authorization code parameter.
       get '/authorize' do
-        enterprise = find_account(
-          domain: params[:domain],
-          client_identifier: params[:client_id]
-        )
+        identity_providers = find_providers(params)
 
         validate_oauth_request(env)
 
-        redirect "/auth/saml/#{enterprise.provider.id}" if enterprise.single_provider?
+        redirect "/auth/saml/#{identity_providers.first.id}" if identity_providers.one?
 
-        @providers = enterprise.identity_providers.not_pending
+        @providers = identity_providers.not_pending
         return erb :multiple_providers if @providers.count > 1
 
         raise Osso::Error::MissingConfiguredIdentityProvider.new(domain: params[:domain])
@@ -39,8 +36,7 @@ module Osso
       # paramaters required by OAuth spec: redirect_uri, client ID,
       # and client secret
       post '/token' do
-
-        Rack::OAuth2::Server::Token.new do |req, res|    
+        Rack::OAuth2::Server::Token.new do |req, res|
           client = Models::OauthClient.find_by!(identifier: req.client_id)
           req.invalid_client! if client.secret != req.client_secret
 
@@ -54,28 +50,48 @@ module Osso
       # Use the access token to request a profile for the user who
       # just logged in. Access tokens are short-lived.
       get '/me' do
+        requested = session.delete(:osso_oauth_requested)
+
         json Models::AccessToken.
           includes(:user).
           valid.
           find_by_token!(params[:access_token]).
-          user
+          user.
+          as_json.
+          merge({ requested: requested })
       end
     end
 
     private
+
+    def find_providers(params)
+      if params[:email]
+        user = find_user(email: params[:email])
+        return [user.identity_provider] if user
+      end
+
+      find_account(
+        domain: params[:domain] || params[:email].split('@')[1],
+        client_identifier: params[:client_id],
+      ).identity_providers
+    end
 
     def find_account(domain:, client_identifier:)
       Osso::Models::EnterpriseAccount.
         includes(:identity_providers).
         joins(:oauth_client).
         find_by!(
-          domain: domain, 
-          oauth_clients: {
-            identifier: client_identifier
-          }
+          domain: domain,
+          oauth_clients: { identifier: client_identifier },
         )
     rescue ActiveRecord::RecordNotFound
       raise Osso::Error::NoAccountForOAuthClientError.new(domain: params[:domain])
+    end
+
+    def find_user(email:)
+      Osso::Models::User.
+        includes(:identity_provider).
+        find_by(email: email)
     end
 
     def find_client(identifier)
@@ -84,11 +100,12 @@ module Osso
       raise Osso::Error::InvalidOAuthClientIdentifier
     end
 
-    def validate_oauth_request(env)
+    def validate_oauth_request(env) # rubocop:disable Metrics/AbcSize
       Rack::OAuth2::Server::Authorize.new do |req, _res|
         client = find_client(req[:client_id])
         session[:osso_oauth_redirect_uri] = req.verify_redirect_uri!(client.redirect_uri_values)
         session[:osso_oauth_state] = params[:state]
+        session[:osso_oauth_requested] = { domain: params[:domain], email: params[:email] }
       end.call(env)
     rescue Rack::OAuth2::Server::Authorize::BadRequest
       raise Osso::Error::InvalidRedirectUri.new(redirect_uri: params[:redirect_uri])

@@ -3,13 +3,15 @@
 require 'roda'
 require 'sequel/core'
 
+DEFAULT_VIEWS_DIR = File.join(File.expand_path(Bundler.root), 'views/rodauth')
+
 module Osso
   class Admin < Roda
     DB = Sequel.postgres(extensions: :activerecord_connection)
     use Rack::Session::Cookie, secret: ENV['SESSION_SECRET']
 
     plugin :middleware
-    plugin :render, engine: 'erb', views: ENV['RODAUTH_VIEWS'] || File.join(File.expand_path(Bundler.root), 'views/rodauth')
+    plugin :render, engine: 'erb', views: ENV['RODAUTH_VIEWS'] || DEFAULT_VIEWS_DIR
     plugin :route_csrf
 
     plugin :rodauth do

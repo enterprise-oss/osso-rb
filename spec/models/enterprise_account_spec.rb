@@ -7,12 +7,12 @@ describe Osso::Models::EnterpriseAccount do
     it 'it returns false for an invalid domain' do
       customer = described_class.new(
         name: 'foo',
-        domain: ' foo.com'
+        domain: ' foo.com',
       )
 
       customer.save
 
-      expect(customer.errors[:domain]).to include("is invalid")
+      expect(customer.errors[:domain]).to include('is invalid')
     end
   end
 end
