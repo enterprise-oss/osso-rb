@@ -164,6 +164,7 @@ describe Osso::Oauth do
           email: user.email,
           id: user.id,
           idp: 'Okta',
+          requested: code.requested.symbolize_keys,
         )
       end
     end

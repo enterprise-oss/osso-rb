@@ -54,8 +54,8 @@ module Osso
           includes(:user).
           valid.
           find_by_token!(params[:access_token])
-          
-          json token.user.as_json.merge(requested: token.requested)
+
+        json token.user.as_json.merge(requested: token.requested)
       end
     end
 

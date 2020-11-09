@@ -12,6 +12,10 @@ FactoryBot.define do
         :authorization_code,
         user: user,
         redirect_uri: user.oauth_client.redirect_uri_values.sample,
+        requested: [
+          { domain: user.email.split('@')[1], email: nil },
+          { domain: nil, email: user.email },
+        ].sample,
       )
     end
   end
