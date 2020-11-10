@@ -7,6 +7,7 @@ module Osso
       belongs_to :enterprise_account
       belongs_to :oauth_client
       has_many :users, dependent: :delete_all
+      before_create :set_sso_issuer
       before_save :set_status
       validate :sso_cert_valid
 
@@ -24,7 +25,7 @@ module Osso
           domain: domain,
           idp_sso_target_url: sso_url,
           idp_cert: sso_cert,
-          issuer: domain,
+          issuer: sso_issuer,
         }
       end
 
@@ -46,6 +47,10 @@ module Osso
 
       def set_status
         self.status = 'configured' if sso_url && sso_cert && pending?
+      end
+
+      def set_sso_issuer
+        self.sso_issuer = [root_url, domain].join('/')
       end
 
       def active!

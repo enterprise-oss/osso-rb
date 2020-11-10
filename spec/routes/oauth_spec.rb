@@ -149,7 +149,7 @@ describe Osso::Oauth do
   end
 
   describe 'get /oauth/me' do
-    describe 'with a valid unexpired access token' do
+    describe 'with a valid unexpired access token in params' do
       it 'returns the user' do
         user = create(:user)
         code = user.authorization_codes.valid.first
@@ -157,6 +157,29 @@ describe Osso::Oauth do
         get(
           '/oauth/me',
           access_token: code.access_token.to_bearer_token,
+        )
+
+        expect(last_response.status).to eq(200)
+        expect(last_json_response).to eq(
+          email: user.email,
+          id: user.id,
+          idp: 'Okta',
+          requested: code.requested.symbolize_keys,
+        )
+      end
+    end
+
+    describe 'with a valid unexpired access token in headers' do
+      it 'returns the user' do
+        user = create(:user)
+        code = user.authorization_codes.valid.first
+
+        get(
+          '/oauth/me',
+          nil,
+          {
+            'HTTP_AUTHORIZATION' => "Bearer: #{code.access_token.to_bearer_token}",
+          },
         )
 
         expect(last_response.status).to eq(200)

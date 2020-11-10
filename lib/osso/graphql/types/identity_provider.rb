@@ -13,6 +13,7 @@ module Osso
         field :service, Types::IdentityProviderService, null: true
         field :domain, String, null: false
         field :acs_url, String, null: false
+        field :sso_issuer, String, null: false
         field :sso_url, String, null: true
         field :sso_cert, String, null: true
         field :status, Types::IdentityProviderStatus, null: false

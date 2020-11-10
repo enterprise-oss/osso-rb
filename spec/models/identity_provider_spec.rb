@@ -43,7 +43,7 @@ describe Osso::Models::IdentityProvider do
           domain: subject.domain,
           idp_cert: subject.sso_cert,
           idp_sso_target_url: subject.sso_url,
-          issuer: subject.domain,
+          issuer: subject.sso_issuer,
         )
     end
   end

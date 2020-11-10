@@ -47,7 +47,6 @@ describe Osso::GraphQL::Schema do
           input: {
             name: Faker::Company.name,
             domain: domain,
-            oauthClientId: oauth_client.id,
           },
         }
       end
@@ -57,10 +56,6 @@ describe Osso::GraphQL::Schema do
         expect(subject.dig('data', 'createEnterpriseAccount', 'enterpriseAccount', 'domain')).
           to eq(domain)
       end
-
-      it 'attaches the Enterprise Account to the correct OAuth Client' do
-        expect { subject }.to change { oauth_client.enterprise_accounts.count }.by(1)
-      end
     end
 
     describe 'for an internal scoped user' do
@@ -68,7 +63,6 @@ describe Osso::GraphQL::Schema do
         {
           scope: 'internal',
           email: 'user@saasco.com',
-          oauth_client_id: oauth_client.identifier,
         }
       end
 
@@ -76,10 +70,6 @@ describe Osso::GraphQL::Schema do
         expect { subject }.to change { Osso::Models::EnterpriseAccount.count }.by(1)
         expect(subject.dig('data', 'createEnterpriseAccount', 'enterpriseAccount', 'domain')).
           to eq(domain)
-      end
-
-      it 'attaches the Enterprise Account to the correct OAuth Client' do
-        expect { subject }.to change { oauth_client.enterprise_accounts.count }.by(1)
       end
     end
 
@@ -96,10 +86,6 @@ describe Osso::GraphQL::Schema do
         expect { subject }.to change { Osso::Models::EnterpriseAccount.count }.by(1)
         expect(subject.dig('data', 'createEnterpriseAccount', 'enterpriseAccount', 'domain')).
           to eq(domain)
-      end
-
-      it 'attaches the Enterprise Account to the correct OAuth Client' do
-        expect { subject }.to change { oauth_client.enterprise_accounts.count }.by(1)
       end
     end
     describe 'for the wrong email scoped user' do
