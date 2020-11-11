@@ -36,6 +36,17 @@ describe Osso::Models::IdentityProvider do
     end
   end
 
+  describe '#sso_issuer' do
+    it 'returns a url unique to self' do
+      ENV['HEROKU_APP_NAME'] = nil
+      ENV['BASE_URL'] = 'https://example.com'
+
+      expect(subject.sso_issuer).to eq(
+        "https://example.com/#{subject.oauth_client.id}/#{subject.domain}",
+      )
+    end
+  end
+
   describe '#saml_options' do
     it 'returns the required args' do
       expect(subject.saml_options).
