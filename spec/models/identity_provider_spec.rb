@@ -42,7 +42,7 @@ describe Osso::Models::IdentityProvider do
       ENV['BASE_URL'] = 'https://example.com'
 
       expect(subject.sso_issuer).to eq(
-        "#{subject.domain}/#{subject.id}",
+        "#{subject.domain}/#{subject.oauth_client_id}",
       )
     end
   end
