@@ -50,7 +50,7 @@ module Osso
       end
 
       def set_sso_issuer
-        self.sso_issuer = [root_url, oauth_client_id, domain].join('/')
+        self.sso_issuer = [domain, id].join('/')
       end
 
       def active!
