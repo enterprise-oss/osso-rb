@@ -16,6 +16,10 @@ module Osso
       PEM_HEADER = "-----BEGIN CERTIFICATE-----\n"
       PEM_FOOTER = "\n-----END CERTIFICATE-----"
 
+      ENTITY_ID_URI_REQUIRED = [
+        'PING',
+      ]
+
       def name
         service.titlecase
       end
@@ -50,6 +54,10 @@ module Osso
       end
 
       def set_sso_issuer
+        parts = [domain, oauth_client_id]
+        
+        parts.shift('https:/') if ENTITY_ID_URI_REQUIRED.any?(service)
+
         self.sso_issuer = [domain, oauth_client_id].join('/')
       end
 
