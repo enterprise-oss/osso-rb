@@ -56,9 +56,9 @@ module Osso
       def set_sso_issuer
         parts = [domain, oauth_client_id]
         
-        parts.shift('https:/') if ENTITY_ID_URI_REQUIRED.any?(service)
+        parts.unshift('https:/') if ENTITY_ID_URI_REQUIRED.any?(service)
 
-        self.sso_issuer = [domain, oauth_client_id].join('/')
+        self.sso_issuer = parts.join('/')
       end
 
       def active!

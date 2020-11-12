@@ -45,6 +45,17 @@ describe Osso::Models::IdentityProvider do
         "#{subject.domain}/#{subject.oauth_client_id}",
       )
     end
+
+    it 'returns a uri with protocol when required' do
+      ENV['HEROKU_APP_NAME'] = nil
+      ENV['BASE_URL'] = 'https://example.com'
+
+      idp = create(:ping_identity_provider)
+
+      expect(idp.sso_issuer).to eq(
+        "https://#{idp.domain}/#{idp.oauth_client_id}",
+      )
+    end
   end
 
   describe '#saml_options' do
