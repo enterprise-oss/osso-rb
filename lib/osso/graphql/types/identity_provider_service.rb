@@ -5,9 +5,10 @@ module Osso
     module Types
       class IdentityProviderService < BaseEnum
         value('AZURE', 'Microsoft Azure Identity Provider', value: 'AZURE')
+        value('GOOGLE', 'Google SAML Identity Provider', value: 'GOOGLE')
         value('OKTA', 'Okta Identity Provider', value: 'OKTA')
         value('ONELOGIN', 'OneLogin Identity Provider', value: 'ONELOGIN')
-        value('GOOGLE', 'Google SAML Identity Provider', value: 'GOOGLE')
+        value('PING', 'PingID Identity Provider', value: 'PING')
       end
     end
   end

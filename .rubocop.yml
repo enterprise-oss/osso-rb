@@ -80,3 +80,6 @@ Style/Documentation:
   Exclude:
     - 'spec/**/*'
     - 'db/**.*'
+
+Gemspec/RequiredRubyVersion:
+  Enabled: false

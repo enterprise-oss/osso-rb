@@ -27,15 +27,36 @@ describe Osso::Models::IdentityProvider do
   describe '#acs_url_validator' do
     it 'returns a regex escaped string' do
       allow(subject).to receive(:acs_url).and_return(
-        'https://foo.com/auth/saml/callback'
+        'https://foo.com/auth/saml/callback',
       )
 
       expect(subject.acs_url_validator).to eq(
-        'https://foo\\.com/auth/saml/callback'
+        'https://foo\\.com/auth/saml/callback',
       )
     end
   end
 
+  describe '#sso_issuer' do
+    it 'returns a url unique to self' do
+      ENV['HEROKU_APP_NAME'] = nil
+      ENV['BASE_URL'] = 'https://example.com'
+
+      expect(subject.sso_issuer).to eq(
+        "#{subject.domain}/#{subject.oauth_client_id}",
+      )
+    end
+
+    it 'returns a uri with protocol when required' do
+      ENV['HEROKU_APP_NAME'] = nil
+      ENV['BASE_URL'] = 'https://example.com'
+
+      idp = create(:ping_identity_provider)
+
+      expect(idp.sso_issuer).to eq(
+        "https://#{idp.domain}/#{idp.oauth_client_id}",
+      )
+    end
+  end
 
   describe '#saml_options' do
     it 'returns the required args' do
@@ -44,7 +65,7 @@ describe Osso::Models::IdentityProvider do
           domain: subject.domain,
           idp_cert: subject.sso_cert,
           idp_sso_target_url: subject.sso_url,
-          issuer: subject.domain,
+          issuer: subject.sso_issuer,
         )
     end
   end

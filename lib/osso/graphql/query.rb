@@ -5,6 +5,7 @@ module Osso
     module Types
       class QueryType < ::GraphQL::Schema::Object
         field :enterprise_accounts, null: true, resolver: Resolvers::EnterpriseAccounts do
+          argument :search, String, required: false
           argument :sort_column, String, required: false
           argument :sort_order, String, required: false
         end
@@ -39,6 +40,13 @@ module Osso
         ) do
           argument :id, ID, required: true
         end
+
+        field(
+          :admin_users,
+          [Types::AdminUser],
+          null: false,
+          resolve: ->(_obj, _args, _context) { Osso::Models::Account.all },
+        )
 
         field(
           :current_user,

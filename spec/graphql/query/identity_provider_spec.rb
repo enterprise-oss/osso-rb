@@ -8,9 +8,9 @@ describe Osso::GraphQL::Schema do
     let(:domain) { Faker::Internet.domain_name }
     let(:variables) { { id: id } }
     let(:query) do
-      <<~GRAPHQL
+      <<-GRAPHQL
         query IdentityProvider($id: ID!) {
-          identityProvider(id: $id) {            
+          identityProvider(id: $id) {
             id
             service
             domain

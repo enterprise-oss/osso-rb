@@ -6,6 +6,7 @@ module Osso
 
     class MissingConfiguredIdentityProvider < AccountConfigurationError
       def initialize(domain: 'The requested domain')
+        super
         @domain = domain
       end
 

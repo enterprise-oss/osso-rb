@@ -1,1 +1,3 @@
-annotate --require osso.rb  --models --model-dir ./lib/osso/models/ --position bottom -k -i
+#!/bin/sh
+
+bundle exec annotate --require osso.rb --model-dir ./lib/osso/models/ --position bottom -k -i

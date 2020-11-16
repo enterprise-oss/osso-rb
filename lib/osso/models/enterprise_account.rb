@@ -8,9 +8,10 @@ module Osso
     # includes fields for external IDs such that you can persist
     # your ID for an account in your Osso instance.
     class EnterpriseAccount < ActiveRecord::Base
-      belongs_to :oauth_client
       has_many :users
       has_many :identity_providers
+
+      validates_format_of :domain, with: /\A[a-z0-9]+([\-.]{1}[a-z0-9]+)*\.[a-z]{2,5}\z/
 
       def single_provider?
         identity_providers.not_pending.one?
@@ -40,6 +41,7 @@ end
 #  name            :string           not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  users_count     :integer          default(0)
 #
 # Indexes
 #

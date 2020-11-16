@@ -55,6 +55,7 @@ module Osso
       @authorization_code ||= user.authorization_codes.create!(
         oauth_client: provider.oauth_client,
         redirect_uri: redirect_uri_base,
+        requested: requested_param,
       )
     end
 
@@ -80,6 +81,10 @@ module Osso
 
     def valid_idp_initiated_flow
       !session[:osso_oauth_redirect_uri] && !session[:osso_oauth_state]
+    end
+
+    def requested_param
+      @session.delete(:osso_oauth_requested)
     end
   end
 end

@@ -13,6 +13,7 @@ module Osso
         field :delete_enterprise_account, mutation: Mutations::DeleteEnterpriseAccount
         field :delete_identity_provider, mutation: Mutations::DeleteIdentityProvider
         field :delete_oauth_client, mutation: Mutations::DeleteOauthClient
+        field :invite_admin_user, mutation: Mutations::InviteAdminUser
         field :set_redirect_uris, mutation: Mutations::SetRedirectUris
         field :regenerate_oauth_credentials, mutation: Mutations::RegenerateOauthCredentials
         field :update_app_config, mutation: Mutations::UpdateAppConfig

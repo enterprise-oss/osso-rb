@@ -28,7 +28,7 @@ module Osso
         def self.authorized?(object, context)
           # we first receive the payload object as a hash, but can depend on the
           # return type to hide the actual objects non-admins shouldn't see
-          return true if object.class == Hash
+          return true if object.instance_of?(Hash)
 
           internal_authorized?(context) || enterprise_authorized?(context, object&.domain)
         end

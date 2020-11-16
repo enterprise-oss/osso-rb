@@ -10,6 +10,7 @@ module Osso
 
     class NoAccountForOAuthClientError < OAuthError
       def initialize(domain: 'the requested domain')
+        super
         @domain = domain
       end
 
@@ -30,13 +31,15 @@ module Osso
 
     class InvalidRedirectUri < OAuthError
       def initialize(redirect_uri:)
+        super
         @redirect_uri = redirect_uri
       end
 
       def message
-        "The requested redirect URI #{@redirect_uri} is not on the allow-list for the rquested OAuth client identifier. " \
-          "Review our OAuth documentation, check you're using the correct OAuth client identifier, " \
-          'and confirm your Redirect URI allow-list includes the appropriate URI(s).'
+        "The requested redirect URI #{@redirect_uri} is not on the allow-list for the rquested " \
+        'OAuth client identifier. Review our OAuth documentation, check you\'re using the correct ' \
+        'OAuth client identifier, and confirm your Redirect URI allow-list includes the ' \
+        'appropriate URI(s).'
       end
     end
   end

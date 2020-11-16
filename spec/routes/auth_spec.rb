@@ -182,29 +182,28 @@ describe Osso::Auth do
       it 'raises an error when email is missing' do
         mock_saml_omniauth(email: nil, id: SecureRandom.uuid)
 
-        
-          response = post(
-            "/auth/saml/#{azure_provider.id}/callback",
-            nil,
-            {
-              'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
-            },
-          )
+        response = post(
+          "/auth/saml/#{azure_provider.id}/callback",
+          nil,
+          {
+            'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
+          },
+        )
 
-          expect(response.body).to eq('Osso::Error::MissingSamlEmailAttributeError')
-        end
+        expect(response.body).to eq('Osso::Error::MissingSamlEmailAttributeError')
+      end
 
       it 'raises an error when id is missing' do
         mock_saml_omniauth(email: Faker::Internet.email, id: nil)
 
         response = post(
-            "/auth/saml/#{azure_provider.id}/callback",
-            nil,
-            {
-              'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
-            },
-          )
-        
+          "/auth/saml/#{azure_provider.id}/callback",
+          nil,
+          {
+            'omniauth.auth' => OmniAuth.config.mock_auth[:saml],
+          },
+        )
+
         expect(response.body).to eq('Osso::Error::MissingSamlIdAttributeError')
       end
     end

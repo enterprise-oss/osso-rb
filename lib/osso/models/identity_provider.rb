@@ -7,13 +7,18 @@ module Osso
       belongs_to :enterprise_account
       belongs_to :oauth_client
       has_many :users, dependent: :delete_all
+      before_create :set_sso_issuer
       before_save :set_status
       validate :sso_cert_valid
 
-      enum status: { pending: "PENDING", configured: 'CONFIGURED', active: "ACTIVE", error: "ERROR"}
+      enum status: { pending: 'PENDING', configured: 'CONFIGURED', active: 'ACTIVE', error: 'ERROR' }
 
       PEM_HEADER = "-----BEGIN CERTIFICATE-----\n"
       PEM_FOOTER = "\n-----END CERTIFICATE-----"
+
+      ENTITY_ID_URI_REQUIRED = [
+        'PING',
+      ]
 
       def name
         service.titlecase
@@ -24,7 +29,7 @@ module Osso
           domain: domain,
           idp_sso_target_url: sso_url,
           idp_cert: sso_cert,
-          issuer: domain,
+          issuer: sso_issuer,
         }
       end
 
@@ -46,6 +51,14 @@ module Osso
 
       def set_status
         self.status = 'configured' if sso_url && sso_cert && pending?
+      end
+
+      def set_sso_issuer
+        parts = [domain, oauth_client_id]
+        
+        parts.unshift('https:/') if ENTITY_ID_URI_REQUIRED.any?(service)
+
+        self.sso_issuer = parts.join('/')
       end
 
       def active!
@@ -85,15 +98,16 @@ end
 # Table name: identity_providers
 #
 #  id                    :uuid             not null, primary key
-#  service               :string
+#  service               :enum
 #  domain                :string           not null
 #  sso_url               :string
 #  sso_cert              :text
 #  enterprise_account_id :uuid
 #  oauth_client_id       :uuid
-#  status                :enum             default("PENDING")
+#  status                :enum             default("pending")
 #  created_at            :datetime
 #  updated_at            :datetime
+#  users_count           :integer          default(0)
 #
 # Indexes
 #

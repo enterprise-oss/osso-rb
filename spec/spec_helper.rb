@@ -15,9 +15,9 @@ require 'webmock/rspec'
 ENV['RACK_ENV'] = 'test'
 ENV['SESSION_SECRET'] = 'supersecret'
 ENV['BASE_URL'] = 'https://example.com'
+ENV['RODAUTH_VIEWS'] = "#{File.dirname(__FILE__)}/support/views"
 
 require File.expand_path '../lib/osso.rb', __dir__
-
 require File.expand_path 'support/spec_app', __dir__
 
 module RSpecMixin
@@ -47,11 +47,11 @@ module RSpecMixin
   end
 
   def spec_views
-    File.dirname(__FILE__) + '/support/views'
+    "#{File.dirname(__FILE__)}/support/views"
   end
 
   def valid_x509_pem
-    raw = File.read(File.dirname(__FILE__) + '/support/fixtures/test.pem')
+    raw = File.read("#{File.dirname(__FILE__)}/support/fixtures/test.pem")
     OpenSSL::X509::Certificate.new(raw).to_pem
   end
 

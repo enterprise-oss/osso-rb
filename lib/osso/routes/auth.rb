@@ -13,7 +13,7 @@ module Osso
     UUID_REGEXP =
       /[0-9a-f]{8}-[0-9a-f]{3,4}-[0-9a-f]{4}-[0-9a-f]{3,4}-[0-9a-f]{12}/.
         freeze
-    
+
     use OmniAuth::Builder do
       OmniAuth::MultiProvider.register(
         self,
@@ -26,7 +26,8 @@ module Osso
           not_pending.
           find(identity_provider_id).
           saml_options
-      rescue
+      rescue StandardError => e
+        Raven.capture_exception(e) if defined?(Raven)
         {}
       end
     end
@@ -38,21 +39,20 @@ module Osso
     namespace '/auth' do
       get '/failure' do
         # ??? invalid ticket, warden throws, ugh
-        
+
         # confirmed:
-        # - a valid but wrong cert will throw here 
+        # - a valid but wrong cert will throw here
         #   (OneLogin::RubySaml::ValidationError, Fingerprint mismatch)
         #   but an _invalid_ cert is not caught. we do validate certs on
         #   configuration, so this may be ok
         #
         # - a valid but wrong ACS URL will throw here. the urls
         #   are pretty complex, but it has come up
-        # 
+        #
         # - specifying the wrong "recipient" in your IDP. Only OL so far
         #   (OneLogin::RubySaml::ValidationError, The response was received
-        #    at vcardme.com instead of 
-        #    http://localhost:9292/auth/saml/e54a9a92-b4b5-4ea5-b0e3-b1423eb20b76/callback) 
-
+        #    at vcardme.com instead of
+        #    http://localhost:9292/auth/saml/e54a9a92-b4b5-4ea5-b0e3-b1423eb20b76/callback)
 
         @error = Osso::Error::SamlConfigError.new
         erb :error
@@ -73,7 +73,7 @@ module Osso
       rescue Osso::Error::Base => e
         @error = e
         erb :error
-      end  
+      end
     end
   end
 end

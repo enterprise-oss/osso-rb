@@ -21,6 +21,13 @@ FactoryBot.define do
       end
     end
 
+    factory :ping_identity_provider, parent: :identity_provider do
+      service { 'PING' }
+      sso_url do
+        'https://auth.pingone.com/42cd503f-f0ba-47c7-a5b5-e69e9d8fab47/saml20/idp/sso'
+      end
+    end
+
     factory :configured_identity_provider, parent: :identity_provider do
       status { 'CONFIGURED' }
       sso_cert do
@@ -55,15 +62,16 @@ end
 # Table name: identity_providers
 #
 #  id                    :uuid             not null, primary key
-#  service               :string
+#  service               :enum
 #  domain                :string           not null
 #  sso_url               :string
 #  sso_cert              :text
 #  enterprise_account_id :uuid
 #  oauth_client_id       :uuid
-#  status                :enum             default("PENDING")
+#  status                :enum             default("pending")
 #  created_at            :datetime
 #  updated_at            :datetime
+#  users_count           :integer          default(0)
 #
 # Indexes
 #

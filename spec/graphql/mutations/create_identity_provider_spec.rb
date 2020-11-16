@@ -5,6 +5,7 @@ require 'spec_helper'
 describe Osso::GraphQL::Schema do
   describe 'CreateIdentityProvider' do
     let(:enterprise_account) { create(:enterprise_account) }
+    let(:oauth_client) { create(:oauth_client) }
     let(:mutation) do
       <<~GRAPHQL
          mutation CreateIdentityProvider($input: CreateIdentityProviderInput!) {
@@ -34,7 +35,15 @@ describe Osso::GraphQL::Schema do
         { scope: 'admin' }
       end
       describe 'without a service' do
-        let(:variables) { { input: { enterpriseAccountId: enterprise_account.id } } }
+        let(:variables) do
+          {
+            input:
+              {
+                enterpriseAccountId: enterprise_account.id,
+                oauthClientId: oauth_client.id,
+              },
+          }
+        end
 
         it 'creates an identity provider' do
           expect { subject }.to change { enterprise_account.identity_providers.count }.by(1)
@@ -44,8 +53,16 @@ describe Osso::GraphQL::Schema do
       end
 
       describe 'with a service' do
-        let(:variables) { { input: { enterpriseAccountId: enterprise_account.id, service: 'OKTA' } } }
-
+        let(:variables) do
+          {
+            input:
+              {
+                enterpriseAccountId: enterprise_account.id,
+                service: 'OKTA',
+                oauthClientId: oauth_client.id,
+              },
+          }
+        end
         it 'creates an identity provider for given service ' do
           expect { subject }.to change { enterprise_account.identity_providers.count }.by(1)
           expect(subject.dig('data', 'createIdentityProvider', 'identityProvider', 'service')).
@@ -65,8 +82,16 @@ describe Osso::GraphQL::Schema do
       let(:enterprise_account) { create(:enterprise_account, domain: domain) }
 
       describe 'without a service' do
-        let(:variables) { { input: { enterpriseAccountId: enterprise_account.id } } }
-
+        let(:variables) do
+          {
+            input:
+              {
+                enterpriseAccountId: enterprise_account.id,
+                oauthClientId: oauth_client.id,
+              },
+          }
+        end
+        
         it 'creates an identity provider' do
           expect { subject }.to change { enterprise_account.identity_providers.count }.by(1)
           expect(subject.dig('data', 'createIdentityProvider', 'identityProvider', 'domain')).
@@ -75,7 +100,16 @@ describe Osso::GraphQL::Schema do
       end
 
       describe 'with a service' do
-        let(:variables) { { input: { enterpriseAccountId: enterprise_account.id, service: 'OKTA' } } }
+        let(:variables) do
+          {
+            input:
+              {
+                enterpriseAccountId: enterprise_account.id,
+                oauthClientId: oauth_client.id,
+                service: 'OKTA',
+              },
+          }
+        end
 
         it 'creates an identity provider for given service ' do
           expect { subject }.to change { enterprise_account.identity_providers.count }.by(1)
@@ -97,7 +131,15 @@ describe Osso::GraphQL::Schema do
       let(:target_account) { create(:enterprise_account) }
 
       describe 'without a service' do
-        let(:variables) { { input: { enterpriseAccountId: target_account.id, domain: domain } } }
+        let(:variables) do
+          {
+            input:
+              {
+                enterpriseAccountId: target_account.id,
+                oauthClientId: oauth_client.id,
+              },
+          }
+        end
 
         it 'does not creates a identity provider' do
           expect { subject }.to_not(change { Osso::Models::IdentityProvider.count })
@@ -105,7 +147,16 @@ describe Osso::GraphQL::Schema do
       end
 
       describe 'with a service' do
-        let(:variables) { { input: { enterpriseAccountId: target_account.id, service: 'OKTA', domain: domain } } }
+        let(:variables) do
+          {
+            input:
+              {
+                enterpriseAccountId: target_account.id,
+                service: 'OKTA',
+                oauthClientId: oauth_client.id,
+              },
+          }
+        end
 
         it 'does not creates a identity provider' do
           expect { subject }.to_not(change { Osso::Models::IdentityProvider.count })

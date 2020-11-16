@@ -1,53 +1,59 @@
 # frozen_string_literal: true
 
-require 'jwt'
+require 'roda'
+require 'sequel/core'
+
+DEFAULT_VIEWS_DIR = File.join(File.expand_path(Bundler.root), 'views/rodauth')
 
 module Osso
-  class Admin < Sinatra::Base
-    include AppConfig
-    helpers Helpers::Auth
-    register Sinatra::Namespace
+  class Admin < Roda
+    DB = Sequel.postgres(extensions: :activerecord_connection)
+    use Rack::Session::Cookie, secret: ENV['SESSION_SECRET']
 
-    before do
-      chomp_token
+    plugin :middleware
+    plugin :render, engine: 'erb', views: ENV['RODAUTH_VIEWS'] || DEFAULT_VIEWS_DIR
+    plugin :route_csrf
+
+    plugin :rodauth do
+      enable :login, :verify_account
+      verify_account_set_password? true
+      already_logged_in { redirect login_redirect }
+      use_database_authentication_functions? false
+
+      before_create_account_route do
+        request.halt unless DB[:accounts].empty?
+      end
     end
 
-    namespace '/admin' do
-      get '/login' do
-        token_protected!
+    alias erb render
 
+    route do |r|
+      r.rodauth
+
+      def current_account
+        Osso::Models::Account.find(rodauth.session['account_id']).
+          context.
+          merge({ rodauth: rodauth })
+      end
+
+      r.on 'admin' do
+        rodauth.require_authentication
         erb :admin, layout: false
       end
 
-      get '' do
-        internal_protected!
+      r.post 'graphql' do
+        rodauth.require_authentication
 
-        erb :admin, layout: false
+        result = Osso::GraphQL::Schema.execute(
+          r.params['query'],
+          variables: r.params['variables'],
+          context: current_account,
+        )
+
+        result.to_json
       end
 
-      get '/enterprise' do
-        token_protected!
-
-        erb :admin, layout: false
-      end
-
-      get '/enterprise/:domain' do
-        enterprise_protected!(params[:domain])
-
-        erb :admin, layout: false
-      end
-
-      get '/config' do
-        admin_protected!
-
-        erb :admin, layout: false
-      end
-
-      get '/config/:id' do
-        admin_protected!
-
-        erb :admin, layout: false
-      end
+      env['rodauth'] = rodauth
     end
   end
 end

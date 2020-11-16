@@ -3,15 +3,16 @@
 require 'spec_helper'
 
 describe Osso::Oauth do
+  before do
+    described_class.set(:views, spec_views)
+  end
+
   let(:client) { create(:oauth_client) }
 
   describe 'get /oauth/authorize' do
     describe 'with a valid client ID and redirect URI' do
       describe 'for a domain that does not belong to an enterprise' do
-        # TODO: better error handling and test
         it 'renders an error page' do
-          described_class.set(:views, spec_views)
-
           create(:enterprise_with_okta, domain: 'foo.com')
 
           get(
@@ -59,7 +60,64 @@ describe Osso::Oauth do
           )
 
           expect(last_response).to be_ok
-          expect(last_response.body).to eq("MULITPLE PROVIDERS")
+          expect(last_response.body).to eq('MULITPLE PROVIDERS')
+        end
+      end
+
+      describe "for an existing user's email address" do
+        it 'redirects to /auth/saml/:provider_id' do
+          enterprise = create(:enterprise_with_okta, oauth_client: client)
+          provider_id = enterprise.identity_providers.first.id
+          user = create(:user, email: "user@#{enterprise.domain}", identity_provider_id: provider_id)
+
+          get(
+            '/oauth/authorize',
+            email: user.email,
+            client_id: client.identifier,
+            response_type: 'code',
+            redirect_uri: client.redirect_uri_values.sample,
+          )
+
+          expect(last_response).to be_redirect
+          follow_redirect!
+          expect(last_request.url).to match("auth/saml/#{provider_id}")
+        end
+      end
+
+      describe "for a new user's email address belonging to an enterprise with one SAML provider" do
+        it 'redirects to /auth/saml/:provider_id' do
+          enterprise = create(:enterprise_with_okta, oauth_client: client)
+
+          get(
+            '/oauth/authorize',
+            email: "user@#{enterprise.domain}",
+            client_id: client.identifier,
+            response_type: 'code',
+            redirect_uri: client.redirect_uri_values.sample,
+          )
+
+          provider_id = enterprise.identity_providers.first.id
+
+          expect(last_response).to be_redirect
+          follow_redirect!
+          expect(last_request.url).to match("auth/saml/#{provider_id}")
+        end
+      end
+
+      describe "for a new user's email address belonging to an enterprise with multiple SAML providers" do
+        it 'renders the multiple providers screen' do
+          enterprise = create(:enterprise_with_multiple_providers, oauth_client: client)
+
+          get(
+            '/oauth/authorize',
+            email: "user@#{enterprise.domain}",
+            client_id: client.identifier,
+            response_type: 'code',
+            redirect_uri: client.redirect_uri_values.sample,
+          )
+
+          expect(last_response).to be_ok
+          expect(last_response.body).to eq('MULITPLE PROVIDERS')
         end
       end
     end
@@ -91,7 +149,7 @@ describe Osso::Oauth do
   end
 
   describe 'get /oauth/me' do
-    describe 'with a valid unexpired access token' do
+    describe 'with a valid unexpired access token in params' do
       it 'returns the user' do
         user = create(:user)
         code = user.authorization_codes.valid.first
@@ -106,6 +164,30 @@ describe Osso::Oauth do
           email: user.email,
           id: user.id,
           idp: 'Okta',
+          requested: code.requested.symbolize_keys,
+        )
+      end
+    end
+
+    describe 'with a valid unexpired access token in headers' do
+      it 'returns the user' do
+        user = create(:user)
+        code = user.authorization_codes.valid.first
+
+        get(
+          '/oauth/me',
+          nil,
+          {
+            'HTTP_AUTHORIZATION' => "Bearer: #{code.access_token.to_bearer_token}",
+          },
+        )
+
+        expect(last_response.status).to eq(200)
+        expect(last_json_response).to eq(
+          email: user.email,
+          id: user.id,
+          idp: 'Okta',
+          requested: code.requested.symbolize_keys,
         )
       end
     end
