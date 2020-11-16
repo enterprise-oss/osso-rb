@@ -19,7 +19,7 @@ module Osso
       verify_account_set_password? true
       already_logged_in { redirect login_redirect }
       use_database_authentication_functions? false
-
+      domain URI.parse(ENV['BASE_URL']).host
       before_create_account_route do
         request.halt unless DB[:accounts].empty?
       end

@@ -18,13 +18,17 @@ namespace :osso do
     admin_email = ENV['ADMIN_EMAIL']
 
     if admin_email
-      admin = Osso::Models::Account.create!(
-        email: admin_email,
-        status_id: 1,
-        role: 'admin',
-      )
+      # admin = Osso::Models::Account.create(
+      #   email: admin_email,
+      #   status_id: 1,
+      #   role: 'admin',
+      # )
 
-      rodauth = Osso::Admin.rodauth.new(Osso::Admin.new({}))
+      rodauth = Osso::Admin.rodauth.new(Osso::Admin.new({
+        request: {
+          host: ENV['BASE_URL']
+        }
+      }))
       account = rodauth.account_from_login(admin_email)
       rodauth.setup_account_verification
     end
