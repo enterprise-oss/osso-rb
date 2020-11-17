@@ -24,10 +24,14 @@ namespace :osso do
         role: 'admin',
       )
 
+      base_uri = URI.parse(ENV['BASE_URL'])
+
       rodauth = Osso::Admin.rodauth.new(Osso::Admin.new({
-        HTTP_HOST: URI.parse(ENV['BASE_URL']).host,
+        'HTTP_HOST' => base_uri.host,
+        'SERVER_NAME' => base_uri.to_s,
+        'rack.url_scheme' => base_uri.scheme
       }))
-      
+
       account = rodauth.account_from_login(admin_email)
       rodauth.setup_account_verification
     end
