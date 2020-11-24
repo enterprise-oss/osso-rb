@@ -7,7 +7,7 @@ module Osso
     def self.included(klass)
       klass.class_eval do
         use Rack::JSONBodyParser
-        use Rack::Session::Cookie, secret: ENV['SESSION_SECRET']
+        use Rack::Session::Cookie, secret: ENV.fetch('SESSION_SECRET')
 
         error ActiveRecord::RecordNotFound do
           status 404
