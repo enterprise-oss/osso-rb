@@ -15,7 +15,7 @@ PATH
       rake
       rodauth (~> 2.6.0)
       sequel (~> 5.37.0)
-      sequel-activerecord_connection (~> 0.3)
+      sequel-activerecord_connection (>= 0.3, < 2.0)
       sinatra
       sinatra-activerecord
       sinatra-contrib
@@ -37,6 +37,8 @@ GEM
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     aes_key_wrap (1.1.0)
+    after_commit_everywhere (0.1.5)
+      activerecord (>= 4.2)
     annotate (3.1.1)
       activerecord (>= 3.2, < 7.0)
       rake (>= 10.4, < 14.0)
@@ -147,8 +149,9 @@ GEM
       nokogiri (>= 1.5.10)
     ruby2_keywords (0.0.2)
     sequel (5.37.0)
-    sequel-activerecord_connection (0.4.1)
+    sequel-activerecord_connection (1.2.0)
       activerecord (>= 4.2, < 7)
+      after_commit_everywhere (~> 0.1.5)
       sequel (~> 5.16)
     simplecov (0.17.0)
       docile (~> 1.1)
@@ -171,7 +174,7 @@ GEM
       tilt (~> 2.0)
     thread_safe (0.3.6)
     tilt (2.0.10)
-    tzinfo (1.2.7)
+    tzinfo (1.2.8)
       thread_safe (~> 0.1)
     unicode-display_width (1.7.0)
     webmock (3.9.3)
