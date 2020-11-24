@@ -19,8 +19,9 @@ steps:
           prefix: '/var/lib/buildkite-agent/builds/enterprise-oss-bk-1/enterpriseoss/osso-rb/'
   
   - block: ":rubygems: Publish :red_button:"
-    branches: "main"
+    if: build.branch == "main" && build.tag != null
+
   
   - name: "Push :rubygems:"
     commands: "./bin/publish"
-    branches: "main"
+    if: build.branch == "main" && build.tag != null
