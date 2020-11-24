@@ -20,7 +20,10 @@ steps:
   
   - block: ":rubygems: Publish :red_button:"
     branches: "main"
+    if: build.tag != null
+
   
   - name: "Push :rubygems:"
     commands: "./bin/publish"
     branches: "main"
+    if: build.tag != null
