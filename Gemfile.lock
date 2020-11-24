@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    osso (0.0.5)
+    osso (0.0.6.alpha)
       activesupport (>= 6.0.3.2)
       bcrypt (~> 3.1.13)
       graphql
@@ -13,7 +13,7 @@ PATH
       rack-contrib
       rack-oauth2
       rake
-      rodauth (~> 2.5.0)
+      rodauth (~> 2.6.0)
       sequel (~> 5.37.0)
       sequel-activerecord_connection (~> 0.3)
       sinatra
@@ -113,9 +113,9 @@ GEM
     rake (13.0.1)
     regexp_parser (1.8.2)
     rexml (3.2.4)
-    roda (3.37.0)
+    roda (3.38.0)
       rack
-    rodauth (2.5.0)
+    rodauth (2.6.0)
       roda (>= 2.6.0)
       sequel (>= 4)
     rspec (3.9.0)
