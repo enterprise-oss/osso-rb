@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'rack-oauth2'
   spec.add_runtime_dependency 'rake'
   spec.add_runtime_dependency 'rodauth', '~> 2.6.0'
-  spec.add_runtime_dependency 'sequel', '~> 5.37.0'
+  spec.add_runtime_dependency 'sequel', '>= 5.37', '< 5.39'
   spec.add_runtime_dependency 'sequel-activerecord_connection', '>= 0.3', '< 2.0'
   spec.add_runtime_dependency 'sinatra'
   spec.add_runtime_dependency 'sinatra-activerecord'
