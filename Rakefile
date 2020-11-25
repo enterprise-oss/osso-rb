@@ -4,6 +4,8 @@
 # to tell ActiveRecord where to find the database
 # schema and migrations
 
+ENV['SESSION_SECRET'] ||= 'rake-secret'
+
 require 'bundler/gem_tasks'
 require 'sinatra/activerecord/rake'
 require './lib/osso'
