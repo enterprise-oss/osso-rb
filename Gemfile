@@ -10,7 +10,7 @@ group :test do
   gem 'faker'
   gem 'pg'
   gem 'rack-test'
-  gem 'rspec', '~> 3.2'
+  gem 'rspec', '~> 3.10'
   gem 'rubocop'
   gem 'simplecov', '= 0.17', require: false
   gem 'webmock', '~> 3.10'
