@@ -9,6 +9,7 @@ module Osso
         value('OKTA', 'Okta Identity Provider', value: 'OKTA')
         value('ONELOGIN', 'OneLogin Identity Provider', value: 'ONELOGIN')
         value('PING', 'PingID Identity Provider', value: 'PING')
+        value('SALESFORCE', 'Salesforce Identity Provider', value: 'SALESFORCE')
       end
     end
   end
