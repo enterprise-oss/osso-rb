@@ -16,13 +16,14 @@ module Osso
       # Once they complete IdP login, they will be returned to the
       # redirect_uri with an authorization code parameter.
       get '/authorize' do
-        identity_providers = find_providers
-
         validate_oauth_request(env)
 
-        redirect "/auth/saml/#{identity_providers.first.id}" if identity_providers.one?
+        return erb :hosted_login if render_hosted_login?
 
-        @providers = identity_providers.not_pending
+        @providers = find_providers
+
+        redirect "/auth/saml/#{@providers.first.id}" if @providers.one?
+
         return erb :multiple_providers if @providers.count > 1
 
         raise Osso::Error::MissingConfiguredIdentityProvider.new(domain: params[:domain])
@@ -61,6 +62,10 @@ module Osso
 
     private
 
+    def render_hosted_login?
+      [params[:email], params[:domain]].all?(&:nil?)
+    end
+
     def find_providers
       if params[:email]
         user = Osso::Models::User.
@@ -71,6 +76,7 @@ module Osso
 
       Osso::Models::IdentityProvider.
         joins(:oauth_client).
+        not_pending.
         where(
           domain: domain_from_params,
           oauth_clients: { identifier: params[:client_id] },

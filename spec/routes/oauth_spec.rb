@@ -27,6 +27,20 @@ describe Osso::Oauth do
         end
       end
 
+      describe 'for a request without email or domain' do
+        it 'redirects to /auth/saml/:provider_id' do
+          get(
+            '/oauth/authorize',
+            client_id: client.identifier,
+            response_type: 'code',
+            redirect_uri: client.redirect_uri_values.sample,
+          )
+
+          expect(last_response).to be_ok
+          expect(last_response.body).to eq('HOSTED LOGIN')
+        end
+      end
+
       describe 'for an enterprise domain with one SAML provider' do
         it 'redirects to /auth/saml/:provider_id' do
           enterprise = create(:enterprise_with_okta, oauth_client: client)
