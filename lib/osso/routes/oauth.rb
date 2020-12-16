@@ -42,7 +42,7 @@ module Osso
           req.invalid_client! if client.secret != req.client_secret
 
           code = Models::AuthorizationCode.find_by_token!(params[:code])
-          req.invalid_grant! if code.redirect_uri != req.redirect_uri
+          req.invalid_grant! if code.redirect_uri != URI.parse(req.redirect_uri).to_s[/[^?]+/] # TODO: eh
 
           res.access_token = code.access_token.to_bearer_token
         end.call(env)
