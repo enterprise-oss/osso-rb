@@ -21,7 +21,8 @@ module Osso
       use_database_authentication_functions? false
       
       after_create_account do
-        verify_account_email_body DB[:accounts]&.empty? ? 
+        puts "CREATED ACCOUNT"
+        verify_account_email_body DB[:accounts]&.one? ? 
         'verify-first-account-email' : 
         'verify-account-email'
       end
