@@ -19,13 +19,13 @@ module Osso
       verify_account_set_password? true
       already_logged_in { redirect login_redirect }
       use_database_authentication_functions? false
-      
-      after_create_account do
-        puts "CREATED ACCOUNT"
-        verify_account_view DB[:accounts]&.one? ? 
-        'verify-first-account-email' : 
-        'verify-account-email'
-      end
+      verify_account_email_body 'verify-first-account-email'
+      # after_create_account do
+      #   puts "CREATED ACCOUNT"
+      #   verify_account_view DB[:accounts]&.one? ? 
+      #   'verify-first-account-email' : 
+      #   'verify-account-email'
+      # end
 
       before_create_account_route do
         request.halt unless DB[:accounts].empty?
