@@ -21,7 +21,7 @@ module Osso
       use_database_authentication_functions? false
       
       verify_account_email_body do
-        DB[:accounts].one? render('verify-first-account-email') : render('verify-account-email')
+        DB[:accounts].one? ? render('verify-first-account-email') : render('verify-account-email')
       end
 
       before_create_account_route do
