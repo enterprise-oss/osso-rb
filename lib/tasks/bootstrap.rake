@@ -33,7 +33,7 @@ namespace :osso do
       }))
 
       account = rodauth.account_from_login(admin_email)
-      rodauth.verify_account_email_body('verify-first-account-email')
+      # rodauth.verify_account_email_body('verify-first-account-email')
       rodauth.setup_account_verification
     end
   end
