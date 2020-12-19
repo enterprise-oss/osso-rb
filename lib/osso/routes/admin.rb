@@ -20,9 +20,9 @@ module Osso
       already_logged_in { redirect login_redirect }
       use_database_authentication_functions? false
       
-      before_verify_account do
+      after_create_account do
         puts "CREATED ACCOUNT"
-        verify_account_email_body DB[:accounts]&.one? ? 
+        verify_account_view DB[:accounts]&.one? ? 
         'verify-first-account-email' : 
         'verify-account-email'
       end
