@@ -20,7 +20,7 @@ module Osso
       already_logged_in { redirect login_redirect }
       use_database_authentication_functions? false
       
-      def verify_account_email_body 
+      verify_account_email_body do
         render('verify-first-account-email')
       end
       # after_create_account do
