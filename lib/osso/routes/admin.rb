@@ -19,7 +19,11 @@ module Osso
       verify_account_set_password? true
       already_logged_in { redirect login_redirect }
       use_database_authentication_functions? false
-      email_from "no-reply@#{domain}"
+      email_from "Osso <no-reply@#{domain}>"
+
+      verify_account_email_subject do
+        DB[:accounts].one? ? 'Your Osso instance is ready' : 'You\'ve been invited to start using Osso'
+      end
 
       verify_account_email_body do
         DB[:accounts].one? ? render('verify-first-account-email') : render('verify-account-email')
