@@ -16,10 +16,15 @@ module Osso
 
     plugin :rodauth do
       enable :login, :verify_account
+      base_uri = URI.parse(ENV.fetch('BASE_URL'))
+      base_url base_uri
+      domain base_uri.host
+
+      email_from { "Osso <no-reply@#{domain}>" }
       verify_account_set_password? true
       already_logged_in { redirect login_redirect }
       use_database_authentication_functions? false
-      email_from "Osso <no-reply@#{domain}>"
+
 
       verify_account_email_subject do
         DB[:accounts].one? ? 'Your Osso instance is ready' : 'You\'ve been invited to start using Osso'
