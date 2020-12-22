@@ -112,7 +112,7 @@ GEM
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rainbow (3.0.0)
-    rake (13.0.1)
+    rake (13.0.3)
     regexp_parser (2.0.0)
     rexml (3.2.4)
     roda (3.38.0)
@@ -176,7 +176,7 @@ GEM
     tzinfo (2.0.3)
       concurrent-ruby (~> 1.0)
     unicode-display_width (1.7.0)
-    webmock (3.10.0)
+    webmock (3.11.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
@@ -198,7 +198,7 @@ DEPENDENCIES
   rspec (~> 3.10)
   rubocop
   simplecov (= 0.17)
-  webmock (~> 3.10)
+  webmock (~> 3.11)
 
 BUNDLED WITH
    2.1.4
