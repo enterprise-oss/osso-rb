@@ -5,6 +5,7 @@
 # schema and migrations
 
 ENV['SESSION_SECRET'] ||= 'rake-secret'
+ENV['BASE_URL'] ||= 'https://example.com'
 
 require 'bundler/gem_tasks'
 require 'sinatra/activerecord/rake'
