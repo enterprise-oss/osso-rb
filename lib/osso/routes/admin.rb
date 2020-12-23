@@ -25,7 +25,6 @@ module Osso
       already_logged_in { redirect login_redirect }
       use_database_authentication_functions? false
 
-
       verify_account_email_subject do
         DB[:accounts].one? ? 'Your Osso instance is ready' : 'You\'ve been invited to start using Osso'
       end
