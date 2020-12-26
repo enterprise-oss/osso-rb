@@ -61,7 +61,6 @@ module Osso
       end
 
       r.on 'admin' do
-        rodauth.require_authentication
         erb :admin, layout: false
       end
 
