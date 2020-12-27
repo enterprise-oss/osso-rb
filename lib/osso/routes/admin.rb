@@ -16,16 +16,17 @@ module Osso
     plugin :route_csrf
 
     plugin :rodauth do
-      cache_templates false
       enable :login, :verify_account, :jwt
+
       base_uri = URI.parse(ENV.fetch('BASE_URL'))
       base_url base_uri
       domain base_uri.host
+
       jwt_secret ENV.fetch('SESSION_SECRET')
       only_json? false
+
       email_from { "Osso <no-reply@#{domain}>" }
       verify_account_set_password? true
-      # already_logged_in { redirect login_redirect }
       use_database_authentication_functions? false
 
       verify_account_view do
@@ -55,8 +56,12 @@ module Osso
       r.rodauth
 
       def current_account
-        Osso::Models::Account.find(rodauth.session.to_hash.stringify_keys['account_id']).
-          context.
+        Osso::Models::Account.find(
+          rodauth.
+          session.
+          to_hash.
+          stringify_keys['account_id']
+        ).context.
           merge({ rodauth: rodauth })
       end
 
