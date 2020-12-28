@@ -9,21 +9,33 @@ module Osso
   class Admin < Roda
     DB = Sequel.postgres(extensions: :activerecord_connection)
     use Rack::Session::Cookie, secret: ENV.fetch('SESSION_SECRET')
-
+    
+    plugin :json
     plugin :middleware
     plugin :render, engine: 'erb', views: ENV['RODAUTH_VIEWS'] || DEFAULT_VIEWS_DIR
     plugin :route_csrf
 
     plugin :rodauth do
-      enable :login, :verify_account
+      enable :login, :verify_account, :jwt
+
       base_uri = URI.parse(ENV.fetch('BASE_URL'))
       base_url base_uri
       domain base_uri.host
 
+      jwt_secret ENV.fetch('SESSION_SECRET')
+      only_json? false
+
       email_from { "Osso <no-reply@#{domain}>" }
       verify_account_set_password? true
-      already_logged_in { redirect login_redirect }
       use_database_authentication_functions? false
+
+      verify_account_view do
+        render :admin
+      end
+
+      login_view do
+        render :admin
+      end
 
       verify_account_email_subject do
         DB[:accounts].one? ? 'Your Osso instance is ready' : 'You\'ve been invited to start using Osso'
@@ -44,13 +56,16 @@ module Osso
       r.rodauth
 
       def current_account
-        Osso::Models::Account.find(rodauth.session['account_id']).
-          context.
+        Osso::Models::Account.find(
+          rodauth.
+          session.
+          to_hash.
+          stringify_keys['account_id']
+        ).context.
           merge({ rodauth: rodauth })
       end
 
       r.on 'admin' do
-        rodauth.require_authentication
         erb :admin, layout: false
       end
 
