@@ -70,7 +70,6 @@ module Osso
       end
 
       r.post 'graphql' do
-        # binding.pry
         rodauth.require_authentication
 
         result = Osso::GraphQL::Schema.execute(
