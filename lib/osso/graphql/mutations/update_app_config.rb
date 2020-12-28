@@ -15,7 +15,10 @@ module Osso
 
         def resolve(**args)
           app_config = Osso::Models::AppConfig.find
-          return response_data(app_config: app_config) if app_config.update(**args)
+          if app_config.update(**args)
+            Osso::Analytics.capture(email: context[:email], event: self.class.name.demodulize, properties: args)
+            return response_data(app_config: app_config)
+          end
 
           response_error(app_config.errors)
         end

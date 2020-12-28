@@ -29,6 +29,10 @@ module Osso
       verify_account_set_password? true
       use_database_authentication_functions? false
 
+      after_login do
+        Osso::Analytics.identify(email: account[:email], properties: account)
+      end
+
       verify_account_view do
         render :admin
       end
