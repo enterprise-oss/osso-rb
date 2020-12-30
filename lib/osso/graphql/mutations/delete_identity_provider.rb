@@ -15,7 +15,7 @@ module Osso
           identity_provider = Osso::Models::IdentityProvider.find(id)
 
           if identity_provider.destroy
-            Osso::Analytics.capture(email: context[:email], event: self.class.name.demodulize, properties: args)
+            Osso::Analytics.capture(email: context[:email], event: self.class.name.demodulize, properties: { id: id })
             return response_data(identity_provider: nil) 
           end
 
