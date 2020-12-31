@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    osso (0.0.10)
+    osso (0.0.11)
       activesupport (>= 6.0.3.2)
       bcrypt (~> 3.1.13)
       graphql
