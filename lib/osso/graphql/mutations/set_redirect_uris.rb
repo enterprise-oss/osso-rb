@@ -18,6 +18,8 @@ module Osso
           update_existing(oauth_client, redirect_uris)
           create_new(oauth_client, redirect_uris)
 
+          Osso::Analytics.capture(email: context[:email], event: self.class.name.demodulize, properties: redirect_uris)
+
           response_data(oauth_client: oauth_client.reload)
         rescue StandardError => e
           response_error(e)

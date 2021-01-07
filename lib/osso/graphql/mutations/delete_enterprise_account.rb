@@ -18,7 +18,11 @@ module Osso
         def resolve(**args)
           customer = enterprise_account(**args)
 
-          return response_data(enterprise_account: nil) if customer.destroy
+          if customer.destroy
+            Osso::Analytics.capture(email: context[:email], event: self.class.name.demodulize, properties: args)
+            return response_data(enterprise_account: nil) 
+          end
+          
 
           response_error(customer.errors)
         end

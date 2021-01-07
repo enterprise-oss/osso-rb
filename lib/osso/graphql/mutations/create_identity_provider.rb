@@ -22,7 +22,12 @@ module Osso
             oauth_client_id: oauth_client_id,
           )
 
-          return response_data(identity_provider: identity_provider) if identity_provider.save
+          if identity_provider.save
+            Osso::Analytics.capture(email: context[:email], event: self.class.name.demodulize, properties: {
+              service: service, enterprise_account_id: enterprise_account_id, oauth_client_id: oauth_client_id
+            })
+            return response_data(identity_provider: identity_provider)
+          end  
 
           response_error(identity_provider.errors)
         end

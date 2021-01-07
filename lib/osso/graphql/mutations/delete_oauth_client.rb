@@ -14,7 +14,10 @@ module Osso
         def resolve(id:)
           oauth_client = Osso::Models::OauthClient.find(id)
 
-          return response_data(oauth_client: nil) if oauth_client.destroy
+          if oauth_client.destroy
+            Osso::Analytics.capture(email: context[:email], event: self.class.name.demodulize, properties: { id: id })
+            return response_data(oauth_client: nil)
+          end
 
           response_error(oauth_client.errors)
         end

@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'mail', '~> 2.7.1'
   spec.add_runtime_dependency 'omniauth-multi-provider'
   spec.add_runtime_dependency 'omniauth-saml'
+  spec.add_runtime_dependency 'posthog-ruby'
   spec.add_runtime_dependency 'rack', '>= 2.1.4'
   spec.add_runtime_dependency 'rack-contrib'
   spec.add_runtime_dependency 'rack-oauth2'
