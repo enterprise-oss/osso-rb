@@ -152,7 +152,7 @@ GEM
       nokogiri (>= 1.5.10)
     ruby2_keywords (0.0.2)
     sequel (5.40.0)
-    sequel-activerecord_connection (1.2.1)
+    sequel-activerecord_connection (1.2.2)
       activerecord (>= 4.2, < 7)
       after_commit_everywhere (~> 0.1.5)
       sequel (~> 5.16)
