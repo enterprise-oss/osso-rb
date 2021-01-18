@@ -80,5 +80,7 @@ RSpec.configure do |config|
 
   OmniAuth.config.test_mode = true
   OmniAuth.config.logger = Logger.new('/dev/null')
+  OmniAuth.config.request_validation_phase = proc {}
+
   WebMock.disable_net_connect!(allow_localhost: true)
 end
