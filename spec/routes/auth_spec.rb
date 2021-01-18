@@ -6,12 +6,12 @@ describe Osso::Auth do
   before do
     described_class.set(:views, spec_views)
   end
-  describe 'get /auth/saml/:uuid' do
+  describe 'post /auth/saml/:uuid' do
     describe 'for an Okta SAML provider' do
       let(:enterprise) { create(:enterprise_with_okta) }
       let(:okta_provider) { enterprise.identity_providers.first }
       it 'uses omniauth saml' do
-        get("/auth/saml/#{okta_provider.id}")
+        post("/auth/saml/#{okta_provider.id}")
 
         expect(last_response).to be_redirect
         follow_redirect!
@@ -23,7 +23,7 @@ describe Osso::Auth do
       let(:enterprise) { create(:enterprise_with_okta) }
       let(:azure_provider) { enterprise.identity_providers.first }
       it 'uses omniauth saml' do
-        get("/auth/saml/#{azure_provider.id}")
+        post("/auth/saml/#{azure_provider.id}")
 
         expect(last_response).to be_redirect
         follow_redirect!
@@ -31,6 +31,7 @@ describe Osso::Auth do
       end
     end
   end
+  
   describe 'post /auth/saml/:uuid/callback' do
     describe 'for an Okta SAML provider' do
       let(:enterprise) { create(:enterprise_with_okta) }
