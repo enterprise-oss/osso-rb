@@ -14,8 +14,8 @@ PATH
       rack-contrib
       rack-oauth2
       rake
-      rodauth (>= 2.6, < 2.9)
-      sequel (>= 5.37, < 5.41)
+      rodauth (~> 2.9)
+      sequel (~> 5.40)
       sequel-activerecord_connection (>= 0.3, < 2.0)
       sinatra
       sinatra-activerecord (>= 2.0.22)
@@ -122,7 +122,7 @@ GEM
     rexml (3.2.4)
     roda (3.40.0)
       rack
-    rodauth (2.8.0)
+    rodauth (2.9.0)
       roda (>= 2.6.0)
       sequel (>= 4)
     rspec (3.10.0)
