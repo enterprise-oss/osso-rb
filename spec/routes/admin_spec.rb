@@ -17,26 +17,26 @@ describe Osso::Admin do
     it 'runs a GraphQL query with a valid jwt' do
       allow_any_instance_of(described_class.rodauth).to receive(:logged_in?).and_return(true)
       allow(Osso::Models::Account).to receive(:find).and_return(account)
-      allow(Osso::GraphQL::Schema).to receive(:execute).and_return({graphql: true})
+      allow(Osso::GraphQL::Schema).to receive(:execute).and_return({ graphql: true })
 
       header 'Content-Type', 'application/json'
-      post("/graphql")
+      post('/graphql')
 
       expect(last_response).to be_ok
-      expect(last_json_response).to eq({graphql: true})
+      expect(last_json_response).to eq({ graphql: true })
     end
 
     it 'returns a 400 for an invalid jwt' do
       header 'Content-Type', 'application/json'
       header 'Authorization', 'Bearer bad-token'
-      post("/graphql")
+      post('/graphql')
 
       expect(last_response.status).to eq 400
     end
-    
+
     it 'returns a 401 without a jwt' do
       header 'Content-Type', 'application/json'
-      post("/graphql")
+      post('/graphql')
 
       expect(last_response.status).to eq 401
     end

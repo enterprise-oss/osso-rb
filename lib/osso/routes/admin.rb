@@ -64,7 +64,7 @@ module Osso
           rodauth.
           session.
           to_hash.
-          stringify_keys['account_id']
+          stringify_keys['account_id'],
         ).context.
           merge({ rodauth: rodauth })
       end

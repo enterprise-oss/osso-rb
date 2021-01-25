@@ -24,10 +24,10 @@ module Osso
             verify_user(email)
 
             Osso::Analytics.capture(email: context[:email], event: self.class.name.demodulize, properties: {
-              invited_email: email,
-              invited_role: role,
-              invited_oauth_client_id: oauth_client_id,
-            })
+                                      invited_email: email,
+                                      invited_role: role,
+                                      invited_oauth_client_id: oauth_client_id,
+                                    })
 
             return response_data(admin_user: admin_user)
           end

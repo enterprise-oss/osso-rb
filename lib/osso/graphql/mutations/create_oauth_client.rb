@@ -16,7 +16,7 @@ module Osso
 
           if oauth_client.save
             Osso::Analytics.capture(email: context[:email], event: self.class.name.demodulize, properties: args)
-            return response_data(oauth_client: oauth_client) 
+            return response_data(oauth_client: oauth_client)
           end
 
           response_error(oauth_client.errors)

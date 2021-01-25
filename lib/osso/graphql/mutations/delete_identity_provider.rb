@@ -16,7 +16,7 @@ module Osso
 
           if identity_provider.destroy
             Osso::Analytics.capture(email: context[:email], event: self.class.name.demodulize, properties: { id: id })
-            return response_data(identity_provider: nil) 
+            return response_data(identity_provider: nil)
           end
 
           response_error(identity_provider.errors)

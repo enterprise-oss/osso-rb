@@ -66,7 +66,7 @@ describe Osso::Models::IdentityProvider do
           idp_cert: subject.sso_cert,
           idp_sso_target_url: subject.sso_url,
           issuer: subject.sso_issuer,
-          name_identifier_format: "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
+          name_identifier_format: 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
         )
     end
   end

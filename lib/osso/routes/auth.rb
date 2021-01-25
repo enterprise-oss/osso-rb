@@ -14,8 +14,8 @@ module Osso
       /[0-9a-f]{8}-[0-9a-f]{3,4}-[0-9a-f]{4}-[0-9a-f]{3,4}-[0-9a-f]{12}/.
         freeze
 
-    use Rack::Protection, allow_if: lambda { |env| Rack::Request.new(env)&.path&.end_with?('callback') }
-        
+    use Rack::Protection, allow_if: ->(env) { Rack::Request.new(env)&.path&.end_with?('callback') }
+
     use OmniAuth::Builder do
       OmniAuth::MultiProvider.register(
         self,
@@ -37,7 +37,6 @@ module Osso
     OmniAuth.config.on_failure = proc do |env|
       OmniAuth::FailureEndpoint.new(env).redirect_to_failure
     end
-
 
     namespace '/auth' do
       get '/failure' do

@@ -5,9 +5,9 @@ require 'posthog-ruby'
 module Osso
   # Osso::Analytics provides an interface to track product analytics for any provider.
   # Osso recommends PostHog as an open source solution for your product analytics needs.
-  # If you want to use another product analytics provider, you can patch the Osso::Analytics 
+  # If you want to use another product analytics provider, you can patch the Osso::Analytics
   # class yourself in your parent application. Be sure to implement the public
-  # .identify and .capture class methods with the required method signatures and require 
+  # .identify and .capture class methods with the required method signatures and require
   # your class after requiring Osso.
   class Analytics
     class << self
@@ -15,9 +15,9 @@ module Osso
         return unless configured?
 
         client.identify({
-          distinct_id: email,
-          properties: properties.merge(instance_properties),
-        })
+                          distinct_id: email,
+                          properties: properties.merge(instance_properties),
+                        })
       end
 
       def capture(email:, event:, properties: {})
@@ -38,10 +38,10 @@ module Osso
 
       def client
         @client ||= PostHog::Client.new({
-          api_key: ENV['POSTHOG_API_KEY'],
-          api_host: ENV['POSTHOG_HOST'],
-          on_error: Proc.new { |status, msg| print msg }
-        })
+                                          api_key: ENV['POSTHOG_API_KEY'],
+                                          api_host: ENV['POSTHOG_HOST'],
+                                          on_error: proc { |_status, msg| print msg },
+                                        })
       end
 
       def instance_properties

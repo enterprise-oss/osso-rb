@@ -3,7 +3,7 @@
 module Osso
   module Models
     class Account < ::ActiveRecord::Base
-      enum status_id: { :Unverified => 1, :Verified => 2, :Closed => 3 }
+      enum status_id: { Unverified: 1, Verified: 2, Closed: 3 }
 
       def context
         {

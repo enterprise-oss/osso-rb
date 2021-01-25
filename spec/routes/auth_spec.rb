@@ -6,7 +6,7 @@ describe Osso::Auth do
   before do
     described_class.set(:views, spec_views)
   end
-  
+
   describe 'post /auth/saml/:uuid' do
     describe 'for an Okta SAML provider' do
       let(:enterprise) { create(:enterprise_with_okta) }
@@ -32,7 +32,7 @@ describe Osso::Auth do
       end
     end
   end
-  
+
   describe 'post /auth/saml/:uuid/callback' do
     describe 'for an Okta SAML provider' do
       let(:enterprise) { create(:enterprise_with_okta) }
