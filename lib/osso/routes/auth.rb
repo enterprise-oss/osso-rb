@@ -14,7 +14,6 @@ module Osso
       /[0-9a-f]{8}-[0-9a-f]{3,4}-[0-9a-f]{4}-[0-9a-f]{3,4}-[0-9a-f]{12}/.
         freeze
 
-    use Rack::Protection
     use OmniAuth::Builder do
       OmniAuth::MultiProvider.register(
         self,
