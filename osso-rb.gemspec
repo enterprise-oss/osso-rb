@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'rack', '>= 2.1.4'
   spec.add_runtime_dependency 'rack-contrib'
   spec.add_runtime_dependency 'rack-oauth2'
+  spec.add_runtime_dependency 'rack-protection', '~> 2.1.0'
   spec.add_runtime_dependency 'rake'
   spec.add_runtime_dependency 'rodauth', '~> 2.9'
   spec.add_runtime_dependency 'sequel', '~> 5.40'

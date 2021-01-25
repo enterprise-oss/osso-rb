@@ -9,7 +9,6 @@ module Osso
   class Admin < Roda
     DB = Sequel.postgres(extensions: :activerecord_connection)
     use Rack::Session::Cookie, secret: ENV.fetch('SESSION_SECRET')
-    use Rack::Protection
 
     plugin :json
     plugin :middleware

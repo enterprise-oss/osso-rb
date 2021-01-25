@@ -13,6 +13,7 @@ PATH
       rack (>= 2.1.4)
       rack-contrib
       rack-oauth2
+      rack-protection (~> 2.1.0)
       rake
       rodauth (~> 2.9)
       sequel (~> 5.40)
