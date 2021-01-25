@@ -5,8 +5,6 @@ require 'omniauth'
 require 'omniauth-multi-provider'
 require 'omniauth-saml'
 
-require 'pry'
-
 module Osso
   class Auth < Sinatra::Base
     include AppConfig
@@ -16,6 +14,7 @@ module Osso
       /[0-9a-f]{8}-[0-9a-f]{3,4}-[0-9a-f]{4}-[0-9a-f]{3,4}-[0-9a-f]{12}/.
         freeze
 
+    use Rack::Protection
     use OmniAuth::Builder do
       OmniAuth::MultiProvider.register(
         self,
@@ -38,13 +37,8 @@ module Osso
       OmniAuth::FailureEndpoint.new(env).redirect_to_failure
     end
 
-    namespace '/auth' do
-      get '/saml/:identity_provider_id' do
-        @identity_provider_id = params[:identity_provider_id]
-        
-        erb :saml_login_form
-      end
 
+    namespace '/auth' do
       get '/failure' do
         # ??? invalid ticket, warden throws, ugh
 
