@@ -7,6 +7,8 @@ module Osso
     include AppConfig
     register Sinatra::Namespace
 
+    use Rack::Protection
+
     namespace '/oauth' do # rubocop:disable Metrics/BlockLength
       # Send your users here in order to being an authentication
       # flow. This flow follows the authorization grant oauth

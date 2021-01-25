@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'omniauth-saml'
   spec.add_runtime_dependency 'posthog-ruby'
   spec.add_runtime_dependency 'rack', '>= 2.1.4'
+  spec.add_runtime_dependency 'rack_csrf', '>= 2.6.0'
   spec.add_runtime_dependency 'rack-contrib'
   spec.add_runtime_dependency 'rack-oauth2'
   spec.add_runtime_dependency 'rake'

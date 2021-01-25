@@ -13,6 +13,7 @@ PATH
       rack (>= 2.1.4)
       rack-contrib
       rack-oauth2
+      rack_csrf (>= 2.6.0)
       rake
       rodauth (~> 2.9)
       sequel (~> 5.40)
@@ -116,6 +117,8 @@ GEM
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
+    rack_csrf (2.6.0)
+      rack (>= 1.1.0)
     rainbow (3.0.0)
     rake (13.0.3)
     regexp_parser (2.0.3)

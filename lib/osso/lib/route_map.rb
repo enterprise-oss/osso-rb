@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'rack/protection'
+
 module Osso
   module RouteMap
     def self.included(klass)

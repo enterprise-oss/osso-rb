@@ -5,6 +5,8 @@ require 'omniauth'
 require 'omniauth-multi-provider'
 require 'omniauth-saml'
 
+require 'pry'
+
 module Osso
   class Auth < Sinatra::Base
     include AppConfig
@@ -37,6 +39,12 @@ module Osso
     end
 
     namespace '/auth' do
+      get '/saml/:identity_provider_id' do
+        @identity_provider_id = params[:identity_provider_id]
+        
+        erb :saml_login_form
+      end
+
       get '/failure' do
         # ??? invalid ticket, warden throws, ugh
 
