@@ -20,7 +20,7 @@ namespace :osso do
     admin_email = ENV['ADMIN_EMAIL']
 
     if admin_email
-      admin = Osso::Models::Account.create(
+      Osso::Models::Account.create(
         email: admin_email,
         status_id: 1,
         role: 'admin',
@@ -29,12 +29,12 @@ namespace :osso do
       base_uri = URI.parse(ENV['BASE_URL'])
 
       rodauth = Osso::Admin.rodauth.new(Osso::Admin.new({
-                                                          'HTTP_HOST' => base_uri.host,
-                                                          'SERVER_NAME' => base_uri.to_s,
-                                                          'rack.url_scheme' => base_uri.scheme,
-                                                        }))
+        'HTTP_HOST' => base_uri.host,
+        'SERVER_NAME' => base_uri.to_s,
+        'rack.url_scheme' => base_uri.scheme,
+      }))
 
-      account = rodauth.account_from_login(admin_email)
+      rodauth.account_from_login(admin_email)
       rodauth.setup_account_verification
     end
   end

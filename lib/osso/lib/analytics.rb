@@ -15,9 +15,9 @@ module Osso
         return unless configured?
 
         client.identify({
-                          distinct_id: email,
-                          properties: properties.merge(instance_properties),
-                        })
+          distinct_id: email,
+          properties: properties.merge(instance_properties),
+        })
       end
 
       def capture(email:, event:, properties: {})
@@ -38,10 +38,10 @@ module Osso
 
       def client
         @client ||= PostHog::Client.new({
-                                          api_key: ENV['POSTHOG_API_KEY'],
-                                          api_host: ENV['POSTHOG_HOST'],
-                                          on_error: proc { |_status, msg| print msg },
-                                        })
+          api_key: ENV['POSTHOG_API_KEY'],
+          api_host: ENV['POSTHOG_HOST'],
+          on_error: proc { |_status, msg| print msg },
+        })
       end
 
       def instance_properties

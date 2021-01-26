@@ -1,24 +1,9 @@
 AllCops:
+  NewCops: enable
   TargetRubyVersion: 2.6.0
   Exclude:
     - db/**/*
     - lib/osso/db/**/*
-
-# New rules must be explicitly opted into / out of
-Lint/RaiseException:
-  Enabled: true
-Lint/StructNewOverride:
-  Enabled: true
-Style/HashEachMethods:
-  Enabled: true
-Style/HashTransformKeys:
-  Enabled: true
-Style/HashTransformValues:
-  Enabled: true
-Layout/SpaceAroundMethodCallOperator:
-  Enabled: true
-Style/ExponentialNotation:
-  Enabled: true
 
 Style/TrailingCommaInArguments:
   Description: "Checks for trailing comma in argument lists."
@@ -49,6 +34,9 @@ Style/TrailingCommaInHashLiteral:
     - consistent_comma
     - no_comma
   Enabled: true
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
 
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
