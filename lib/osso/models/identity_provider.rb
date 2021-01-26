@@ -18,7 +18,7 @@ module Osso
 
       ENTITY_ID_URI_REQUIRED = [
         'PING',
-      ]
+      ].freeze
 
       def name
         service.titlecase
@@ -30,7 +30,7 @@ module Osso
           idp_sso_target_url: sso_url,
           idp_cert: sso_cert,
           issuer: sso_issuer,
-          name_identifier_format: "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
+          name_identifier_format: 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
         }
       end
 
@@ -56,7 +56,7 @@ module Osso
 
       def set_sso_issuer
         parts = [domain, oauth_client_id]
-        
+
         parts.unshift('https:/') if ENTITY_ID_URI_REQUIRED.any?(service)
 
         self.sso_issuer = parts.join('/')

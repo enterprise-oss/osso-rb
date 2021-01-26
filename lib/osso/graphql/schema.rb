@@ -14,7 +14,6 @@ GraphQL::Relay::BaseConnection.register_connection_implementation(
 module Osso
   module GraphQL
     class Schema < ::GraphQL::Schema
-      use ::GraphQL::Pagination::Connections
       query Types::QueryType
       mutation Types::MutationType
 

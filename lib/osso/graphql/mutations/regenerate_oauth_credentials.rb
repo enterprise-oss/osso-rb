@@ -16,7 +16,13 @@ module Osso
           oauth_client.regenerate_secrets!
 
           if oauth_client.save
-            Osso::Analytics.capture(email: context[:email], event: self.class.name.demodulize, properties: { oauth_client_id: id })
+            Osso::Analytics.capture(
+              email: context[:email],
+              event: self.class.name.demodulize,
+              properties: { 
+                oauth_client_id: id 
+              }
+            )
             return response_data(oauth_client: oauth_client)
           end
 

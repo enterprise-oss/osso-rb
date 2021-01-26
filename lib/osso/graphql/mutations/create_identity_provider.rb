@@ -13,7 +13,7 @@ module Osso
         field :identity_provider, Types::IdentityProvider, null: false
         field :errors, [String], null: false
 
-        def resolve(service: nil, enterprise_account_id:, oauth_client_id:)
+        def resolve(enterprise_account_id:, oauth_client_id:, service: nil)
           customer = enterprise_account(enterprise_account_id: enterprise_account_id)
 
           identity_provider = customer.identity_providers.build(
@@ -27,12 +27,12 @@ module Osso
               service: service, enterprise_account_id: enterprise_account_id, oauth_client_id: oauth_client_id
             })
             return response_data(identity_provider: identity_provider)
-          end  
+          end
 
           response_error(identity_provider.errors)
         end
 
-        def domain(enterprise_account_id:, **args)
+        def domain(enterprise_account_id:, **_args)
           enterprise_account(enterprise_account_id: enterprise_account_id)&.domain
         end
 

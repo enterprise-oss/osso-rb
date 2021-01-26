@@ -16,44 +16,39 @@ module Osso
 
         field :oauth_clients, null: true, resolver: Resolvers::OAuthClients
 
-        field(
-          :identity_provider,
-          Types::IdentityProvider,
-          null: true,
-          resolve: ->(_obj, args, _context) { Osso::Models::IdentityProvider.find(args[:id]) },
-        ) do
+        field :admin_users, [Types::AdminUser], null: false
+
+        field :app_config, Types::AppConfig, null: false
+
+        field :current_user, Types::AdminUser, null: false
+
+        field :identity_provider, Types::IdentityProvider, null: true do
           argument :id, ID, required: true
         end
 
-        field(
-          :app_config,
-          Types::AppConfig,
-          null: false,
-          resolve: ->(_obj, _args, _context) { Osso::Models::AppConfig.find },
-        )
-
-        field(
-          :oauth_client,
-          Types::OauthClient,
-          null: true,
-          resolve: ->(_obj, args, _context) { Osso::Models::OauthClient.find(args[:id]) },
-        ) do
+        field :oauth_client, Types::OauthClient, null: true do
           argument :id, ID, required: true
         end
 
-        field(
-          :admin_users,
-          [Types::AdminUser],
-          null: false,
-          resolve: ->(_obj, _args, _context) { Osso::Models::Account.all },
-        )
+        def admin_users
+          Osso::Models::Account.all
+        end
 
-        field(
-          :current_user,
-          Types::AdminUser,
-          null: false,
-          resolve: ->(_obj, _args, context) { context.to_h },
-        )
+        def app_config
+          Osso::Models::AppConfig.find
+        end
+
+        def current_user
+          context.to_h
+        end
+
+        def identity_provider(id:)
+          Osso::Models::IdentityProvider.find(id)
+        end
+
+        def oauth_client(id:)
+          Osso::Models::OauthClient.find(id)
+        end
       end
     end
   end

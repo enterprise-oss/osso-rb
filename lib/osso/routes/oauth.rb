@@ -22,7 +22,7 @@ module Osso
 
         @providers = find_providers
 
-        redirect "/auth/saml/#{@providers.first.id}" if @providers.one?
+        return erb :saml_login_form if @providers.one?
 
         return erb :multiple_providers if @providers.count > 1
 

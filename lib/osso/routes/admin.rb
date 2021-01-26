@@ -9,7 +9,7 @@ module Osso
   class Admin < Roda
     DB = Sequel.postgres(extensions: :activerecord_connection)
     use Rack::Session::Cookie, secret: ENV.fetch('SESSION_SECRET')
-    
+
     plugin :json
     plugin :middleware
     plugin :render, engine: 'erb', views: ENV['RODAUTH_VIEWS'] || DEFAULT_VIEWS_DIR
@@ -64,7 +64,7 @@ module Osso
           rodauth.
           session.
           to_hash.
-          stringify_keys['account_id']
+          stringify_keys['account_id'],
         ).context.
           merge({ rodauth: rodauth })
       end

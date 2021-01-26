@@ -91,7 +91,7 @@ describe Osso::GraphQL::Schema do
               },
           }
         end
-        
+
         it 'creates an identity provider' do
           expect { subject }.to change { enterprise_account.identity_providers.count }.by(1)
           expect(subject.dig('data', 'createIdentityProvider', 'identityProvider', 'domain')).

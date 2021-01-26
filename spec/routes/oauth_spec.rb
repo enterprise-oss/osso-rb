@@ -28,7 +28,7 @@ describe Osso::Oauth do
       end
 
       describe 'for a request without email or domain' do
-        it 'redirects to /auth/saml/:provider_id' do
+        it 'renders the hosted login page' do
           get(
             '/oauth/authorize',
             client_id: client.identifier,
@@ -42,7 +42,7 @@ describe Osso::Oauth do
       end
 
       describe 'for an enterprise domain with one SAML provider' do
-        it 'redirects to /auth/saml/:provider_id' do
+        it 'renders the saml login form' do
           enterprise = create(:enterprise_with_okta, oauth_client: client)
 
           get(
@@ -55,9 +55,7 @@ describe Osso::Oauth do
 
           provider_id = enterprise.identity_providers.first.id
 
-          expect(last_response).to be_redirect
-          follow_redirect!
-          expect(last_request.url).to match("auth/saml/#{provider_id}")
+          expect(last_response.body).to match(provider_id)
         end
       end
 
@@ -79,7 +77,7 @@ describe Osso::Oauth do
       end
 
       describe "for an existing user's email address" do
-        it 'redirects to /auth/saml/:provider_id' do
+        it 'renders the saml login form' do
           enterprise = create(:enterprise_with_okta, oauth_client: client)
           provider_id = enterprise.identity_providers.first.id
           user = create(:user, email: "user@#{enterprise.domain}", identity_provider_id: provider_id)
@@ -92,14 +90,12 @@ describe Osso::Oauth do
             redirect_uri: client.redirect_uri_values.sample,
           )
 
-          expect(last_response).to be_redirect
-          follow_redirect!
-          expect(last_request.url).to match("auth/saml/#{provider_id}")
+          expect(last_response.body).to match(provider_id)
         end
       end
 
       describe "for a new user's email address belonging to an enterprise with one SAML provider" do
-        it 'redirects to /auth/saml/:provider_id' do
+        it 'renders the saml login form' do
           enterprise = create(:enterprise_with_okta, oauth_client: client)
 
           get(
@@ -112,9 +108,7 @@ describe Osso::Oauth do
 
           provider_id = enterprise.identity_providers.first.id
 
-          expect(last_response).to be_redirect
-          follow_redirect!
-          expect(last_request.url).to match("auth/saml/#{provider_id}")
+          expect(last_response.body).to match(provider_id)
         end
       end
 

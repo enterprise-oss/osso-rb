@@ -17,7 +17,7 @@ module Osso
 
           if enterprise_account.save
             Osso::Analytics.capture(email: context[:email], event: self.class.name.demodulize, properties: args)
-            return response_data(enterprise_account: enterprise_account) 
+            return response_data(enterprise_account: enterprise_account)
           end
 
           response_error(enterprise_account.errors)

@@ -20,9 +20,8 @@ module Osso
 
           if customer.destroy
             Osso::Analytics.capture(email: context[:email], event: self.class.name.demodulize, properties: args)
-            return response_data(enterprise_account: nil) 
+            return response_data(enterprise_account: nil)
           end
-          
 
           response_error(customer.errors)
         end

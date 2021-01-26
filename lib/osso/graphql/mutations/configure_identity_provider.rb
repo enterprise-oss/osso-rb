@@ -17,7 +17,7 @@ module Osso
 
           if provider.update(args)
             Osso::Analytics.capture(email: context[:email], event: self.class.name.demodulize, properties: args)
-            return response_data(identity_provider: provider) 
+            return response_data(identity_provider: provider)
           end
 
           response_error(provider.errors)
