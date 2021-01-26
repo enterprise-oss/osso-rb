@@ -4,7 +4,7 @@ require 'cgi'
 require 'omniauth'
 require 'omniauth-multi-provider'
 require 'omniauth-saml'
-require 'pry'
+
 module Osso
   class Auth < Sinatra::Base
     include AppConfig
