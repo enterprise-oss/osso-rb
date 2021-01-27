@@ -73,6 +73,15 @@ module Osso
         erb :admin, layout: false
       end
 
+      r.post 'idp' do
+        onboarded = Osso::Models::IdentityProvider.
+          not_pending.
+          where(domain: r.params['domain']).
+          exists?
+
+        { onboarded: onboarded }.to_json
+      end
+
       r.post 'graphql' do
         rodauth.require_authentication
 
