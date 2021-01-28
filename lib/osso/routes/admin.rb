@@ -11,6 +11,7 @@ module Osso
     use Rack::Session::Cookie, secret: ENV.fetch('SESSION_SECRET')
 
     plugin :json
+    plugin :json_parser
     plugin :middleware
     plugin :render, engine: 'erb', views: ENV['RODAUTH_VIEWS'] || DEFAULT_VIEWS_DIR
     plugin :route_csrf
@@ -71,6 +72,15 @@ module Osso
 
       r.on 'admin' do
         erb :admin, layout: false
+      end
+
+      r.post 'idp' do
+        onboarded = Osso::Models::IdentityProvider.
+          not_pending.
+          where(domain: r.params['domain']).
+          exists?
+
+        { onboarded: onboarded }.to_json
       end
 
       r.post 'graphql' do
