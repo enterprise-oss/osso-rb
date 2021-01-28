@@ -41,4 +41,31 @@ describe Osso::Admin do
       expect(last_response.status).to eq 401
     end
   end
+
+  describe 'post /idp' do
+    let(:domain) { Faker::Internet.domain_name }
+    
+    before do
+      create(:configured_identity_provider, domain: domain)
+    end
+
+    it 'returns true when an available IDP is found' do
+      header 'Content-Type', 'application/json'
+      header 'Accept', 'application/json'
+      post('/idp', { domain: domain }.to_json)
+
+      expect(last_response).to be_ok
+      expect(last_json_response).to eq({ onboarded: true })
+    end
+
+    it 'returns false when an available IDP is not found' do
+      header 'Content-Type', 'application/json'
+      header 'Accept', 'application/json'
+
+      post('/idp', { domain: domain.reverse}.to_json)
+
+      expect(last_response).to be_ok
+      expect(last_json_response).to eq({ onboarded: false })
+    end
+  end
 end

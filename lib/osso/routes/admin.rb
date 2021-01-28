@@ -11,6 +11,7 @@ module Osso
     use Rack::Session::Cookie, secret: ENV.fetch('SESSION_SECRET')
 
     plugin :json
+    plugin :json_parser
     plugin :middleware
     plugin :render, engine: 'erb', views: ENV['RODAUTH_VIEWS'] || DEFAULT_VIEWS_DIR
     plugin :route_csrf
