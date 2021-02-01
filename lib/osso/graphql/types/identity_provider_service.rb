@@ -8,6 +8,7 @@ module Osso
         value('GOOGLE', 'Google SAML Identity Provider', value: 'GOOGLE')
         value('OKTA', 'Okta Identity Provider', value: 'OKTA')
         value('ONELOGIN', 'OneLogin Identity Provider', value: 'ONELOGIN')
+        value('OTHER', 'Generic SAML Identity Provider', value: 'OTHER')
         value('PING', 'PingID Identity Provider', value: 'PING')
         value('SALESFORCE', 'Salesforce Identity Provider', value: 'SALESFORCE')
       end
