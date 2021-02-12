@@ -1,5 +1,7 @@
 module Osso
   class ScimQueryParser
+    # TODO: cribbed this from an open source rails SCIM gem.
+    # stylistically not quite what I love
     attr_accessor :query_elements
 
     def self.perform(qs)
@@ -50,7 +52,9 @@ module Osso
         "ILIKE %"  
       else
         # TODO: implement additional query filters
-        raise ScimRails::ExceptionHandler::InvalidQuery
+        # and also this is not the right error class but
+        # whatever for now
+        raise NotImplementedError
       end
     end
   end

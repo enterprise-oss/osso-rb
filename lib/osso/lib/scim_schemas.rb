@@ -1,5 +1,3 @@
-require 'scim-kit'
-
 module Osso
   module ScimSchema
     SCHEMA_URI = 'urn:scim:osso:default:schema'
