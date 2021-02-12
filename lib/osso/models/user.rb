@@ -19,6 +19,22 @@ module Osso
           idp: identity_provider.name,
         }
       end
+
+      def as_scim_json(*)
+        {
+          id: id,
+          email: email,
+          name: {
+            familyName: 'familyName',
+            givenName: 'givenName',
+          },
+          userName: email,
+          active: true,
+          emails: [
+            { value: email, primary: true}
+          ]
+        }
+      end
     end
   end
 end
