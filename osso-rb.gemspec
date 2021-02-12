@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'rack-protection', '~> 2.1.0'
   spec.add_runtime_dependency 'rake'
   spec.add_runtime_dependency 'rodauth', '~> 2.9'
+  spec.add_runtime_dependency 'scim-kit', '~> 0.5.1'
   spec.add_runtime_dependency 'sequel', '~> 5.40'
   spec.add_runtime_dependency 'sequel-activerecord_connection', '>= 0.3', '< 2.0'
   spec.add_runtime_dependency 'sinatra'

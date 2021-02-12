@@ -7,6 +7,8 @@ module Osso
   require_relative 'osso/lib/oauth2_token'
   require_relative 'osso/lib/route_map'
   require_relative 'osso/lib/saml_handler'
+  require_relative 'osso/lib/scim_query_parser'
+  require_relative 'osso/lib/scim_schemas'
   require_relative 'osso/models/models'
   require_relative 'osso/routes/routes'
   require_relative 'osso/graphql/schema'
