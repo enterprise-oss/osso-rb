@@ -3,11 +3,11 @@ module Osso
     include AppConfig
     register Sinatra::Namespace
 
-    before do
-      error 401 unless authorized?
-    end
-
     namespace '/scim/v2' do
+      before do
+        error 401 unless authorized?
+      end
+      
       get '/Users' do
         users = Models::User
         users = users.where(identity_provider: current_identity_provider)        
