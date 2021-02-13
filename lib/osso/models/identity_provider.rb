@@ -4,7 +4,6 @@ module Osso
   module Models
     # Base class for SAML Providers
     class IdentityProvider < ActiveRecord::Base
-      include ScimSchema
       belongs_to :enterprise_account
       belongs_to :oauth_client
       has_many :users, dependent: :delete_all

@@ -1,7 +1,13 @@
 module Osso
   class ScimQueryParser
     # TODO: cribbed this from an open source rails SCIM gem.
-    # stylistically not quite what I love
+    # stylistically not quite what I love.
+    # Anyhow, SCIM decided to go and create their own query language 🤷‍♂️
+    # So we need to take the filter param and convert it into something we
+    # can use to query the DB. Maybe we should be explicit about mapping 
+    # attributes and values to avoid SQL injection but like, if Okta 
+    # is sending authneticated requests with SQL injection I think we 
+    # have bigger problems??
     attr_accessor :query_elements
 
     def self.perform(qs)
@@ -18,11 +24,11 @@ module Osso
 
     def attribute
       attribute = query_elements.dig(0)
-      raise ScimRails::ExceptionHandler::InvalidQuery if attribute.blank?
+      raise StandardError if attribute.blank?
       attribute = attribute.to_sym
 
       mapped_attribute = attribute_mapping(attribute)
-      raise ScimRails::ExceptionHandler::InvalidQuery if mapped_attribute.blank?
+      raise StandardError if mapped_attribute.blank?
       ActiveRecord::Base.connection.quote(mapped_attribute)
     end
 
