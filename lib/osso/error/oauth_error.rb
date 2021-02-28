@@ -4,7 +4,7 @@ module Osso
   module Error
     class OAuthError < Base
       def docs_url
-        'https://ossoapp.com/docs/integration/oauth-consumption'
+        'https://ossoapp.com/docs/consume/overview'
       end
     end
 
