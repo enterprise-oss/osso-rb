@@ -36,7 +36,7 @@ module Osso
       end
 
       def message
-        "The requested redirect URI #{@redirect_uri} is not on the allow-list for the rquested " \
+        "The requested redirect URI #{@redirect_uri} is not on the allow-list for the requested " \
         'OAuth client identifier. Review our OAuth documentation, check you\'re using the correct ' \
         'OAuth client identifier, and confirm your Redirect URI allow-list includes the ' \
         'appropriate URI(s).'
