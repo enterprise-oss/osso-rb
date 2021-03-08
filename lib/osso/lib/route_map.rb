@@ -9,6 +9,7 @@ module Osso
         use Osso::Admin
         use Osso::Auth
         use Osso::Oauth
+        use Osso::Scim
       end
     end
   end

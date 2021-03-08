@@ -50,6 +50,16 @@ module Osso
         Regexp.escape(acs_url)
       end
 
+      def bearer_token
+        payload = { 
+          id: id,
+          domain: domain,
+        }
+
+        token = JWT.encode(payload, ENV['SESSION_SECRET'], 'HS256')
+        Base64.urlsafe_encode64(token)
+      end
+
       def set_status
         self.status = 'configured' if sso_url && sso_cert && pending?
       end
